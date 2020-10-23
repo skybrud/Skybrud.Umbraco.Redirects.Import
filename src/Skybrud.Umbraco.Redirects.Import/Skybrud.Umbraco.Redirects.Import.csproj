@@ -1,0 +1,50 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <Version>1.0.0-alpha001</Version>
+    <Authors>Anders Bjerner</Authors>
+    <Company>Skybrud.dk</Company>
+    <Description>Import and export addon for Skybrud.Umbraco.Redirects.</Description>
+    <Copyright>Copyright © 2020</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <PackageId>Skybrud.Umbraco.Redirects.Import</PackageId>
+    <PackageTags>Umbraco, Redirects, 301, Content, Url, Import</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/</PackageProjectUrl>
+    <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="UmbracoCms.Web" Version="8.1.0">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="2.0.5">
+      <ExcludeAssets>contentFiles</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.css" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.html" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.js" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\Lang\*.xml" />
+    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\package.manifest" />
+  </ItemGroup>
+
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release' AND '$(BuildTools)'=='1'">
+    <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
+  </Target>
+
+</Project>
