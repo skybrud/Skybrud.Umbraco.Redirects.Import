@@ -1,5 +1,11 @@
 ﻿{
-	"javascript": [
-		"/App_Plugins/Skybrud.Umbraco.Redirects.Import/Scripts/Run.js"
-	]
+  "javascript": [
+    "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Scripts/Run.js",
+    "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Scripts/Controllers/File.js",
+    "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Scripts/Controllers/Import.js",
+    "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Scripts/Controllers/Items.js"
+  ],
+  "css": [
+    "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Styles/Default.css"
+  ]
 }

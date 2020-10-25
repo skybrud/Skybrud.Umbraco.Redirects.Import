@@ -1,4 +1,4 @@
-﻿app.run(function (eventsService) {
+﻿app.run(function (eventsService, editorService) {
 
     eventsService.on("skybrud.umbraco.redirects.dashboard.init", function (_, args) {
 
@@ -9,7 +9,19 @@
             label: "Import",
             labelKey: "redirects_import",
             handler: function() {
-                // open import dialog
+
+                editorService.open({
+                    title: "Import redirects",
+                    size: "medium",
+                    view: "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Dialogs/Import.html",
+                    submit: function () {
+                        editorService.close();
+                    },
+                    close: function () {
+                        editorService.close();
+                    }
+                });
+
             }
         });
 

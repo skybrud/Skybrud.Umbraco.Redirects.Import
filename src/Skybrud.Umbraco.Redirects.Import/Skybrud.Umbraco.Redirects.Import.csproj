@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Reference Include="System.Web" />
+    <PackageReference Include="Skybrud.Csv" Version="0.0.2" />
     <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
