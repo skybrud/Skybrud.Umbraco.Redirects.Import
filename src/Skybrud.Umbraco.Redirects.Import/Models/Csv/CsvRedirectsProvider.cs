@@ -16,9 +16,12 @@ using Umbraco.Core.Models.PublishedContent;
 using Umbraco.Core.PropertyEditors;
 using Umbraco.Web.Composing;
 
-namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
+namespace Skybrud.Umbraco.Redirects.Import.Models.Csv
+{
+    using System.Linq;
 
-    public class CsvRedirectsProvider : IRedirectsProvider {
+    public class CsvRedirectsProvider : IRedirectsImportExportProvider
+    {
 
         #region Properties
 
@@ -94,7 +97,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
             }
         };
 
-        public class Item {
+        public class Item
+        {
 
 
 
@@ -108,50 +112,53 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
 
         #endregion
 
-        public IImportOptions ParseImportSettings(JObject obj) {
+        public IImportOptions ParseImportSettings(JObject obj)
+        {
             return CsvImportOptions.Parse(obj);
         }
 
-        IImportOptions IRedirectsProvider.ParseImportSettings(JObject obj) {
-            return ParseImportSettings(obj);
-        }
-
-        public CsvImportOptions ParseImportSettings(Dictionary<string, string> dictionary) {
-            return CsvImportOptions.FromDictionary(dictionary);
-        }
-
-        IImportOptions IRedirectsProvider.ParseImportSettings(Dictionary<string, string> dictionary) {
+        IImportOptions IRedirectsImportExportProvider.ParseImportSettings(Dictionary<string, string> dictionary)
+        {
             return ParseImportSettings(dictionary);
         }
 
-        public object Import(RedirectsProviderFile file, IImportOptions options) {
+        public CsvImportOptions ParseImportSettings(Dictionary<string, string> dictionary)
+        {
+            return CsvImportOptions.FromDictionary(dictionary);
+        }
+
+
+        public ImportDataSet Import(RedirectsProviderFile file, IImportOptions options)
+        {
 
             if (file == null) throw new ArgumentNullException(nameof(file));
             if (options == null) throw new ArgumentNullException(nameof(options));
 
             if (!(options is CsvImportOptions)) throw new ArgumentException("Must be an instance of CsvImportOptions", nameof(options));
 
-            return Import(file, (CsvImportOptions) options);
+            return Import(file, (CsvImportOptions)options);
 
         }
 
-        public object Import(RedirectsProviderFile file, CsvImportOptions options) {
+        public ImportDataSet Import(RedirectsProviderFile file, CsvImportOptions options)
+        {
 
             if (file == null) throw new ArgumentNullException(nameof(file));
             if (options == null) throw new ArgumentNullException(nameof(options));
-            
+
             // Determine the encoding
             Encoding encoding;
-            switch (options.Encoding) {
+            switch (options.Encoding)
+            {
 
                 case CsvImportEncoding.Ascii:
                     encoding = Encoding.ASCII;
                     break;
-                
+
                 case CsvImportEncoding.Utf8:
                     encoding = Encoding.UTF8;
                     break;
-                
+
                 case CsvImportEncoding.Windows1252:
                     encoding = Encoding.GetEncoding(1252);
                     break;
@@ -165,10 +172,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
                     break;
 
             }
-            
+
             // Load the CSV file from the stream
             CsvFile csv;
-            using (Stream stream = file.InputStream) {
+            using (Stream stream = file.InputStream)
+            {
                 csv = CsvFile.Load(stream, encoding);
             }
 
@@ -178,27 +186,20 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
             MapCsvColumns(io);
 
             // Parse the rows
-            List<RedirectImportItem> redirects = ParseCsvRows(io);
-
-
-            var service = new RedirectsImportService();
-
-
-            foreach (var redirect in redirects) {
-
-                service.Import(redirect, options);
-
-            }
-
+            var redirects = ParseCsvRows(io);
+            
             return redirects;
 
         }
 
-        private void MapCsvColumns(CsvInternalImportOptions options) {
-            
-            foreach (CsvColumn column in options.File.Columns) {
+        private void MapCsvColumns(CsvInternalImportOptions options)
+        {
 
-                switch (column.Name.Replace(" ", "").ToLowerInvariant()) {
+            foreach (CsvColumn column in options.File.Columns)
+            {
+
+                switch (column.Name.Replace(" ", "").ToLowerInvariant())
+                {
 
                     case "rootnodeid":
                     case "domain":
@@ -235,7 +236,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
                 }
 
             }
-            
+
             if (options.ColumnRootNodeId == null) throw new RedirectsException("No column found for *root node ID*");
             if (options.ColumnInboundUrl == null) throw new RedirectsException("No column found for *inbound URL*");
             if (options.ColumnDestinationId == null) throw new RedirectsException("No column found for *destination ID*");
@@ -244,113 +245,124 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
 
         }
 
-        private List<RedirectImportItem> ParseCsvRows(CsvInternalImportOptions options) {
-            
-            List<RedirectImportItem> redirects = new List<RedirectImportItem>();
+        private ImportDataSet ParseCsvRows(CsvInternalImportOptions options)
+        {
 
-            foreach (CsvRow row in options.File.Rows) {
+            var importData = new ImportDataSet();
+            var redirects = new List<ImportDataItem>();
 
-                RedirectImportItem item = new RedirectImportItem {
-                    AddOptions = new AddRedirectOptions()
-                };
+            foreach (CsvRow row in options.File.Rows)
+            {
+                var errors = new List<string>();
+                ImportDataItem item = new ImportDataItem();
+                //{
+                //    AddOptions = new AddRedirectOptions()
+                //};
 
+                //RootNode Id / Key
                 string valueRootNodeId = row.GetCellValue(options.ColumnRootNodeId.Index);
-                if (int.TryParse(valueRootNodeId, out int rootNodeId)) {
-                    item.AddOptions.RootNodeId = rootNodeId;
-
+                if (int.TryParse(valueRootNodeId, out int rootNodeId))
+                {
+                    item.RootNodeId = rootNodeId;
 
                     IPublishedContent content = Current.UmbracoContext.Content.GetById(rootNodeId);
 
-                    if (content != null) item.AddOptions.RootNodeKey = content.Key;
+                    if (content != null) item.RootNodeKey = content.Key;
 
-                } else {
-
+                }
+                else
+                {
                     // TODO: Should we validate the domain? Any security concerns about using the input value?
 
                     IDomain domain = Current.Services.DomainService.GetByName(valueRootNodeId);
-                    if (domain == null) {
-                        item.Errors.Add("Unknown root node ID or domain: " + valueRootNodeId);
-                    } else if (domain.RootContentId == null) {
-                        item.Errors.Add("Domain doesn't have a root node ID: " + valueRootNodeId);
-                    } else {
-                        item.AddOptions.RootNodeId = domain.RootContentId.Value;
+                    if (domain == null)
+                    {
+                        errors.Add($"Row {row.Index}: Unknown root node ID or domain: " + valueRootNodeId);
+                    }
+                    else if (domain.RootContentId == null)
+                    {
+                        errors.Add($"Row {row.Index}: Domain doesn't have a root node ID: " + valueRootNodeId);
+                    }
+                    else
+                    {
+                        item.RootNodeId = domain.RootContentId.Value;
                         IPublishedContent content = Current.UmbracoContext.Content.GetById(domain.RootContentId.Value);
-                        if (content != null) item.AddOptions.RootNodeKey = content.Key;
+                        if (content != null) item.RootNodeKey = content.Key;
                     }
 
                 }
 
+                //Old Url - REQUIRED
                 string valueInboundUrl = row.GetCellValue(options.ColumnInboundUrl.Index);
-                try {
-
+                try
+                {
                     // TODO: Should we validate the domain? Any security concerns about using the input value?
 
                     string testUrl = "http://hest.dk" + valueInboundUrl;
                     Uri uri = new Uri(testUrl);
-                    item.AddOptions.OriginalUrl = valueInboundUrl;
-
-
-                } catch (Exception) {
-                    item.Errors.Add("Invalid inbound URL specified: " + valueInboundUrl);
+                    // item.AddOptions.OriginalUrl = valueInboundUrl;
+                    item.OldUrl = valueInboundUrl;
+                }
+                catch (Exception)
+                {
+                    errors.Add($"Row {row.Index}: Invalid inbound URL specified: " + valueInboundUrl);
+                    item.DataInvalidForImport = true;
                 }
 
-
-
-
-
+                //Destination Id
                 string valueDestinationId = row.GetCellValue(options.ColumnDestinationId.Index);
-                if (!int.TryParse(valueDestinationId, out int destinationId)) {
-                    item.Errors.Add("Invalid destination ID: " + valueDestinationId);
+                if (!int.TryParse(valueDestinationId, out int destinationId))
+                {
+                    errors.Add($"WARN: Row {row.Index}: Invalid destination ID: " + valueDestinationId);
+                }
+                else
+                {
+                    item.DestinationId = destinationId;
                 }
 
 
-
+                //New Url - REQUIRED
                 string destinationUrl = row.GetCellValue(options.ColumnDestinationUrl.Index);
-                if (string.IsNullOrWhiteSpace(destinationUrl)) {
-                    item.Errors.Add("Invalid destination URL: " + destinationUrl);
+                if (string.IsNullOrWhiteSpace(destinationUrl))
+                {
+                    errors.Add($"ERROR: Row {row.Index}: Invalid destination URL: " + destinationUrl);
+                    item.DataInvalidForImport = true;
                 }
 
-
-
-
+                //Link Mode (RedirectDestinationType)
                 string valueLinkMode = row.GetCellValue(options.ColumnDestinationType.Index);
-                if (!EnumUtils.TryParseEnum(valueLinkMode, out RedirectDestinationType destinationMode)) {
-                    item.Errors.Add("Invalid destination type: " + valueLinkMode);
+                if (!EnumUtils.TryParseEnum(valueLinkMode, out RedirectDestinationType destinationMode))
+                {
+                    errors.Add($"WARN: Row {row.Index}: Invalid destination type: " + valueLinkMode);
+                }
+                else
+                {
+                    item.DestinationType = destinationMode;
                 }
 
+               
 
-                string destinatioName = "";
-                Guid destinationKey = Guid.Empty;
-                if (destinationMode == RedirectDestinationType.Content) {
-                    IPublishedContent content = Current.UmbracoContext.Content.GetById(destinationId);
-                    if (content != null) {
-                        destinatioName = content.Name;
-                        destinationKey = content.Key;
-                        destinationUrl = content.Url;
-                    }
-                } else if (destinationMode == RedirectDestinationType.Media) {
-                    IPublishedContent media = Current.UmbracoContext.Media.GetById(destinationId);
-                    if (media != null) {
-                        destinatioName = media.Name;
-                        destinationKey = media.Key;
-                        destinationUrl = media.Url;
-                    }
-                }
-
-                item.AddOptions.Destination = new RedirectDestination(destinationId, destinationKey, destinationUrl, destinationMode) { /*Name = destinatioName*/ };
+                //item.AddOptions.Destination = new RedirectDestination(destinationId, destinationKey, destinationUrl, destinationMode) { /*Name = destinatioName*/ };
                 //item.AddOptions.Overwrite = options.Options.OverwriteExisting;
-                
-                redirects.Add(item);
 
+                //Finish up Row
+                item.Messages = errors;
+                redirects.Add(item);
             }
 
-            return redirects;
+            importData.Items = redirects;
 
+            //Compile failed rows ERROR messages
+            var failures = redirects.Where(n => n.DataInvalidForImport);
+            importData.ImportErrors = failures.SelectMany(n => n.Messages.Where(m => m.StartsWith("ERROR")));
+
+            return importData;
         }
 
     }
 
-    class CsvInternalImportOptions {
+    class CsvInternalImportOptions
+    {
 
         public CsvFile File { get; }
 
@@ -366,7 +378,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Csv {
 
         public CsvColumn ColumnDestinationUrl { get; set; }
 
-        public CsvInternalImportOptions(CsvFile file, CsvImportOptions options) {
+        public CsvInternalImportOptions(CsvFile file, CsvImportOptions options)
+        {
             File = file;
             Options = options;
         }

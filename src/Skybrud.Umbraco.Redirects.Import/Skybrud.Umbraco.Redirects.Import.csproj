@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <Reference Include="System.Web" />
+    <PackageReference Include="Dragonfly.Net" Version="1.26.0" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.2" />
     <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
       <PrivateAssets>all</PrivateAssets>
@@ -45,7 +46,10 @@
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release' AND '$(BuildTools)'=='1'">
-    <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
-  </Target>
+    <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;&#xD;&#xA;&#xD;&#xA;XCOPY /s /y  &quot;$(TargetDir)$(TargetName).*&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\bin&quot;&#xD;&#xA;XCOPY /s /r /y  &quot;$(ProjectDir)\App_Plugins&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\App_Plugins&quot;" />
+      <Exec Command="XCOPY /s /y  &quot;$(TargetDir)$(TargetName).*&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\bin&quot;&#xD;&#xA;XCOPY /s /r /y  &quot;$(ProjectDir)\App_Plugins&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\App_Plugins&quot;&#xD;&#xA;" />
+ <Exec Command="XCOPY /s /y  &quot;$(TargetDir)$(TargetName).*&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\bin&quot;&#xD;&#xA;XCOPY /s /r /y  &quot;$(ProjectDir)\App_Plugins&quot; &quot;C:\Users\Heather\NAS Folders\Active Projects\Webs\Clients\HIND\sourcecode\HindlePower.Web\App_Plugins&quot;&#xD;&#xA;" />
+    </Target>
 
-</Project>
+
+  </Project>

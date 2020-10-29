@@ -4,6 +4,7 @@ using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models {
     
+    //TODO: We might not need this Class?
     public class RedirectImportItem {
 
         /// <summary>

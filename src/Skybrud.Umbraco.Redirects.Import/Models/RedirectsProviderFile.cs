@@ -19,11 +19,22 @@ namespace Skybrud.Umbraco.Redirects.Import.Models {
             InputStream = file.InputStream;
         }
 
-        //public RedirectsProviderFile(FileInfo file) {
-        //    FileName = file.Name;
-        //    ContentLength = file.Length;
-        //    InputStream = file.OpenRead();
-        //}
+        public RedirectsProviderFile(string FilePath)
+        {
+            //TODO: Add error checking/handling for non-existent file?
+            FileName = FilePath;
+
+            var fileInfo = new FileInfo(FilePath);
+            ContentLength = fileInfo.Length;
+            InputStream = fileInfo.OpenRead();
+        }
+
+        public RedirectsProviderFile(FileInfo fileInfo)
+        {
+            FileName = fileInfo.Name;
+            ContentLength = fileInfo.Length;
+            InputStream = fileInfo.OpenRead();
+        }
 
     }
 

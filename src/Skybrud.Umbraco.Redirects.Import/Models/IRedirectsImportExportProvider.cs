@@ -3,7 +3,8 @@ using Newtonsoft.Json.Linq;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models {
    
-    public interface IRedirectsProvider {
+    public interface IRedirectsImportExportProvider
+    {
 
         #region Properties
 
@@ -35,7 +36,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Models {
 
         IImportOptions ParseImportSettings(Dictionary<string, string> dictionary);
 
-        object Import(RedirectsProviderFile file, IImportOptions options);
+        ImportDataSet Import(RedirectsProviderFile file, IImportOptions options);
 
         #endregion
 

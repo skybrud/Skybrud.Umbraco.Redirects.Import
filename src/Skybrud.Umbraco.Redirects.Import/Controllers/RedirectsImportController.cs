@@ -11,14 +11,25 @@ using Skybrud.WebApi.Json;
 using Umbraco.Web.Mvc;
 using Umbraco.Web.WebApi;
 
-namespace Skybrud.Umbraco.Redirects.Import.Controllers {
+namespace Skybrud.Umbraco.Redirects.Import.Controllers
+{
+    using Skybrud.Umbraco.Redirects.Models;
 
     [JsonOnlyConfiguration]
     [PluginController("Skybrud")]
-    public class RedirectsImportController : UmbracoAuthorizedApiController {
+    public class RedirectsImportController : UmbracoAuthorizedApiController
+    {
+
+        private readonly IRedirectsService _redirectsService;
+
+        public RedirectsImportController(IRedirectsService RedirectsService)
+        {
+            _redirectsService = RedirectsService;
+        }
 
         [HttpGet]
-        public object GetProviders() {
+        public object GetProviders()
+        {
 
             return new[] {
                 new CsvRedirectsProvider()
@@ -28,8 +39,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
 
 
         [HttpPost]
-        public object Upload() {
-
+        public object Upload()
+        {
             HttpPostedFile file = HttpContext.Current.Request.Files["file"];
 
             if (file == null) return Request.CreateResponse(HttpStatusCode.BadRequest, "No file specified.");
@@ -39,12 +50,12 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
             RedirectsProviderFile pfile = new RedirectsProviderFile(new HttpPostedFileWrapper(file));
 
             Dictionary<string, string> body = new Dictionary<string, string>();
-            foreach (string key in HttpContext.Current.Request.Form.Keys) {
+            foreach (string key in HttpContext.Current.Request.Form.Keys)
+            {
                 body[key] = HttpContext.Current.Request.Form[key];
             }
 
-            return new RedirectsImportService().Import(pfile, CsvImportOptions.FromDictionary(body));
-
+            return new RedirectsImportService(_redirectsService, Umbraco).Import(pfile, CsvImportOptions.FromDictionary(body));
         }
 
     }
