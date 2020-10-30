@@ -25,6 +25,7 @@
   <ItemGroup>
     <Reference Include="System.Web" />
     <PackageReference Include="Dragonfly.Net" Version="1.26.0" />
+    <PackageReference Include="LinqToCsv" Version="1.5.0" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.2" />
     <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
       <PrivateAssets>all</PrivateAssets>
