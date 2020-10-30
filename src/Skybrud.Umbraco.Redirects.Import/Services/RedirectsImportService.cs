@@ -18,7 +18,6 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
 
     public class RedirectsImportService
     {
-
         private IRedirectsService _redirectsService;
         private UmbracoHelper _umbracoHelper;
 
@@ -29,16 +28,27 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
         }
 
         #region Public Methods
-        public ImportResultSet Import(RedirectsProviderFile File, DefaultImportOptions ImportOptions, IRedirectsImportExportProvider ImportExportProvider)
+        public ImportResultSet Import(RedirectsProviderFile File, DefaultImportOptions ImportOptions,
+            IRedirectsImportExportProvider ImportExportProvider, IImportOptions ImportProviderOptions)
         {
             //Setup
             var resultsSet = new ImportResultSet();
             resultsSet.Filename = File.FileName;
             resultsSet.DefaultOptions = ImportOptions;
 
-            //Use provider to import the data to a standard model
-            var importsDataModel = ImportExportProvider.Import(File, ImportOptions.ImportExportProviderOptions);
-
+            var importsDataModel =new ImportDataSet();
+            try
+            {
+                //Use provider to import the data to a standard model
+                importsDataModel = ImportExportProvider.Import(File, ImportProviderOptions);
+            }
+            catch (Exception e)
+            {
+                var msg = $"Exception from ImportExportProvider '{ImportExportProvider.Name}': {e.Message}";
+                resultsSet.ErrorMessages.Add(msg);
+                resultsSet.HasErrors = true;
+            }
+            
             //check for Provider data errors, add to results
             if (importsDataModel.ImportErrors.Any())
             {
@@ -47,7 +57,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
 
             if (!importsDataModel.Items.Any())
             {
-                resultsSet.ErrorMessages.Add("No Items were imported successfully for processing.");
+                resultsSet.ErrorMessages.Add("No redirects were imported successfully for processing.");
                 return resultsSet;
             }
 
@@ -64,6 +74,9 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
             var siteRoot = ImportOptions.SiteRootNode;
             var allContentNodes = siteRoot > 0 ? NodesHelper.AllContentNodes(_umbracoHelper, siteRoot).ToList() : NodesHelper.AllContentNodes(_umbracoHelper).ToList();
             var allMediaNodes = NodesHelper.AllMediaNodes(_umbracoHelper).ToList();
+            var domains = Current.Services.DomainService.GetAll(true);
+            var onSiteDomains = domains.Select(d => d.DomainName).ToList();
+            onSiteDomains.Add(Dragonfly.NetHelpers.Info.ThisSiteDomain(false));
 
             foreach (var import in importsDataModel.Items)
             {
@@ -86,6 +99,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
 
                 if (!isError)
                 {
+                    var redirectAdded = false;
+
                     // Split the Old URL and query string
                     string[] oldUrlParts = import.OldUrl.Split('?');
                     string oldUrl = oldUrlParts[0].TrimEnd('/');
@@ -102,53 +117,68 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
                         newAnchor = "#" + x[1];
                     }
 
-
                     //Update Options
                     options.OriginalUrl = import.OldUrl;
 
+
                     //TODO: Add support for Destination ID & Type
 
+                    //Check New Url data
                     //Try to determine type
-                    if (newUrl.Contains("://"))
+                    if (!redirectAdded && newUrl.Contains("://"))
                     {
-                        //TODO: Check for internal domain? 
-                        //full url, assume external
-                        RedirectDestination destination = new RedirectDestination(0, Guid.Empty, import.NewUrl, RedirectDestinationType.Url);
-                        options.Destination = destination;
+                        //full url -  Check for internal domain
+                        var fullUri = new Uri(newUrl);
+                        if (!onSiteDomains.Contains(fullUri.Host))
+                        {
+                            //assume external
+                            RedirectDestination destination = new RedirectDestination(0, Guid.Empty, import.NewUrl, RedirectDestinationType.Url);
+                            options.Destination = destination;
 
-                        // Add the External redirect
-                        try
-                        {
-                            RedirectItem redirect = _redirectsService.AddRedirect(options);
-                            newRedirects.Add(redirect);
+                            // Add the External redirect
+                            try
+                            {
+                                RedirectItem redirect = _redirectsService.AddRedirect(options);
+                                newRedirects.Add(redirect);
+                            }
+                            catch (Exception e)
+                            {
+                                isError = true;
+                                var errItem = new ImportErrorItem(import, e.Message);
+                                errorItems.Add(errItem);
+                            }
+
+                            redirectAdded = true;
                         }
-                        catch (Exception e)
+                        else
                         {
-                            isError = true;
-                            var errItem = new ImportErrorItem(import, e.Message);
-                            errorItems.Add(errItem);
+                            //domain is on-site, parse and update
+                            newUrl = fullUri.PathAndQuery;
                         }
                     }
-                    else
+
+                    if (!redirectAdded)
                     {
                         //Try to lookup node
                         RedirectDestination destinationNode = null;
 
-                        var matchingContent = allContentNodes.Where(n => n.Url.TrimEnd('/') == newUrl);
+                        var matchingContent = allContentNodes.Where(n => n.Url(mode:UrlMode.Relative).TrimEnd('/') == newUrl).ToList();
                         if (matchingContent.Any())
                         {
                             // Content Link
                             var node = matchingContent.First();
-                            destinationNode = new RedirectDestination(node.Id, node.Key, node.Url, import.NewUrl, RedirectDestinationType.Content);
+                            destinationNode = new RedirectDestination(node.Id, node.Key, node.Url, import.NewUrl,
+                                RedirectDestinationType.Content);
                         }
                         else
                         {
-                            var matchingMedia = allMediaNodes.Where(n => n.Url == newUrl);
+                            var matchingMedia = allMediaNodes.Where(n => n.Url(mode: UrlMode.Relative) == newUrl);
                             if (matchingMedia.Any())
                             {
                                 // Media Link
                                 var node = matchingMedia.First();
-                                destinationNode = new RedirectDestination(node.Id, node.Key, node.Url, RedirectDestinationType.Media);
+                                destinationNode = new RedirectDestination(node.Id, node.Key, node.Url,
+                                    RedirectDestinationType.Media);
                             }
                             else
                             {
@@ -174,6 +204,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Services
                                 var errItem = new ImportErrorItem(import, e.Message);
                                 errorItems.Add(errItem);
                             }
+
+                            redirectAdded = true;
                         }
                     }
                 }

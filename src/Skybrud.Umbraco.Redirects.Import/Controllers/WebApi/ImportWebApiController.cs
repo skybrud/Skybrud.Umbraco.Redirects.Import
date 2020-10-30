@@ -34,7 +34,7 @@
         }
 
 
-        /// /Umbraco/backoffice/Api/ImportWebApi/ImportRedirects
+        /// /Umbraco/backoffice/Api/ImportWebApi/ImportRedirectsTest
         [System.Web.Http.HttpGet]
         public HttpResponseMessage ImportRedirectsTest()
         {
@@ -49,7 +49,7 @@
             //Set CSV Provider + options
             IRedirectsImportExportProvider csvProvider = new CsvRedirectsProvider();
             var csvOptions = new CsvImportOptions();
-            csvOptions.Encoding = CsvImportEncoding.Auto;
+            csvOptions.Encoding = CsvImportEncoding.Utf8;
             csvOptions.OverwriteExisting = false;
 
             //Test Data File
@@ -70,7 +70,7 @@
             {
                 //Call Service for Results
                 var importerService = new RedirectsImportService(_redirectsService, Umbraco);
-                var results = importerService.Import(importFile, defaults, csvProvider);
+                var results = importerService.Import(importFile, defaults, csvProvider, csvOptions);
                 returnStatusMsg.RelatedObject = results;
 
                 if (results.HasErrors)

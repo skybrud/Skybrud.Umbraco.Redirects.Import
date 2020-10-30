@@ -62,7 +62,6 @@ namespace Skybrud.Umbraco.Redirects.Import.Models
 
     public class DefaultImportOptions
     {
-        public IImportOptions ImportExportProviderOptions { get; set; }
         public Constants.RedirectType Type { get; set; }
 
         public int SiteRootNode { get; set; }

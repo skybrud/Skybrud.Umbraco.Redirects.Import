@@ -16,6 +16,7 @@
         public ImportDataSet()
         {
             Items = new List<ImportDataItem>();
+            ImportErrors = new List<string>();
         }
     }
 

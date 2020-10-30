@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Web;
 
-namespace Skybrud.Umbraco.Redirects.Import.Models {
-    
-    public class RedirectsProviderFile {
+namespace Skybrud.Umbraco.Redirects.Import.Models
+{
+
+    public class RedirectsProviderFile
+    {
 
         public string FileName { get; set; }
 
@@ -13,7 +15,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Models {
 
         public Stream InputStream { get; private set; }
 
-        public RedirectsProviderFile(HttpPostedFileBase file) {
+        public RedirectsProviderFile(HttpPostedFileBase file)
+        {
             FileName = file.FileName;
             ContentLength = file.ContentLength;
             InputStream = file.InputStream;
@@ -21,12 +24,22 @@ namespace Skybrud.Umbraco.Redirects.Import.Models {
 
         public RedirectsProviderFile(string FilePath)
         {
-            //TODO: Add error checking/handling for non-existent file?
-            FileName = FilePath;
+            var mappedPath = "";
+            var canMap = Dragonfly.NetHelpers.Files.TryGetMappedPath(FilePath, out mappedPath);
 
-            var fileInfo = new FileInfo(FilePath);
-            ContentLength = fileInfo.Length;
-            InputStream = fileInfo.OpenRead();
+            if (canMap)
+            {
+                FileName = mappedPath;
+
+                var fileInfo = new FileInfo(mappedPath);
+                ContentLength = fileInfo.Length;
+                InputStream = fileInfo.OpenRead();
+            }
+            else
+            {
+                throw new ArgumentException($"Unable to map a valid path for '{FilePath}'", nameof(FilePath));
+            }
+
         }
 
         public RedirectsProviderFile(FileInfo fileInfo)
