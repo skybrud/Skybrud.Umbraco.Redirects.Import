@@ -15,6 +15,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
             // TODO: Should importers/exporters be registered manually as auto discovery may be expensive?
             builder.WithCollectionBuilder<ImporterCollectionBuilder>().Add(() => builder.TypeLoader.GetTypes<IImporter>());
             builder.WithCollectionBuilder<ExporterCollectionBuilder>().Add(() => builder.TypeLoader.GetTypes<IExporter>());
+            
+            builder.ManifestFilters().Append<RedirectsImportManifestFilter>();
 
         }
 
