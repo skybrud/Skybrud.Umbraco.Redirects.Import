@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="ClosedXml" Version="0.96.0" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.41" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.42" />
     <PackageReference Include="Skybrud.Umbraco.Redirects" Version="4.0.1" />
     <PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
