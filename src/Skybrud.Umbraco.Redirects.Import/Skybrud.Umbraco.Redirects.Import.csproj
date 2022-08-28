@@ -1,18 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
     <LangVersion>10.0</LangVersion>
     <TargetFramework>net6.0</TargetFramework>
-    <StaticWebAssetBasePath>App_Plugins/Skybrud.Umbraco.Redirects</StaticWebAssetBasePath>
+    <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
   </PropertyGroup>
 
-  <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-  </ItemGroup>
+  <PropertyGroup>
+    <VersionPrefix>1.0.0-alpha001</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+    <Company>Limbo</Company>
+    <Authors>Anders Bjerner</Authors>
+    <Copyright>Copyright © 2022</Copyright>
+    <Title>Skybrud Redirects Import</Title>
+    <Description>Import and export addon for Skybrud.Umbraco.Redirects.</Description>
+  </PropertyGroup>
 
-  <ItemGroup>
-    <None Include="compilerconfig.json" />
-  </ItemGroup>
+  <!-- Information for the NuGet package -->
+  <PropertyGroup>
+    <PackageId>Skybrud.Umbraco.Redirects.Import</PackageId>
+    <PackageTags>Skybrud, Umbraco, Redirects, Import, Export, Limbo, Umbraco-Marketplace</PackageTags>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</PackageProjectUrl>
+    <PackageIcon>Limbo.png</PackageIcon>
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</RepositoryUrl>
+  </PropertyGroup>
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
@@ -23,6 +38,21 @@
     <PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="10.0.0" />
     <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="10.0.0" />
+  </ItemGroup>
+
+  <!-- Include package icon for NuGet -->
+  <ItemGroup>
+    <Content Include="../build/Limbo.png" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Generate XML documentation -->
+  <PropertyGroup>
+    <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="compilerconfig.json" />
+    <None Include="compilerconfig.json" />
   </ItemGroup>
 
 </Project>
