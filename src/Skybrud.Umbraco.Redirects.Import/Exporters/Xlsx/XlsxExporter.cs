@@ -7,7 +7,7 @@ using Skybrud.Umbraco.Redirects.Import.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
 
-    public class XlsxExporter : ExporterBase<ExcelExportOptions, XlsxExportResult> {
+    public class XlsxExporter : ExporterBase<XlsxExportOptions, XlsxExportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
@@ -35,7 +35,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
             };
         }
 
-        public override XlsxExportResult Export(ExcelExportOptions options) {
+        public override XlsxExportResult Export(XlsxExportOptions options) {
 
             byte[] bytes;
 

@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
 
         #region Member methods
 
-        public XlsxExportResult Export(ExcelExportOptions options) {
+        public XlsxExportResult Export(XlsxExportOptions options) {
 
             byte[] bytes;
 

@@ -2,7 +2,7 @@
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
 
-    public class ExcelExportOptions : IExportColumnOptions {
+    public class XlsxExportOptions : IExportColumnOptions {
 
         public ExportColumnList Columns { get; set; }
 
