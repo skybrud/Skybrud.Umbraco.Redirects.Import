@@ -9,6 +9,7 @@
   <!-- Include NuGet dependencies -->
   <ItemGroup>
     <PackageReference Include="ClosedXml" Version="0.96.0" />
+    <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
     <PackageReference Include="Skybrud.Essentials" Version="1.1.41" />
     <PackageReference Include="Skybrud.Umbraco.Redirects" Version="4.0.1" />
     <PackageReference Include="Umbraco.Cms.Core" Version="10.0.0" />
@@ -18,12 +19,6 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="Skybrud.Csv">
-      <HintPath>..\assemblies\Skybrud.Csv.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
