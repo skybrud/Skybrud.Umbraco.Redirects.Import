@@ -1,0 +1,7 @@
+﻿<div ng-controller="SkybrudUmbracoRedirects.ItemsController as vm">
+    <div class="hest-items">
+        <button type="button" ng-repeat="item in vm.items" class="hest-item" ng-click="vm.select(item)" ng-class="{'hest-item-active': item.selected}">
+            {{item.name}}
+        </button>
+    </div>
+</div>

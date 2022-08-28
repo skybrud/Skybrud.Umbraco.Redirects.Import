@@ -1,0 +1,10 @@
+﻿<div ng-controller="SkybrudUmbracoRedirects.ColumnsController as vm">
+
+    <div ng-repeat="column in model.value">
+        <label>
+            <input type="checkbox" ng-model="column.selected" />
+            {{column.alias}}
+        </label>
+    </div>
+
+</div>

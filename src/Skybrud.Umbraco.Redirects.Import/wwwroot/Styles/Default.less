@@ -1,0 +1,185 @@
+﻿.hest-items {
+
+
+
+}
+
+.hest-item {
+    appearance: none;
+    display: inline-block;
+    -webkit-appearance: none;
+    border: 0;
+    font-weight: bold;
+    color: #1A2650;
+    line-height: 1;
+    background-color: rgba(216,215,217, .5);
+    font-size: 13px;
+    margin: 0 7px 7px 0;
+    padding: 10px 20px;
+    border-radius: 4px;
+    transition: all .2s ease;
+    position: relative;
+
+    &:hover {
+        background-color: rgba(216,215,217, .3);
+        color: #2152a3;
+    }
+
+    &.hest-item-active {
+        background-color: #F5C1BC;
+        color: #1A2650;
+
+        &:hover {
+            background-color: darken(#F5C1BC, 5%);
+        }
+    }
+}
+
+ul.redirects-providers, ul.redirects-importers, ul.redirects-exporters {
+
+    list-style: none;
+        margin: 0;
+
+    a {
+        display: flex;
+        padding: 10px;
+        margin: 0;
+        &:hover {
+            background: #efefef;
+        }
+        div {
+            min-height: 48px;
+        }
+    }
+
+    li + li {
+        margin-top: 10px;
+    }
+
+    .umb-icon {
+        margin-right: 15px;
+        width: 48px;
+        height: 48px;
+    }
+
+}
+
+ul.redirect-errors {
+    list-style: none;
+    margin-left: 0;
+    li {
+        margin-left: 0;
+        font-size: 12px;
+    }
+}
+
+
+.skybrud-borgerdk-item {
+
+    & + & {
+        margin-top: 5px;
+    }
+
+    &-content {
+        border: 1px solid #E9E9EB;
+        padding: 7px 10px 5px 10px;
+        background: white;
+    }
+
+    &-title {
+        display: flex;
+        line-height: 20px;
+    }
+
+    &-message {
+        font-size: 12px;
+    }
+
+    &-icon {
+        width: 38px;
+        font-size: 20px;
+        margin-top: 3px;
+        i {
+            background: fade(#9e9e9e, 20%);
+            padding: 4px;
+            border-radius: 50%;
+        }
+
+        i.color-green {
+            background: fade(#4caf50, 20%);
+        }
+
+        i.color-red {
+            background: fade(#f44436, 20%);
+        }
+
+        i.color-orange {
+            background: fade(#ff9800, 20%);
+        }
+    }
+
+    &-name {
+        flex: 1;
+
+        button {
+            border: 0;
+            background: 0;
+            padding: 0;
+            font-size: 12px;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &-duration {
+        font-size: 12px;
+    }
+
+    ul {
+        margin: 5px 0 0 15px;
+    }
+
+    li + li {
+        margin-top: 5px;
+    }
+
+    &-debug {
+        display: none;
+    }
+
+    &-exception {
+        pre {
+            display: none;
+        }
+
+        table.table.details {
+            margin-top: 10px;
+            border: 1px solid #E9E9EB;
+            border-radius: 0;
+            box-shadow: none;
+
+            > tbody > tr {
+                > th, > td {
+                    padding: 5px;
+                    vertical-align: top;
+                }
+            }
+
+            > tbody > tr > th {
+                white-space: nowrap;
+                padding-right: 15px;
+            }
+        }
+
+        &-stacktrace {
+            white-space: pre-wrap;
+        }
+    }
+}
+
+.umb-tab-button:disabled {
+    color: lightgray;
+    text-decoration: none;
+}

@@ -1,0 +1,153 @@
+﻿.hest-item {
+  appearance: none;
+  display: inline-block;
+  -webkit-appearance: none;
+  border: 0;
+  font-weight: bold;
+  color: #1A2650;
+  line-height: 1;
+  background-color: rgba(216, 215, 217, 0.5);
+  font-size: 13px;
+  margin: 0 7px 7px 0;
+  padding: 10px 20px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  position: relative;
+}
+.hest-item:hover {
+  background-color: rgba(216, 215, 217, 0.3);
+  color: #2152a3;
+}
+.hest-item.hest-item-active {
+  background-color: #F5C1BC;
+  color: #1A2650;
+}
+.hest-item.hest-item-active:hover {
+  background-color: #f2aca6;
+}
+ul.redirects-providers,
+ul.redirects-importers,
+ul.redirects-exporters {
+  list-style: none;
+  margin: 0;
+}
+ul.redirects-providers a,
+ul.redirects-importers a,
+ul.redirects-exporters a {
+  display: flex;
+  padding: 10px;
+  margin: 0;
+}
+ul.redirects-providers a:hover,
+ul.redirects-importers a:hover,
+ul.redirects-exporters a:hover {
+  background: #efefef;
+}
+ul.redirects-providers a div,
+ul.redirects-importers a div,
+ul.redirects-exporters a div {
+  min-height: 48px;
+}
+ul.redirects-providers li + li,
+ul.redirects-importers li + li,
+ul.redirects-exporters li + li {
+  margin-top: 10px;
+}
+ul.redirects-providers .umb-icon,
+ul.redirects-importers .umb-icon,
+ul.redirects-exporters .umb-icon {
+  margin-right: 15px;
+  width: 48px;
+  height: 48px;
+}
+ul.redirect-errors {
+  list-style: none;
+  margin-left: 0;
+}
+ul.redirect-errors li {
+  margin-left: 0;
+  font-size: 12px;
+}
+.skybrud-borgerdk-item + .skybrud-borgerdk-item {
+  margin-top: 5px;
+}
+.skybrud-borgerdk-item-content {
+  border: 1px solid #E9E9EB;
+  padding: 7px 10px 5px 10px;
+  background: white;
+}
+.skybrud-borgerdk-item-title {
+  display: flex;
+  line-height: 20px;
+}
+.skybrud-borgerdk-item-message {
+  font-size: 12px;
+}
+.skybrud-borgerdk-item-icon {
+  width: 38px;
+  font-size: 20px;
+  margin-top: 3px;
+}
+.skybrud-borgerdk-item-icon i {
+  background: rgba(158, 158, 158, 0.2);
+  padding: 4px;
+  border-radius: 50%;
+}
+.skybrud-borgerdk-item-icon i.color-green {
+  background: rgba(76, 175, 80, 0.2);
+}
+.skybrud-borgerdk-item-icon i.color-red {
+  background: rgba(244, 68, 54, 0.2);
+}
+.skybrud-borgerdk-item-icon i.color-orange {
+  background: rgba(255, 152, 0, 0.2);
+}
+.skybrud-borgerdk-item-name {
+  flex: 1;
+}
+.skybrud-borgerdk-item-name button {
+  border: 0;
+  background: 0;
+  padding: 0;
+  font-size: 12px;
+}
+.skybrud-borgerdk-item-name button:hover {
+  text-decoration: underline;
+}
+.skybrud-borgerdk-item-duration {
+  font-size: 12px;
+}
+.skybrud-borgerdk-item ul {
+  margin: 5px 0 0 15px;
+}
+.skybrud-borgerdk-item li + li {
+  margin-top: 5px;
+}
+.skybrud-borgerdk-item-debug {
+  display: none;
+}
+.skybrud-borgerdk-item-exception pre {
+  display: none;
+}
+.skybrud-borgerdk-item-exception table.table.details {
+  margin-top: 10px;
+  border: 1px solid #E9E9EB;
+  border-radius: 0;
+  box-shadow: none;
+}
+.skybrud-borgerdk-item-exception table.table.details > tbody > tr > th,
+.skybrud-borgerdk-item-exception table.table.details > tbody > tr > td {
+  padding: 5px;
+  vertical-align: top;
+}
+.skybrud-borgerdk-item-exception table.table.details > tbody > tr > th {
+  white-space: nowrap;
+  padding-right: 15px;
+}
+.skybrud-borgerdk-item-exception-stacktrace {
+  white-space: pre-wrap;
+}
+.umb-tab-button:disabled {
+  color: lightgray;
+  text-decoration: none;
+}

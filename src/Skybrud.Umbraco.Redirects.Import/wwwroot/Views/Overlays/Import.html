@@ -1,0 +1,90 @@
+﻿﻿<div ng-controller="SkybrudUmbracoRedirects.ImportController as vm">
+    <form name="propertiesForm" ng-submit="vm.save()" novalidate val-form-manager>
+        <umb-editor-view>
+            <umb-editor-header name="model.title" name-locked="true" hide-alias="true" hide-icon="true" hide-description="true"></umb-editor-header>
+            <umb-editor-container>
+                <ng-form name="tabsForm" val-form-manager>
+                    <umb-tabs-nav tabs="vm.tabs" on-tab-change="vm.changeTab(tab)"></umb-tabs-nav>
+                    <umb-tab-content ng-repeat="tab in vm.tabs" ng-show="tab.active" tab="tab">
+                        <div ng-if="tab.alias === 'importer'">
+                            <umb-box ng-show="!vm.importer">
+                                <umb-box-content>
+                                    <ul class="redirects-importers">
+                                        <li ng-repeat="importer in vm.importers">
+                                            <a ng-click="vm.selectImporter(importer)">
+                                                <umb-icon icon="{{importer.icon}}"></umb-icon>
+                                                <div>
+                                                    <strong ng-bind="importer.name"></strong><br />
+                                                    <small ng-bind="importer.description"></small>
+                                                </div>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </umb-box-content>
+                            </umb-box>
+                        </div>
+                        <div ng-if="tab.alias === 'options'">
+                            <umb-box>
+                                <umb-box-content>
+                                    <ng-form class="form-horizontal" name="configurationEditorForm" novalidate val-form-manager>
+                                        <umb-property property="option" ng-repeat="option in vm.config">
+                                            <umb-property-editor model="option" is-pre-value="true"></umb-property-editor>
+                                        </umb-property>
+                                    </ng-form>
+                                </umb-box-content>
+                            </umb-box>
+                        </div>
+                        <div ng-if="tab.alias === 'result'">
+                            <umb-box>
+                                <umb-box-content>
+                                    <div class="skybrud-borgerdk-item" ng-if="vm.result.errors">
+                                        <div class="skybrud-borgerdk-item-content">
+                                            <div class="skybrud-borgerdk-item-title">
+                                                <div class="skybrud-borgerdk-item-icon">
+                                                    <i class="icon-delete color-red"></i>
+                                                </div>
+                                                <div class="skybrud-borgerdk-item-name color-red">
+                                                    Import failed
+                                                    <div class="skybrud-borgerdk-item-message">
+                                                        <div ng-repeat="error in vm.result.errors" class="color-red">{{error}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="skybrud-borgerdk-item" ng-repeat="item in vm.result.redirects">
+                                        <div class="skybrud-borgerdk-item-content">
+                                            <div class="skybrud-borgerdk-item-title">
+                                                <div class="skybrud-borgerdk-item-icon">
+                                                    <i ng-show="item.icon" class="{{item.icon}}"></i>
+                                                </div>
+                                                <div class="skybrud-borgerdk-item-name">
+                                                    {{item.options.originalUrl}}
+                                                    <div class="skybrud-borgerdk-item-message" ng-if="item.messages.length > 0">
+                                                        <div ng-repeat="message in item.messages" class="{{message.class}}">{{message.text}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </umb-box-content>
+                            </umb-box>
+                        </div>
+                    </umb-tab-content>
+                </ng-form>
+            </umb-editor-container>
+            <umb-editor-footer>
+                <umb-editor-footer-content-right>
+                    <umb-button action="model.close()" button-style="link" label="{{model.closeButtonLabel || 'Close'}}" type="button"></umb-button>
+                    <umb-button type="submit"
+                                button-style="success"
+                                disabled="model.submitButtonDisabled"
+                                state="model.submitButtonState"
+                                label="{{model.submitButtonLabel || 'Continue'}}">
+                    </umb-button>
+                </umb-editor-footer-content-right>
+            </umb-editor-footer>
+        </umb-editor-view>
+    </form>
+</div>

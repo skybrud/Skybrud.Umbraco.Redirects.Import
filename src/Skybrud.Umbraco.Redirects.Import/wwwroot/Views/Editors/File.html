@@ -1,0 +1,24 @@
+﻿<div ng-controller="SkybrudUmbracoRedirects.FileController as vm">
+    <div ng-show="model.value.length > 0">
+        <div ng-repeat="file in model.value">
+            <div>
+                <strong>{{file.name}}</strong>
+                <small>({{file.size}} bytes)</small>
+                <button type="button" ng-click="vm.reset()" class="btn btn-link color-red">Remove</button>
+                <div ng-repeat="error in file.errors" class="color-red">{{error}}</div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="model.value.length == 0" ngf-drop class="dropzone is-small" ngf-change="vm.handleFiles($files, $event)" ngf-drag-over-class="drag-over" ngf-multiple="false">
+        <div class="content">
+            <img class="illustration" src="assets/img/uploader/upload-illustration.svg" alt="" draggable="false" />
+            <div class="file-select"
+                 ngf-select
+                 ng-model="vm.filesHolder"
+                 ngf-change="vm.handleFiles($files, $event)"
+                 ngf-multiple="true">
+                - <localize key="media_orClickHereToUpload">or click here to choose files</localize>
+            </div>
+        </div>
+    </div>
+</div>
