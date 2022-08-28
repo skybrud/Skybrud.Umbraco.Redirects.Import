@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-
-<language alias="da" intName="Danish" localName="dansk" lcid="6" culture="da-DK">
-  <area alias="redirects">
-    <key alias="import">Importér</key>
-    <key alias="export">Eksportér</key>
-  </area>
-</language>

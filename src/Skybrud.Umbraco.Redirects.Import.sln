@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29806.167
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32616.157
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skybrud.Umbraco.Redirects.Import", "Skybrud.Umbraco.Redirects.Import\Skybrud.Umbraco.Redirects.Import.csproj", "{3443E08B-3921-47FC-804B-790B203FC41E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Skybrud.Umbraco.Redirects.Import", "Skybrud.Umbraco.Redirects.Import\Skybrud.Umbraco.Redirects.Import.csproj", "{A088D65B-C1D1-4B5F-89D7-A3FA7E627293}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +11,15 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3443E08B-3921-47FC-804B-790B203FC41E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3443E08B-3921-47FC-804B-790B203FC41E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3443E08B-3921-47FC-804B-790B203FC41E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3443E08B-3921-47FC-804B-790B203FC41E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A088D65B-C1D1-4B5F-89D7-A3FA7E627293}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A088D65B-C1D1-4B5F-89D7-A3FA7E627293}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A088D65B-C1D1-4B5F-89D7-A3FA7E627293}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A088D65B-C1D1-4B5F-89D7-A3FA7E627293}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {006F7AAF-DB6F-47BD-806A-C5142B6FAA90}
+		SolutionGuid = {841EAD9F-F37B-417E-B274-35B652C2C2D0}
 	EndGlobalSection
 EndGlobal
