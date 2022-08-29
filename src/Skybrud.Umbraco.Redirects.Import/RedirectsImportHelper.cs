@@ -109,8 +109,9 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         break;
 
                     case "url":
-                    case "inboundurl":
+                    case "old":
                     case "from":
+                    case "inboundurl":
                     case "originalurl":
                         if (columns.InboundUrl != null) break;
                         columns.InboundUrl = column;
@@ -139,9 +140,10 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         columns.DestinationType = column;
                         break;
 
-                    case "destinationurl":
-                    case "newurl":
                     case "to":
+                    case "new":
+                    case "newurl":
+                    case "destinationurl":
                         if (columns.DestinationUrl != null) break;
                         columns.DestinationUrl = column;
                         break;
