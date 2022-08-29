@@ -14,7 +14,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
 
         public CsvExporter(RedirectsImportService redirectsImportService) {
             _redirectsImportService = redirectsImportService;
-            Icon = "icon-redirects-csv";
+            Icon = "icon-redirects-csv icon-user";
             Name = "CSV";
             Description = "Lets you export redirects to a CSV file.";
         }
@@ -56,6 +56,19 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
                         }}
                     }
                 },
+                //new() {
+                //    Alias = "includeSeparator",
+                //    Label = "Include separator",
+                //    Description = "Include an explicit separator declaration (eg. <code>sep=;</code>) in the beginning of the CSV file.",
+                //    View = $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}",
+                //    Value = "true",
+                //    Config = new Dictionary<string, object> {
+                //        {"items", new [] {
+                //            new Item { Alias = "true", Name = "Yes" },
+                //            new Item { Alias = "false", Name = "No" }
+                //        }}
+                //    }
+                //},
                 RedirectsImportUtils.GetColumnsOption()
             };
 
