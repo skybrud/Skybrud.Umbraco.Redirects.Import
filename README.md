@@ -26,7 +26,7 @@ Install-Package Skybrud.Umbraco.Redirects -Version 4.0.0-alpha001
 ## Screenshots
 
 ![image](https://user-images.githubusercontent.com/3634580/187294337-f95fc44c-a058-4e0f-8c31-aed876115ed5.png)
-*The package adds an **Import** option as well as an *'Export** option to the existing *Add redirect** button.*
+*The package adds an **Import** option as well as an **Export** option to the existing **Add redirect** button.*
 
 ![image](https://user-images.githubusercontent.com/3634580/187294360-428ed84e-a0ac-4c56-a2be-85e76fe53e25.png)
 *Package includes default importers and exporters for CSV, JSON and XLSX.*
