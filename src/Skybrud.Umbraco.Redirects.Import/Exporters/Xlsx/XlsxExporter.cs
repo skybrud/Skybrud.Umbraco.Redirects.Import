@@ -26,12 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
 
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
             return new[] {
-                new Option {
-                    Alias = "columns",
-                    Label = "Columns",
-                    Description = "Select the columns that should be included in the exported file.",
-                    View = $"{RedirectsImportPackage.AppPlugins}?v={RedirectsPackage.Version}"
-                }
+                RedirectsImportUtils.GetColumnsOption()
             };
         }
 

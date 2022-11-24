@@ -294,10 +294,6 @@ namespace Skybrud.Umbraco.Redirects.Import {
             string destinationQuery = null;
             string destinationFragment = null;
 
-            if (string.IsNullOrWhiteSpace(destinationUrl)) {
-                item.Errors.Add($"Invalid destination URL: {destinationUrl}");
-            }
-
             IPublishedContent destination = null;
 
             if (Columns.DestinationKey is not null) {
@@ -407,7 +403,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         return;
                     }
                 }
-            } else {
+            } else if (!destinationUrl.StartsWith("http://") && !destinationUrl.StartsWith("https://")) {
                 item.Errors.Add($"Destination URL is not a valid URL: {destinationUrl}");
                 return;
             }
