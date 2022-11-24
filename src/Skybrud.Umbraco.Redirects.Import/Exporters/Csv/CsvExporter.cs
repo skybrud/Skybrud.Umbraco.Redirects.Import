@@ -6,12 +6,19 @@ using Skybrud.Umbraco.Redirects.Import.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
 
+    /// <summary>
+    /// A CSV specific implementation of the <see cref="ExporterBase{TOptions,TResult}"/> class.
+    /// </summary>
     public class CsvExporter : ExporterBase<CsvExportOptions, CsvExportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="redirectsImportService"/>.
+        /// </summary>
+        /// <param name="redirectsImportService">The current instance of <see cref="RedirectsImportService"/>.</param>
         public CsvExporter(RedirectsImportService redirectsImportService) {
             _redirectsImportService = redirectsImportService;
             Icon = "icon-redirects-csv icon-user";
@@ -23,6 +30,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
 
         #region Member methods
 
+        /// <summary>
+        /// Returns a list of options based on the specified <paramref name="request"/>.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <returns>A collection of <see cref="Option"/>.</returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new List<Option> {
@@ -74,6 +86,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
 
         }
 
+        /// <summary>
+        /// Initiates a new export based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options"></param>
+        /// <returns>An instance of <see cref="CsvExportResult"/> representing the result of the export.</returns>
         public override CsvExportResult Export(CsvExportOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));

@@ -14,6 +14,8 @@ using Skybrud.Umbraco.Redirects.Import.Importers;
 using Umbraco.Cms.Web.BackOffice.Controllers;
 using Umbraco.Cms.Web.Common.Attributes;
 
+#pragma warning disable CS1591
+
 namespace Skybrud.Umbraco.Redirects.Import.Controllers {
 
     [PluginController("Skybrud")]
