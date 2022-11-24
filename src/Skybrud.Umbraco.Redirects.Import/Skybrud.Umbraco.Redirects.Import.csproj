@@ -9,13 +9,13 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.0.0-alpha001</VersionPrefix>
+    <VersionPrefix>4.0.0-alpha002</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
     <Copyright>Copyright © 2022</Copyright>
     <Title>Skybrud Redirects Import</Title>
-    <Description>Import and export addon for Skybrud.Umbraco.Redirects.</Description>
+    <Description>Import and export addon for Skybrud Redirects.</Description>
   </PropertyGroup>
 
   <!-- Information for the NuGet package -->
