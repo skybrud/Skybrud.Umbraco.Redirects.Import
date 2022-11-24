@@ -79,6 +79,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 {"DestinationUrl", x => x.Destination.Url.ToString()},
                 {"DestinationQuery", x => x.Destination.Query.ToString()},
                 {"DestinationFragment", x => x.Destination.Fragment.ToString()},
+                {"DestinationName", x => x.Destination.Name.ToString()},
                 {"Type", x => x.Type.ToString()},
                 {"IsPermanent", x => x.IsPermanent.ToString()},
                 {"ForwardQueryString", x => x.ForwardQueryString.ToString()},

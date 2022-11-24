@@ -21,6 +21,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
                 new() { Alias = "DestionationUrl", IsSelected = true },
                 new() { Alias = "DestionationQuery", IsSelected = true },
                 new() { Alias = "DestionationFragment", IsSelected = true },
+                new() { Alias = "DestionationName", IsSelected = true },
                 new() { Alias = "Type", IsSelected = true },
                 new() { Alias = "IsPermanent", IsSelected = false },
                 new() { Alias = "ForwardQueryString", IsSelected = true },
