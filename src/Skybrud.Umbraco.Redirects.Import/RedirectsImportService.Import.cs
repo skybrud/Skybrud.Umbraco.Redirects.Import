@@ -43,7 +43,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
             } catch (Exception ex) {
                 item.Errors.Add(ex.Message); // TODO: Should not expose exception message if the exception is not 'RedirectsExcerption'
                 item.Status = RedirectImportStatus.Failed;
-
+                _logger.LogError(ex, "Failed importing redirect.");
             }
 
         }
