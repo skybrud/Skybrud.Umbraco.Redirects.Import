@@ -200,6 +200,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 ParseInboundUrl(inter, row, item);
                 ParseDestination(row, item);
                 ParseRedirectType(inter, row, item);
+                ParseForwardQueryString(inter, row, item);
 
                 redirects.Add(item);
 
