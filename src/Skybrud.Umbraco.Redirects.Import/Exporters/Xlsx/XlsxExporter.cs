@@ -7,12 +7,18 @@ using Skybrud.Umbraco.Redirects.Import.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
 
+    /// <summary>
+    /// Class serving as an exporter for exporting redirects to an <strong>XLSX</strong> file.
+    /// </summary>
     public class XlsxExporter : ExporterBase<XlsxExportOptions, XlsxExportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
         public XlsxExporter(RedirectsImportService redirectsImportService) {
             _redirectsImportService = redirectsImportService;
             Icon = "icon-redirects-excel";
@@ -24,12 +30,22 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
 
         #region Member methods
 
+        /// <summary>
+        /// Returns a collection of <see cref="Option"/> representing the configurable options for the exporter.
+        /// </summary>
+        /// <param name="request">A reference to the current request.</param>
+        /// <returns>A collection of <see cref="Option"/></returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
             return new[] {
                 RedirectsImportUtils.GetColumnsOption()
             };
         }
 
+        /// <summary>
+        /// Triggers a new export of redirects based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The options for the export.</param>
+        /// <returns>An instance of <see cref="XlsxExportResult"/> representing the result of the export.</returns>
         public override XlsxExportResult Export(XlsxExportOptions options) {
 
             byte[] bytes;

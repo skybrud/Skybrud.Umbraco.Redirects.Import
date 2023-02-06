@@ -1,7 +1,12 @@
 ﻿using System.Data;
 
+#pragma warning disable CS1591
+
 namespace Skybrud.Umbraco.Redirects.Import.Models.Import {
 
+    /// <summary>
+    /// Class representing the column mapping of a redriects import.
+    /// </summary>
     public class ImportColumnList {
 
         public DataColumn RootNode { get; set; }

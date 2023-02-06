@@ -11,12 +11,18 @@ using System.Text;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
 
+    /// <summary>
+    /// Class representing an importer based on an <strong>CSV</strong> file.
+    /// </summary>
     public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
         public CsvImporter(RedirectsImportService redirectsImportService) {
 
             _redirectsImportService = redirectsImportService;
@@ -31,6 +37,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
 
         #region Member methods
 
+        /// <summary>
+        /// Returns a collection with the options for the <strong>Options</strong> step in the import process.
+        /// </summary>
+        /// <param name="request">A reference to current request.</param>
+        /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new Option[] {
@@ -78,6 +89,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
 
         }
 
+        /// <summary>
+        /// Performs a new import based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The options describing the import.</param>
+        /// <returns>An instance of <see cref="CsvImportResult"/> representing the result of the import.</returns>
         public override CsvImportResult Import(CsvImportOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));
@@ -144,6 +160,10 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             };
         }
 
+        /// <summary>
+        /// Returns a list of available encodings.
+        /// </summary>
+        /// <returns>A list of <see cref="CsvImportEncodingItem"/>.</returns>
         protected virtual IReadOnlyList<CsvImportEncodingItem> GetEncodings() {
 
             var temp = new List<CsvImportEncodingItem> {
@@ -167,6 +187,12 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
 
         }
 
+        /// <summary>
+        /// Attempts to get the encoding with the specified <paramref name="alias"/>.
+        /// </summary>
+        /// <param name="alias">The alias of the encoding.</param>
+        /// <param name="result">When this method returns, holds an instance <see cref="Encoding"/> representing the matched encoding if successful; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
         protected bool TryGetEncoding(string alias, out Encoding result) {
 
             try {

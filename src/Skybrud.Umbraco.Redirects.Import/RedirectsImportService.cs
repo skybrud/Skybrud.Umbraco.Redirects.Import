@@ -18,6 +18,9 @@ using Skybrud.Umbraco.Redirects.Import.Exporters;
 
 namespace Skybrud.Umbraco.Redirects.Import {
 
+    /// <summary>
+    /// Service class for handling imports and exports.
+    /// </summary>
     public partial class RedirectsImportService {
 
         private readonly ILogger<RedirectsImportService> _logger;
@@ -29,6 +32,15 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
+        /// <param name="logger"></param>
+        /// <param name="domainService"></param>
+        /// <param name="mediaService"></param>
+        /// <param name="umbracoContextAccessor"></param>
+        /// <param name="webHostEnvironment"></param>
+        /// <param name="redirectsService"></param>
         public RedirectsImportService(ILogger<RedirectsImportService> logger, IDomainService domainService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, IWebHostEnvironment webHostEnvironment, IRedirectsService redirectsService) {
             _logger = logger;
             _domainService = domainService;

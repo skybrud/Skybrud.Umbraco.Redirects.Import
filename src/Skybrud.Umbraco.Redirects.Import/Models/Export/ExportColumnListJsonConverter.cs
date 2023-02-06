@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
 
-    public class ExportColumnListJsonConverter : JsonConverter {
+    internal class ExportColumnListJsonConverter : JsonConverter {
 
         public override bool CanWrite => false;
 

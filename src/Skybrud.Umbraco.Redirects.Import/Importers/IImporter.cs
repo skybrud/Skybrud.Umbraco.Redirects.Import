@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers {
 
+    /// <summary>
+    /// Interface describing an importer.
+    /// </summary>
     public interface IImporter {
 
         #region Properties
@@ -41,8 +44,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// <summary>
         /// Returns a collection with the options for the <strong>Options</strong> step in the import process.
         /// </summary>
-        /// <param name="request">A reference to current request.</param>
-        /// <returns></returns>
+        /// <param name="request">A reference to the current request.</param>
+        /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
         IEnumerable<Option> GetOptions(HttpRequest request);
 
         /// <summary>
@@ -56,13 +59,16 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// Performs a new import based on the specified <paramref name="options"/>.
         /// </summary>
         /// <param name="options">The options describing the import.</param>
-        /// <returns>An instance of <see cref="IImportResult"/>.</returns>
+        /// <returns>An instance of <see cref="IImportResult"/> representing the result of the import.</returns>
         IImportResult Import(IImportOptions options);
 
         #endregion
 
     }
 
+    /// <summary>
+    /// Interface describing a generic importer.
+    /// </summary>
     public interface IImporter<TOptions, out TResult> : IImporter where TOptions : IImportOptions where TResult : IImportResult {
 
         /// <summary>

@@ -9,12 +9,18 @@ using Skybrud.Umbraco.Redirects.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Json {
 
+    /// <summary>
+    /// Class serving as an exporter for exporting redirects to a <strong>JSON</strong> file.
+    /// </summary>
     public class JsonExporter : ExporterBase<JsonExportOptions, JsonExportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
         public JsonExporter(RedirectsImportService redirectsImportService) {
             _redirectsImportService = redirectsImportService;
             Icon = "icon-redirects-json";
@@ -26,6 +32,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Json {
 
         #region Member methods
 
+        /// <summary>
+        /// Returns a collection of <see cref="Option"/> representing the configurable options for the exporter.
+        /// </summary>
+        /// <param name="request">A reference to the current request.</param>
+        /// <returns>A collection of <see cref="Option"/></returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new List<Option> {
@@ -46,6 +57,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Json {
 
         }
 
+        /// <summary>
+        /// Triggers a new export of redirects based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The options for the export.</param>
+        /// <returns>An instance of <see cref="JsonExportResult"/> representing the result of the export.</returns>
         public override JsonExportResult Export(JsonExportOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));

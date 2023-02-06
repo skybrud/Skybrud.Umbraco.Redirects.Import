@@ -4,11 +4,17 @@ using Newtonsoft.Json;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
 
+    /// <summary>
+    /// Class representing a list of columns to be exported.
+    /// </summary>
     [JsonConverter(typeof(ExportColumnListJsonConverter))]
     public class ExportColumnList : IEnumerable<ExportColumnItem> {
 
-        private readonly List<ExportColumnItem> _columns;
+        private readonly IReadOnlyList<ExportColumnItem> _columns;
 
+        /// <summary>
+        /// Initializes a new instanced with default options.
+        /// </summary>
         public ExportColumnList() {
             _columns = new List<ExportColumnItem> {
                 new() { Alias = "Id", IsSelected = true },
@@ -30,10 +36,15 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
             };
         }
 
-        public ExportColumnList(List<ExportColumnItem> columns) {
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="columns"/>.
+        /// </summary>
+        /// <param name="columns">A list of columns the new instance should be based on.</param>
+        public ExportColumnList(IReadOnlyList<ExportColumnItem> columns) {
             _columns = columns;
         }
 
+        /// <inheritdoc />
         public IEnumerator<ExportColumnItem> GetEnumerator() {
             return _columns.GetEnumerator();
         }

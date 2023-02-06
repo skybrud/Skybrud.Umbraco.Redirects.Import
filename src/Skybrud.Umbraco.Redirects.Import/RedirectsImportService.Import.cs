@@ -12,6 +12,10 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
     public partial class RedirectsImportService {
 
+        /// <summary>
+        /// Triggers a new import of the specified <paramref name="item"/>.
+        /// </summary>
+        /// <param name="item">The item to be imported.</param>
         public virtual void Import(RedirectImportItem item) {
 
             try {
@@ -48,6 +52,12 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
         }
 
+        /// <summary>
+        /// Triggers a new import of the redirects identified by the specified <paramref name="dataTable"/>.
+        /// </summary>
+        /// <param name="options">The options for the import.</param>
+        /// <param name="dataTable">The data table holding the redirects.</param>
+        /// <returns>An instance of <see cref="ImportResult"/> representing the result of the import.</returns>
         public virtual ImportResult Import(IImportOptions options, DataTable dataTable) {
 
             // Initialize a new helper instance
@@ -77,6 +87,12 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
         }
 
+        /// <summary>
+        /// Returns whether <paramref name="b"/> provides any new changes for <paramref name="a"/>.
+        /// </summary>
+        /// <param name="a">The existing redirect.</param>
+        /// <param name="b">The options for the updated redirect.</param>
+        /// <returns><see langword="true"/> if any new changes are detected, otherwise, <see langword="false"/>.</returns>
         protected virtual bool HasChanges(IRedirect a, AddRedirectOptions b) {
 
             StringBuilder sb1 = new();
@@ -104,9 +120,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
             return sb1.ToString() != sb2.ToString();
 
-            throw new Exception((sb1.ToString() == sb2.ToString()) + "\r\n\r\n" + sb1 + "\r\n\r\nvs\r\n\r\n" + sb2);
-
         }
 
     }
+
 }

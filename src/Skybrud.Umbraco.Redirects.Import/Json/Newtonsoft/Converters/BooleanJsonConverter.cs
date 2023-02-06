@@ -4,7 +4,9 @@ using Skybrud.Essentials.Strings;
 
 namespace Skybrud.Umbraco.Redirects.Import.Json.Newtonsoft.Converters {
 
-    public class BooleanJsonConverter : JsonConverter {
+    internal class BooleanJsonConverter : JsonConverter {
+
+        // TODO: COnsider moving to Skybrud.Essentials?
 
         public override bool CanWrite => false;
 

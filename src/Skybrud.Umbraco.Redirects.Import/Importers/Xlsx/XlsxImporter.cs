@@ -5,17 +5,22 @@ using System.IO;
 using System.Linq;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Http;
-using Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx;
 using Skybrud.Umbraco.Redirects.Import.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
 
+    /// <summary>
+    /// Class representing an importer based on an <strong>XLSX</strong> file.
+    /// </summary>
     public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
 
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
 
+        /// <summary>
+        /// Initializes a new instance based on the specified dependencies.
+        /// </summary>
         public XlsxImporter(RedirectsImportService redirectsImportService) {
             _redirectsImportService = redirectsImportService;
             Icon = "icon-redirects-excel";
@@ -27,32 +32,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
 
         #region Member methods
 
-        public XlsxExportResult Export(XlsxExportOptions options) {
-
-            byte[] bytes;
-
-            // Initialize a new workbook
-            using (XLWorkbook workbook = new()) {
-
-                // Add a new sheet to the workbook based on the data table
-                IXLWorksheet worksheet = workbook.Worksheets.Add(_redirectsImportService.ExportAsDataTable(options));
-
-                // Adjust column sizes
-                worksheet.Columns().AdjustToContents();
-
-                // Convert the workbook to a byte array
-                using (MemoryStream ms = new()) {
-                    workbook.SaveAs(ms);
-                    bytes = ms.ToArray();
-                }
-
-            }
-
-            // Return the result
-            return new XlsxExportResult(Guid.NewGuid(), bytes);
-
-        }
-
+        /// <summary>
+        /// Returns a collection with the options for the <strong>Options</strong> step in the import process.
+        /// </summary>
+        /// <param name="request">A reference to current request.</param>
+        /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new [] {
@@ -62,6 +46,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
 
         }
 
+        /// <summary>
+        /// Performs a new import based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The options describing the import.</param>
+        /// <returns>An instance of <see cref="XlsxImportResult"/> representing the result of the import.</returns>
         public override XlsxImportResult Import(XlsxImportOptions options) {
 
             if (options == null) throw new ArgumentNullException(nameof(options));

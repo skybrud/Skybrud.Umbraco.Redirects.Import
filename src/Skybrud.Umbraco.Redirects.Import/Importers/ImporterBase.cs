@@ -7,6 +7,11 @@ using System.Collections.Generic;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers {
 
+    /// <summary>
+    /// Class serving as a base implementation for an <see cref="IImporter"/>.
+    /// </summary>
+    /// <typeparam name="TOptions">The type of the options.</typeparam>
+    /// <typeparam name="TResult">The type of the result.</typeparam>
     public abstract class ImporterBase<TOptions, TResult> : IImporter<TOptions, TResult> where TOptions : IImportOptions where TResult : IImportResult {
 
         #region Properties
@@ -39,6 +44,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
 
         #region Member methods
 
+        /// <summary>
+        /// Parses and returns the options based on the specified HTTP <paramref name="request"/>.
+        /// </summary>
+        /// <param name="request">The HTTP request.</param>
+        /// <returns>A collection of <see cref="Option"/> representing the parsed options.</returns>
         public virtual IEnumerable<Option> GetOptions(HttpRequest request) {
             return Array.Empty<Option>();
         }
@@ -47,6 +57,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
             return ParseOptions(config);
         }
 
+        /// <summary>
+        /// Parses the specified <paramref name="config"/> into an instance of <typeparamref name="TOptions"/>.
+        /// </summary>
+        /// <param name="config">A JSON object representing the configuration to parse.</param>
+        /// <returns>An instance of <typeparamref name="TOptions"/> representing the parsed options.</returns>
         public virtual TOptions ParseOptions(JObject config) {
             return config.ToObject<TOptions>();
         }
@@ -56,6 +71,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
             return Import(t);
         }
 
+        /// <summary>
+        /// Triggers a new import based on the specified <paramref name="options"/>.
+        /// </summary>
+        /// <param name="options">The options for the import.</param>
+        /// <returns>An instance of <typeparamref name="TResult"/> representing the result of the import.</returns>
         public abstract TResult Import(TOptions options);
 
         #endregion
