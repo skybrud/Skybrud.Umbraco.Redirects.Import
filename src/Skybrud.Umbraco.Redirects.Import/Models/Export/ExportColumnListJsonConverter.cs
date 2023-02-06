@@ -10,14 +10,14 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
 
         public override bool CanWrite => false;
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
             throw new NotImplementedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
             if (reader.TokenType != JsonToken.StartArray) return null;
             JArray array = JArray.Load(reader);
-            return new ExportColumnList(new List<ExportColumnItem>(array.Select(x => ((JObject) x).ToObject<ExportColumnItem>())));
+            return new ExportColumnList(new List<ExportColumnItem>(array.Select(x => ((JObject) x).ToObject<ExportColumnItem>())!));
 
         }
 

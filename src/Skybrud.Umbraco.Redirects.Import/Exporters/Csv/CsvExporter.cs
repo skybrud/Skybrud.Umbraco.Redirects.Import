@@ -38,33 +38,25 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new List<Option> {
-                new() {
-                    Alias = "encoding",
-                    Label = "Encoding",
-                    Description = "Select the encoding of the CSV file.",
-                    View = $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}",
+                new("encoding", "Encoding", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the encoding of the CSV file.") {
                     Value = "utf8",
                     Config = new Dictionary<string, object> {
                         {"items", new [] {
-                            new Item { Alias = "ascii", Name = "Ascii" },
-                            new Item { Alias = "utf8", Name = "UTF-8" },
-                            new Item { Alias = "windows1252", Name = "Windows 1252" }
+                            new Item("ascii", "Ascii"),
+                            new Item("utf8", "UTF-8"),
+                            new Item("windows1252", "Windows 1252")
                         }}
                     }
                 },
-                new() {
-                    Alias = "separator",
-                    Label = "Separator",
-                    Description = "Select the separator to be used in the exported CSV file.",
-                    View = $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}",
+                new("separator", "Separator", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the separator to be used in the exported CSV file.") {
                     Value = "semicolon",
                     Config = new Dictionary<string, object> {
                         {"items", new [] {
-                            new Item { Alias = "default", Name = "Default" },
-                            new Item { Alias = "colon", Name = "Colon" },
-                            new Item { Alias = "semicolon", Name = "Semi colon" },
-                            new Item { Alias = "space", Name = "Space" },
-                            new Item { Alias = "Tab", Name = "Tab" }
+                            new Item("default", "Default"),
+                            new Item("colon", "Colon"),
+                            new Item("semicolon", "Semi colon"),
+                            new Item("space", "Space"),
+                            new Item("Tab", "Tab")
                         }}
                     }
                 },
@@ -76,8 +68,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
                 //    Value = "true",
                 //    Config = new Dictionary<string, object> {
                 //        {"items", new [] {
-                //            new Item { Alias = "true", Name = "Yes" },
-                //            new Item { Alias = "false", Name = "No" }
+                //            new Item("true", "Yes"),
+                //            new Item("false", "No")
                 //        }}
                 //    }
                 //},

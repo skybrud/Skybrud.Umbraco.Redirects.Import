@@ -32,7 +32,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
         /// Gets a reference to an <see cref="Exception"/> if the import failed at a global level.
         /// </summary>
         [JsonIgnore]
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
 
         #endregion
 
@@ -51,12 +51,14 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
 
         private XlsxImportResult(IReadOnlyList<RedirectImportItem> redirects) {
             IsSuccessful = true;
+            Errors = Array.Empty<string>();
             Redirects = redirects;
         }
 
         private XlsxImportResult(IReadOnlyList<string> errors) {
             IsSuccessful = false;
             Errors = errors;
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         private XlsxImportResult(Exception exception) {
@@ -65,6 +67,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
             Errors = new[] {
                 exception is RedirectsException rex ? rex.Message : "Import failed on the server."
             };
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         #endregion

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Umbraco.Cms.Core.Composing;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers {
@@ -18,7 +19,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
 
             foreach (IImporter item in this) {
 
-                string typeName = item.GetType().AssemblyQualifiedName;
+                string? typeName = item.GetType().AssemblyQualifiedName;
                 if (typeName != null && _lookup.ContainsKey(typeName) == false) {
                     _lookup.Add(typeName, item);
                 }
@@ -33,8 +34,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// <typeparam name="TImporter">The type of the importer.</typeparam>
         /// <param name="result">When this method returns, holds an instance of <typeparamref name="TImporter"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGet<TImporter>(out TImporter result) where TImporter : IImporter {
-            if (_lookup.TryGetValue(typeof(TImporter).AssemblyQualifiedName!, out IImporter importer)) {
+        public bool TryGet<TImporter>([NotNullWhen(true)] out TImporter? result) where TImporter : IImporter {
+            if (_lookup.TryGetValue(typeof(TImporter).AssemblyQualifiedName!, out IImporter? importer)) {
                 result = (TImporter)importer;
                 return true;
             }
@@ -48,7 +49,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// <param name="typeName">The name of the type.</param>
         /// <param name="result">When this method returns, holds an instance of <see cref="IImporter"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGet(string typeName, out IImporter result) {
+        public bool TryGet(string typeName, [NotNullWhen(true)] out IImporter? result) {
             return _lookup.TryGetValue(typeName, out result);
         }
 

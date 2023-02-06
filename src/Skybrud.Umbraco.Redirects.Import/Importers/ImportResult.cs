@@ -32,7 +32,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// Gets a reference to an <see cref="Exception"/> if the import failed at a global level.
         /// </summary>
         [JsonIgnore]
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
 
         #endregion
 
@@ -41,11 +41,13 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         private ImportResult(IReadOnlyList<RedirectImportItem> redirects) {
             IsSuccessful = true;
             Redirects = redirects;
+            Errors = Array.Empty<string>();
         }
 
         private ImportResult(IReadOnlyList<string> errors) {
             IsSuccessful = false;
             Errors = errors;
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         private ImportResult(Exception exception) {
@@ -54,6 +56,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
             Errors = new[] {
                 exception is RedirectsException rex ? rex.Message : "Import failed on the server."
             };
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         #endregion

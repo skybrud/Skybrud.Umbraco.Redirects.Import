@@ -33,6 +33,13 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Import {
         [JsonProperty("warnings")]
         public List<string> Warnings = new();
 
+        /// <summary>
+        /// Initializes a new instance with default options.
+        /// </summary>
+        public RedirectImportItem() {
+            AddOptions = new AddRedirectOptions();
+        }
+
     }
 
 }

@@ -1,4 +1,5 @@
-﻿using Skybrud.Umbraco.Redirects.Import.Models.Import;
+﻿using System;
+using Skybrud.Umbraco.Redirects.Import.Models.Import;
 using System.Collections.Generic;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Json {
@@ -24,6 +25,20 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Json {
         /// Gets a list of the imported redirects.
         /// </summary>
         public IReadOnlyList<RedirectImportItem> Redirects { get; }
+
+        #endregion
+
+        #region Constructors
+
+        /// <summary>
+        /// Initializes a new instance with default options.
+        /// </summary>
+        public JsonImportResult() {
+            IsSuccessful = false;
+            Errors = null!;
+            Redirects = null!;
+            throw new NotImplementedException();
+        }
 
         #endregion
 

@@ -17,22 +17,22 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
         /// </summary>
         public ExportColumnList() {
             _columns = new List<ExportColumnItem> {
-                new() { Alias = "Id", IsSelected = true },
-                new() { Alias = "Key", IsSelected = true },
-                new() { Alias = "RootKey", IsSelected = true },
-                new() { Alias = "Url", IsSelected = true },
-                new() { Alias = "QueryString", IsSelected = true },
-                new() { Alias = "DestinationType", IsSelected = true },
-                new() { Alias = "DestinationId", IsSelected = true },
-                new() { Alias = "DestionationUrl", IsSelected = true },
-                new() { Alias = "DestionationQuery", IsSelected = true },
-                new() { Alias = "DestionationFragment", IsSelected = true },
-                new() { Alias = "DestionationName", IsSelected = true },
-                new() { Alias = "Type", IsSelected = true },
-                new() { Alias = "IsPermanent", IsSelected = false },
-                new() { Alias = "ForwardQueryString", IsSelected = true },
-                new() { Alias = "CreateDate", IsSelected = true },
-                new() { Alias = "UpdateDate", IsSelected = true }
+                new("Id", true),
+                new("Key", true),
+                new("RootKey", true),
+                new("Url", true),
+                new("QueryString", true),
+                new("DestinationType", true),
+                new("DestinationId", true),
+                new("DestionationUrl", true),
+                new("DestionationQuery", true),
+                new("DestionationFragment", true),
+                new("DestionationName", true),
+                new("Type", true),
+                new("IsPermanent", false),
+                new("ForwardQueryString", true),
+                new("CreateDate", true),
+                new("UpdateDate", true)
             };
         }
 

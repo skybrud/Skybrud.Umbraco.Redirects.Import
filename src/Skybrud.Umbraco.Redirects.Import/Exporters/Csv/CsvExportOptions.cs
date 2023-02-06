@@ -29,7 +29,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
         /// <summary>
         /// Gets or sets the columns that should be included in the exported CSV file.
         /// </summary>
-        public ExportColumnList Columns { get; set; }
+        public ExportColumnList? Columns { get; set; }
 
     }
 

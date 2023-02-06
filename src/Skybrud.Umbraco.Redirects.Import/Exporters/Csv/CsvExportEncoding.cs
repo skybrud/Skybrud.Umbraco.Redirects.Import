@@ -1,6 +1,4 @@
-﻿using static System.Net.WebRequestMethods;
-
-namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
+﻿namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
 
     /// <summary>
     /// Enum class indicating an encoding.

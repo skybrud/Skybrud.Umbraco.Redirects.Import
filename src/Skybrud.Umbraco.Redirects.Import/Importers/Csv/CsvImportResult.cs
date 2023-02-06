@@ -32,7 +32,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// Gets a reference to an <see cref="Exception"/> if the import failed at a global level.
         /// </summary>
         [JsonIgnore]
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
 
         #endregion
 
@@ -49,14 +49,16 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             Exception = result.Exception;
         }
 
-        private CsvImportResult(List<RedirectImportItem> redirects) {
+        private CsvImportResult(IReadOnlyList<RedirectImportItem> redirects) {
             IsSuccessful = true;
+            Errors = Array.Empty<string>();
             Redirects = redirects;
         }
 
-        private CsvImportResult(List<string> errors) {
+        private CsvImportResult(IReadOnlyList<string> errors) {
             IsSuccessful = false;
             Errors = errors;
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         private CsvImportResult(Exception exception) {
@@ -65,6 +67,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             Errors = new[] {
                 exception is RedirectsException rex ? rex.Message : "Import failed on the server."
             };
+            Redirects = Array.Empty<RedirectImportItem>();
         }
 
         #endregion

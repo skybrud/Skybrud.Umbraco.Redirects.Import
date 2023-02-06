@@ -17,7 +17,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// Gets the type of the importer.
         /// </summary>
         [JsonProperty("type", Order = -99)]
-        public string Type => GetType().AssemblyQualifiedName;
+        public string Type => GetType().AssemblyQualifiedName!;
 
         /// <summary>
         /// Gets the icon of the importer.
@@ -35,7 +35,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// Gets the description of the importer.
         /// </summary>
         [JsonProperty("description", Order = -97)]
-        string Description { get; }
+        string? Description { get; }
 
         #endregion
 

@@ -10,7 +10,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx {
         /// <summary>
         /// Gets or sets the columns that should be included in the exported XLSX file.
         /// </summary>
-        public ExportColumnList Columns { get; set; }
+        public ExportColumnList? Columns { get; set; }
 
     }
 

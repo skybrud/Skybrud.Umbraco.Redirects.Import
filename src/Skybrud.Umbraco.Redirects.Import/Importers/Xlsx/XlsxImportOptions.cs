@@ -21,7 +21,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx {
         /// <summary>
         /// Gets or sets the uploaded file.
         /// </summary>
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
 
     }
 

@@ -26,7 +26,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// <summary>
         /// Gets or sets the uploaded file.
         /// </summary>
-        IFormFile File { get; set; }
+        IFormFile? File { get; set; }
 
     }
 

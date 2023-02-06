@@ -10,7 +10,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Extensions {
         /// <param name="row">The row.</param>
         /// <param name="column">The column.</param>
         /// <returns>The string value of the cell if successful; otherwise, <see langword="null"/>.</returns>
-        public static string GetString(this DataRow row, DataColumn column) {
+        public static string? GetString(this DataRow? row, DataColumn? column) {
             return row == null || column == null ? null : row[column]?.ToString();
         }
 

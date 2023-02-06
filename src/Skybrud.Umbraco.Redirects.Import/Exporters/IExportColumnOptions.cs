@@ -12,7 +12,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters {
         /// Gets a list of the columns that should be exported.
         /// </summary>
         [JsonProperty("columns", Order = 50)]
-        ExportColumnList Columns { get; set; }
+        ExportColumnList? Columns { get; set; }
 
     }
 

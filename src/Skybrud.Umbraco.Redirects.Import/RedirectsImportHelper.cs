@@ -4,10 +4,11 @@ using Skybrud.Umbraco.Redirects.Import.Exceptions;
 using Skybrud.Umbraco.Redirects.Import.Extensions;
 using Skybrud.Umbraco.Redirects.Import.Models.Import;
 using Skybrud.Umbraco.Redirects.Models;
-using Skybrud.Umbraco.Redirects.Models.Options;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
+using Skybrud.Essentials.Common;
 using Skybrud.Umbraco.Redirects.Import.Importers;
 using Umbraco.Cms.Core.Models;
 using Umbraco.Cms.Core.Models.PublishedContent;
@@ -49,7 +50,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Gets a reference to the <see cref="ImportColumnList"/> with the mapped columns.
         /// </summary>
-        public ImportColumnList Columns { get; set; }
+        public ImportColumnList? Columns { get; set; }
 
         #endregion
 
@@ -63,9 +64,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
             _mediaService = mediaService;
 
             DomainService = domainService;
-            if (!umbracoContextAccessor.TryGetUmbracoContext(out IUmbracoContext umbraco)) throw new Exception("Unable to get current Umbraco context.");
-            Umbraco = umbraco;
-
+            Umbraco = umbracoContextAccessor.GetRequiredUmbracoContext();
             DataTable = table;
             Options = options;
 
@@ -81,8 +80,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="id">The numeric ID of the content.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetContent(int id, out IPublishedContent result) {
-            result = Umbraco?.Content?.GetById(id);
+        public bool TryGetContent(int id, [NotNullWhen(true)] out IPublishedContent? result) {
+            result = Umbraco.Content?.GetById(id);
             return result != null;
         }
 
@@ -92,8 +91,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="key">The GUID key of the content.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetContent(Guid key, out IPublishedContent result) {
-            result = Umbraco?.Content?.GetById(key);
+        public bool TryGetContent(Guid key, [NotNullWhen(true)] out IPublishedContent? result) {
+            result = Umbraco.Content?.GetById(key);
             return result != null;
         }
 
@@ -103,8 +102,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="route">The route of the content.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetContent(string route, out IPublishedContent result) {
-            result = Umbraco?.Content?.GetByRoute(route);
+        public bool TryGetContent(string route, [NotNullWhen(true)] out IPublishedContent? result) {
+            result = Umbraco.Content?.GetByRoute(route);
             return result != null;
         }
 
@@ -114,8 +113,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="id">The numeric ID the media.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetMedia(int id, out IPublishedContent result) {
-            result = Umbraco?.Media?.GetById(id);
+        public bool TryGetMedia(int id, [NotNullWhen(true)] out IPublishedContent? result) {
+            result = Umbraco.Media?.GetById(id);
             return result != null;
         }
 
@@ -125,8 +124,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="key">The GUID key the media.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetMedia(Guid key, out IPublishedContent result) {
-            result = Umbraco?.Media?.GetById(key);
+        public bool TryGetMedia(Guid key, [NotNullWhen(true)] out IPublishedContent? result) {
+            result = Umbraco.Media?.GetById(key);
             return result != null;
         }
 
@@ -136,9 +135,9 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="route">The route of the media.</param>
         /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        public bool TryGetMedia(string route, out IPublishedContent result) {
+        public bool TryGetMedia(string route, [NotNullWhen(true)] out IPublishedContent? result) {
 
-            IMedia media = _mediaService.GetMediaByPath(route);
+            IMedia? media = _mediaService.GetMediaByPath(route);
             if (media != null) return TryGetMedia(media.Key, out result);
 
             result = null;
@@ -248,27 +247,26 @@ namespace Skybrud.Umbraco.Redirects.Import {
         }
 
         /// <summary>
-        /// Parses the redirects indetified by the specified <paramref name="helper"/> instance.
+        /// Parses the redirects.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <returns>A list of <see cref="RedirectImportItem"/> representing the parsed redirects.</returns>
-        public virtual List<RedirectImportItem> ParseRedirects(RedirectsImportHelper helper) {
+        public virtual List<RedirectImportItem> ParseRedirects() {
 
             List<RedirectImportItem> redirects = new();
 
-            foreach (DataRow row in helper.DataTable.Rows) {
+            foreach (DataRow row in DataTable.Rows) {
 
                 RedirectImportItem item = new() {
-                    AddOptions = new AddRedirectOptions {
+                    AddOptions = {
                         Overwrite = Options.OverwriteExisting
                     }
                 };
 
-                ParseRootNode(helper, row, item);
-                ParseInboundUrl(helper, row, item);
-                ParseDestination(helper, row, item);
-                ParseRedirectType(helper, row, item);
-                ParseForwardQueryString(helper, row, item);
+                ParseRootNode(row, item);
+                ParseInboundUrl(row, item);
+                ParseDestination(row, item);
+                ParseRedirectType(row, item);
+                ParseForwardQueryString(row, item);
 
                 redirects.Add(item);
 
@@ -281,18 +279,19 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Parses the value for the root node option of the specified <paramref name="row"/>.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <param name="row">The row being parsed.</param>
         /// <param name="item">An instance of <see cref="RedirectImportItem"/> representing the parsed row.</param>
-        public virtual void ParseRootNode(RedirectsImportHelper helper, DataRow row, RedirectImportItem item) {
+        public virtual void ParseRootNode(DataRow row, RedirectImportItem item) {
 
-            string valueRootNode = row.GetString(helper.Columns.RootNode);
+            if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
+
+            string? valueRootNode = row.GetString(Columns.RootNode);
             if (string.IsNullOrWhiteSpace(valueRootNode)) return;
 
             // Does the value match a numeric ID?
             if (int.TryParse(valueRootNode, out int rootNodeId)) {
                 item.AddOptions.RootNodeId = rootNodeId;
-                if (helper.TryGetContent(rootNodeId, out IPublishedContent content)) {
+                if (TryGetContent(rootNodeId, out IPublishedContent? content)) {
                     item.AddOptions.RootNodeKey = content.Key;
                     return;
                 }
@@ -306,7 +305,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 if (rootNodeKey == Guid.Empty) {
                     return;
                 }
-                if (helper.TryGetContent(rootNodeKey, out IPublishedContent content)) {
+                if (TryGetContent(rootNodeKey, out IPublishedContent? content)) {
                     item.AddOptions.RootNodeId = content.Id;
                     return;
                 }
@@ -316,7 +315,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
             // TODO: Should we validate the domain? Any security concerns about using the input value?
 
-            IDomain domain = DomainService.GetByName(valueRootNode!);
+            IDomain? domain = DomainService.GetByName(valueRootNode);
 
             if (domain == null) {
                 item.Errors.Add($"Unknown root node or domain: '{valueRootNode}'");
@@ -324,7 +323,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 item.Errors.Add($"Domain doesn't have a root node ID: '{valueRootNode}'");
             } else {
                 item.AddOptions.RootNodeId = domain.RootContentId.Value;
-                if (helper.TryGetContent(rootNodeId, out IPublishedContent content)) {
+                if (TryGetContent(rootNodeId, out IPublishedContent? content)) {
                     item.AddOptions.RootNodeKey = content.Key;
                     return;
                 }
@@ -336,13 +335,14 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Parses the inbound URL of the specified <paramref name="row"/>.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <param name="row">The row being parsed.</param>
         /// <param name="item">An instance of <see cref="RedirectImportItem"/> representing the parsed row.</param>
-        public virtual void ParseInboundUrl(RedirectsImportHelper helper, DataRow row, RedirectImportItem item) {
+        public virtual void ParseInboundUrl(DataRow row, RedirectImportItem item) {
 
-            string url = row.GetString(helper.Columns.InboundUrl);
-            string query = row.GetString(helper.Columns.InboundQuery);
+            if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
+
+            string? url = row.GetString(Columns.InboundUrl);
+            string? query = row.GetString(Columns.InboundQuery);
 
             try {
                 // TODO: Should we validate the URL?
@@ -363,28 +363,29 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Parses the destination of the specified <paramref name="row"/>.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <param name="row">The row being parsed.</param>
         /// <param name="item">An instance of <see cref="RedirectImportItem"/> representing the parsed row.</param>
-        public virtual void ParseDestination(RedirectsImportHelper helper, DataRow row, RedirectImportItem item) {
+        public virtual void ParseDestination(DataRow row, RedirectImportItem item) {
+
+            if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
 
             RedirectDestinationType destinationType = RedirectDestinationType.Url;
 
             if (Columns.DestinationType is not null) {
-                string value = row.GetString(Columns.DestinationType);
+                string? value = row.GetString(Columns.DestinationType);
                 if (!EnumUtils.TryParseEnum(value, out destinationType)) {
                     item.Errors.Add($"Invalid destination type: {value}");
                 }
             }
 
-            string destinationUrl = row.GetString(Columns.DestinationUrl);
-            string destinationQuery = null;
-            string destinationFragment = null;
+            string? destinationUrl = row.GetString(Columns.DestinationUrl);
+            string? destinationQuery = null;
+            string? destinationFragment = null;
 
-            IPublishedContent destination = null;
+            IPublishedContent? destination = null;
 
             if (Columns.DestinationKey is not null) {
-                string value = row.GetString(Columns.DestinationKey);
+                string? value = row.GetString(Columns.DestinationKey);
                 if (!string.IsNullOrWhiteSpace(value)) {
                     if (!Guid.TryParse(value, out Guid destinationKey)) {
                         item.Errors.Add($"Invalid destination key: {value}");
@@ -401,7 +402,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
             }
 
             if (destination == null && Columns.DestinationId is not null) {
-                string value = row.GetString(Columns.DestinationId);
+                string? value = row.GetString(Columns.DestinationId);
                 if (!string.IsNullOrWhiteSpace(value)) {
                     if (!int.TryParse(value, out int destinationId)) {
                         item.Errors.Add($"Invalid destination ID: {value}");
@@ -438,11 +439,11 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
             if (int.TryParse(destinationUrl, out int id)) {
                 if (destination == null) {
-                    if (TryGetContent(id, out IPublishedContent content)) {
+                    if (TryGetContent(id, out IPublishedContent? content)) {
                         destination = content;
                         destinationUrl = content.Url();
                         destinationType = RedirectDestinationType.Content;
-                    } else if (TryGetMedia(id, out IPublishedContent media)) {
+                    } else if (TryGetMedia(id, out IPublishedContent? media)) {
                         destination = media;
                         destinationUrl = media.Url();
                         destinationType = RedirectDestinationType.Media;
@@ -453,11 +454,11 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 }
             } else if (Guid.TryParse(destinationUrl, out Guid key)) {
                 if (destination == null) {
-                    if (TryGetContent(key, out IPublishedContent content)) {
+                    if (TryGetContent(key, out IPublishedContent? content)) {
                         destination = content;
                         destinationUrl = content.Url();
                         destinationType = RedirectDestinationType.Content;
-                    } else if (TryGetMedia(key, out IPublishedContent media)) {
+                    } else if (TryGetMedia(key, out IPublishedContent? media)) {
                         destination = media;
                         destinationUrl = media.Url();
                         destinationType = RedirectDestinationType.Media;
@@ -468,7 +469,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 }
             } else if (destinationUrl.StartsWith("/media")) {
                 if (destination == null) {
-                    if (TryGetMedia(destinationUrl, out IPublishedContent media)) {
+                    if (TryGetMedia(destinationUrl, out IPublishedContent? media)) {
                         destination = media;
                         destinationUrl = media.Url();
                         destinationType = RedirectDestinationType.Media;
@@ -480,7 +481,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 }
             } else if (destinationUrl.StartsWith("/")) {
                 if (destination == null) {
-                    if (TryGetContent(destinationUrl, out IPublishedContent content)) {
+                    if (TryGetContent(destinationUrl, out IPublishedContent? content)) {
                         destination = content;
                         destinationUrl = content.Url();
                         destinationType = RedirectDestinationType.Content;
@@ -496,12 +497,12 @@ namespace Skybrud.Umbraco.Redirects.Import {
             }
 
             if (Columns.DestinationQuery is not null) {
-                string value = row.GetString(Columns.DestinationQuery);
+                string? value = row.GetString(Columns.DestinationQuery);
                 if (!string.IsNullOrWhiteSpace(value)) destinationQuery = value;
             }
 
             if (Columns.DestinationFragment is not null) {
-                string value = row.GetString(Columns.DestinationFragment);
+                string? value = row.GetString(Columns.DestinationFragment);
                 if (!string.IsNullOrWhiteSpace(value)) destinationFragment = value;
             }
 
@@ -509,10 +510,10 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 Id = destination?.Id ?? default,
                 Key = destination?.Key ?? default,
                 Url = destinationUrl,
-                Query = destinationQuery,
-                Fragment = destinationFragment,
+                Query = destinationQuery ?? string.Empty,
+                Fragment = destinationFragment ?? string.Empty,
                 Type = destinationType,
-                Name = destination?.Name
+                Name = destination?.Name ?? string.Empty
             };
 
         }
@@ -520,13 +521,14 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Parses the redirect type of the specified <paramref name="row"/>.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <param name="row">The row being parsed.</param>
         /// <param name="item">An instance of <see cref="RedirectImportItem"/> representing the parsed row.</param>
-        public virtual void ParseRedirectType(RedirectsImportHelper helper, DataRow row, RedirectImportItem item) {
+        public virtual void ParseRedirectType(DataRow row, RedirectImportItem item) {
+
+            if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
 
             // Get the value from the cell (if found)
-            string value = row.GetString(helper.Columns.RedirectType);
+            string? value = row.GetString(Columns.RedirectType);
 
             // Does the column specify an explicit type?
             if (EnumUtils.TryParseEnum(value, out RedirectType type)) {
@@ -541,20 +543,21 @@ namespace Skybrud.Umbraco.Redirects.Import {
             }
 
             // Use the fallback value if we can't tell from the imported file
-            item.AddOptions.Type = helper.Options.DefaultRedirectType;
+            item.AddOptions.Type = Options.DefaultRedirectType;
 
         }
 
         /// <summary>
         /// Parses the query string option of the specified <paramref name="row"/>.
         /// </summary>
-        /// <param name="helper">A reference to the redirects import helper.</param>
         /// <param name="row">The row being parsed.</param>
         /// <param name="item">An instance of <see cref="RedirectImportItem"/> representing the parsed row.</param>
-        public virtual void ParseForwardQueryString(RedirectsImportHelper helper, DataRow row, RedirectImportItem item) {
+        public virtual void ParseForwardQueryString(DataRow row, RedirectImportItem item) {
+
+            if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
 
             // Get the value from the cell (if found)
-            string value = row.GetString(helper.Columns.ForwardQueryString);
+            string? value = row.GetString(Columns.ForwardQueryString);
 
             // Parse the value into a boolean
             item.AddOptions.ForwardQueryString = StringUtils.ParseBoolean(value);

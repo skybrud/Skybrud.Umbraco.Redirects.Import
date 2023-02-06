@@ -179,7 +179,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// </summary>
         /// <param name="extension">The file extension.</param>
         /// <returns>The content type.</returns>
-        public virtual string GetContentType(string extension) {
+        public virtual string GetContentType(string? extension) {
             return extension?.Trim('.') switch {
                 "csv" => "text/csv",
                 "json" => "application/json",

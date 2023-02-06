@@ -6,15 +6,15 @@ namespace Skybrud.Umbraco.Redirects.Import.Json.Newtonsoft.Converters {
 
     internal class BooleanJsonConverter : JsonConverter {
 
-        // TODO: COnsider moving to Skybrud.Essentials?
+        // TODO: Consider moving to Skybrud.Essentials?
 
         public override bool CanWrite => false;
 
-        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer) {
+        public override void WriteJson(JsonWriter writer, object? value, JsonSerializer serializer) {
             throw new NotImplementedException();
         }
 
-        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer) {
+        public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
 
             switch (reader.TokenType) {
 
@@ -22,7 +22,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Json.Newtonsoft.Converters {
                     return (bool) reader.Value!;
 
                 case JsonToken.String:
-                    return StringUtils.ParseBoolean((string)reader.Value);
+                    return StringUtils.ParseBoolean((string)reader.Value!);
 
                 case JsonToken.Integer:
                     return ((int) reader.Value!) == 1;

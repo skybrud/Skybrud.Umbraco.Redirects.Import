@@ -19,6 +19,16 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Export {
         [JsonProperty("selected")]
         public bool IsSelected { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance based on the specified <paramref name="alias"/>.
+        /// </summary>
+        /// <param name="alias">The alias of the item.</param>
+        /// <param name="selected">Whether the item is selected.</param>
+        public ExportColumnItem(string alias, bool selected) {
+            Alias = alias;
+            IsSelected = selected;
+        }
+
     }
 
 }

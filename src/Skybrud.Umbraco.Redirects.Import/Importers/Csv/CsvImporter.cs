@@ -5,6 +5,7 @@ using Skybrud.Umbraco.Redirects.Import.Models;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -44,43 +45,29 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
+            const string itemsUrl = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/Items.html";
+            const string fileUrl = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/File.html";
+
             return new Option[] {
-                new () {
-                    Alias = "overwriteExisting",
-                    Label = "Overwrite existing",
-                    Description = "Indicates whether existing redirects should be overwritten for matching inbound URLs.",
-                    View = "boolean"
-                },
-                new () {
-                    Alias = "encoding",
-                    Label = "Encoding",
-                    Description = "Select the encoding of the uploaded CSV file.",
-                    View = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/Items.html",
+                new ("overwriteExisting", "Overwrite existing", "boolean", "Indicates whether existing redirects should be overwritten for matching inbound URLs."),
+                new ("encoding", "Encoding", itemsUrl, "Select the encoding of the uploaded CSV file.") {
                     Config = new Dictionary<string, object> {
                         {"items", GetEncodings()}
                     }
                 },
-                new () {
-                    Alias = "separator",
-                    Label = "Separator",
-                    Description = "Select the separator used in the uploaded CSV file.",
-                    View = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/Items.html",
+                new ("separator", "Separator", itemsUrl, "Select the separator used in the uploaded CSV file.") {
                     Config = new Dictionary<string, object> {
                         {"items", new [] {
-                            new Item { Alias = "Auto", Name = "Auto" },
-                            new Item { Alias = "Colon", Name = "Colon" },
-                            new Item { Alias = "Comma", Name = "Comma" },
-                            new Item { Alias = "SemiColon", Name = "Semi colon" },
-                            new Item { Alias = "Space", Name = "Space" },
-                            new Item { Alias = "Tab", Name = "Tab" }
+                            new Item("Auto", "Auto"),
+                            new Item("Colon", "Colon"),
+                            new Item("Comma", "Comma"),
+                            new Item("SemiColon", "Semi colon"),
+                            new Item("Space", "Space"),
+                            new Item("Tab", "Tab")
                         }}
                     }
                 },
-                new () {
-                    Alias = "file",
-                    Label = "File",
-                    Description = "Select the CSV file.",
-                    View = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/File.html",
+                new ("file", "File", fileUrl, "Select the CSV file.") {
                     Config = new Dictionary<string, object> {
                         {"multiple", false}
                     }
@@ -117,7 +104,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             using Stream stream = options.File.OpenReadStream();
 
             // Determine the encoding
-            Encoding encoding = GetEncoding(options);
+            Encoding? encoding = GetEncoding(options);
 
             // Determine the separator
             CsvSeparator separator = GetSeparator(options);
@@ -150,7 +137,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             };
         }
 
-        private Encoding GetEncoding(CsvImportOptions options) {
+        private Encoding? GetEncoding(CsvImportOptions options) {
             return options.Encoding switch {
                 CsvImportEncoding.Ascii => Encoding.ASCII,
                 CsvImportEncoding.Utf8 => Encoding.UTF8,
@@ -193,11 +180,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// <param name="alias">The alias of the encoding.</param>
         /// <param name="result">When this method returns, holds an instance <see cref="Encoding"/> representing the matched encoding if successful; otherwise, <see langword="null"/>.</param>
         /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
-        protected bool TryGetEncoding(string alias, out Encoding result) {
+        protected bool TryGetEncoding(string alias, [NotNullWhen(true)] out Encoding? result) {
 
             try {
                 result = Encoding.GetEncoding(alias);
-                return result != null;
+                return true;
             } catch {
                 result = null;
                 return false;

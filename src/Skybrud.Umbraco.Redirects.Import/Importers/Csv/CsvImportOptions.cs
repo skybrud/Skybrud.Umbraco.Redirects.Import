@@ -21,7 +21,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// <summary>
         /// Gets or sets the uploaded file.
         /// </summary>
-        public IFormFile File { get; set; }
+        public IFormFile? File { get; set; }
 
         /// <summary>
         /// Gets or sets the separator to be used when importing the CSV file.

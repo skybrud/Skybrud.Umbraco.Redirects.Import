@@ -18,9 +18,15 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <param name="item">The item to be imported.</param>
         public virtual void Import(RedirectImportItem item) {
 
+            if (string.IsNullOrWhiteSpace(item.AddOptions.OriginalUrl)) {
+                item.Errors.Add("Redirect does not specify an original URL.");
+                item.Status = RedirectImportStatus.Failed;
+                return;
+            }
+
             try {
 
-                IRedirect existing = _redirectsService.GetRedirectByUrl(item.AddOptions.RootNodeKey, item.AddOptions.OriginalUrl);
+                IRedirect? existing = _redirectsService.GetRedirectByUrl(item.AddOptions.RootNodeKey, item.AddOptions.OriginalUrl);
 
                 if (!item.AddOptions.Overwrite && existing != null) {
                     item.Errors.Add("Redirect with same root node, URL and query string already exist.");
@@ -69,7 +75,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 helper.Columns = helper.MapColumns(helper);
 
                 // Parse the rows into new redirect add options
-                List<RedirectImportItem> redirects = helper.ParseRedirects(helper);
+                List<RedirectImportItem> redirects = helper.ParseRedirects();
 
                 foreach (var redirect in redirects) {
                     Import(redirect);

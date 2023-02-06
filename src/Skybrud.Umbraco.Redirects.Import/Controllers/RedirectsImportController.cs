@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -77,11 +78,11 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
         public object Export(JObject body) {
 
             // Get a reference to the selected exporter
-            string type = body.GetString("type");
+            string type = body.GetString("type")!;
             if (string.IsNullOrWhiteSpace(type)) return BadRequest("No type specified for selected exporter.");
-            if (!_exporters.TryGet(type, out IExporter exporter)) return BadRequest($"Selected exporter {type} not found.");
+            if (!_exporters.TryGet(type, out IExporter? exporter)) return BadRequest($"Selected exporter {type} not found.");
 
-            JObject config = body.GetObject("config");
+            JObject? config = body.GetObject("config");
             if (config == null) return BadRequest("Failed parsing JSON data!!!");
 
             IExportOptions options = exporter.ParseOptions(config);
@@ -120,13 +121,13 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
         [HttpPost]
         public object Import() {
 
-            if (!TryGetJsonBody(out JObject body)) return BadRequest("Failed parsing JSON data!!!");
+            if (!TryGetJsonBody(out JObject? body)) return BadRequest("Failed parsing JSON data!!!");
 
             // Get a reference to the selected importer
-            string type = body.GetString("type");
-            if (!_importers.TryGet(type, out IImporter importer)) return BadRequest($"Importer '{type}' not found.");
+            string type = body.GetString("type")!;
+            if (!_importers.TryGet(type, out IImporter? importer)) return BadRequest($"Importer '{type}' not found.");
 
-            JObject config = body.GetObject("config");
+            JObject? config = body.GetObject("config");
             if (config == null) return BadRequest("Configuration object not found in JSON data.");
 
             IImportOptions options = importer.ParseOptions(config);
@@ -169,8 +170,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
             };
         }
 
-        private bool TryGetJsonBody(out JObject result) {
-            return JsonUtils.TryParseJsonObject(Request.Form["body"].FirstOrDefault(), out result);
+        private bool TryGetJsonBody([NotNullWhen(true)] out JObject? result) {
+            return JsonUtils.TryParseJsonObject(Request.Form["body"].FirstOrDefault()!, out result);
         }
 
     }

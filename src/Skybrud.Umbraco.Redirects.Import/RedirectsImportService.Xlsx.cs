@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
         public virtual DataTable ToDataTable(XLWorkbook workbook) {
 
             // Get the first worksheet from the workbook
-            IXLWorksheet worksheet = workbook.Worksheets.FirstOrDefault();
+            IXLWorksheet? worksheet = workbook.Worksheets.FirstOrDefault();
             if (worksheet == null) throw new RedirectsException("Workbook does not contain any worksheets.");
 
             // Initialize a new data table
