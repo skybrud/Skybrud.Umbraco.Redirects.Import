@@ -36,10 +36,8 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 table.Rows.Add();
 
                 // Iterate through the columns of the row
-                int c = 0;
                 foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber)) {
                     table.Rows[^1][cell.WorksheetColumn().ColumnNumber() - 1] = cell.Value?.ToString() ?? string.Empty;
-                    c++;
                 }
 
             }
