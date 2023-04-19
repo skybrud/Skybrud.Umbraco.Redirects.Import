@@ -7,16 +7,16 @@ Import and export addon for [Skybrud.Umbraco.Redirects](https://github.com/skybr
 
 ## Installation
 
-The Umbraco 10 version of this package is only available via [NuGet](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
+The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.0-alpha003
+dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.0-alpha004
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 4.0.0-alpha003
+Install-Package Skybrud.Umbraco.Redirects -Version 4.0.0-alpha004
 ```
 
 

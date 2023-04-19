@@ -10,11 +10,11 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.0.0-alpha003</VersionPrefix>
+    <VersionPrefix>4.0.0-alpha004</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
-    <Copyright>Copyright © 2023</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
     <Title>Skybrud Redirects Import</Title>
     <Description>Import and export addon for Skybrud Redirects.</Description>
   </PropertyGroup>
