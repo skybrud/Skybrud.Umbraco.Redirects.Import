@@ -32,12 +32,17 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     continue;
                 }
 
+                // Get the first and last column of the row (might be null)
+                IXLCell? firstCell = row.FirstCellUsed();
+                IXLCell? lastCell = row.LastCellUsed();
+                if (firstCell is null || lastCell is null) continue;
+
                 // Add a new row to the data table
                 table.Rows.Add();
 
                 // Iterate through the columns of the row
-                foreach (IXLCell cell in row.Cells(row.FirstCellUsed().Address.ColumnNumber, row.LastCellUsed().Address.ColumnNumber)) {
-                    table.Rows[^1][cell.WorksheetColumn().ColumnNumber() - 1] = cell.Value?.ToString() ?? string.Empty;
+                foreach (IXLCell cell in row.Cells(firstCell.Address.ColumnNumber, lastCell.Address.ColumnNumber)) {
+                    table.Rows[^1][cell.WorksheetColumn().ColumnNumber() - 1] = cell.Value.GetText();
                 }
 
             }
