@@ -24,7 +24,7 @@
     <PackageId>Skybrud.Umbraco.Redirects.Import</PackageId>
     <PackageTags>Skybrud, Umbraco, Redirects, Import, Export, Limbo, Umbraco-Marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</PackageProjectUrl>
+    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/v4/</PackageProjectUrl>
     <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</RepositoryUrl>

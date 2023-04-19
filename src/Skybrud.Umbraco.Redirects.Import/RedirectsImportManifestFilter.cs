@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Skybrud.Essentials.Strings.Extensions;
 using Umbraco.Cms.Core.Manifest;
 
 namespace Skybrud.Umbraco.Redirects.Import {
@@ -10,7 +9,9 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <inheritdoc />
         public void Filter(List<PackageManifest> manifests) {
             manifests.Add(new PackageManifest {
-                PackageName = RedirectsImportPackage.Alias.ToKebabCase(),
+                AllowPackageTelemetry = true,
+                PackageName = RedirectsImportPackage.Name,
+                Version = RedirectsImportPackage.InformationalVersion,
                 BundleOptions = BundleOptions.Independent,
                 Scripts = new[] {
                     $"/App_Plugins/{RedirectsImportPackage.Alias}/Scripts/App.js",
