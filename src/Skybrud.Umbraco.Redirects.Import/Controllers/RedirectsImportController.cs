@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Newtonsoft.Json.Serialization;
@@ -22,13 +23,15 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
     [PluginController("Skybrud")]
     public class RedirectsImportController : UmbracoAuthorizedApiController {
 
+        private readonly ILogger<RedirectsImportController> _logger;
         private readonly RedirectsImportService _redirectsImportService;
         private readonly ImporterCollection _importers;
         private readonly ExporterCollection _exporters;
 
         #region Constructors
 
-        public RedirectsImportController(RedirectsImportService redirectsImportService, ImporterCollection importers, ExporterCollection exporters) {
+        public RedirectsImportController(ILogger<RedirectsImportController> logger, RedirectsImportService redirectsImportService, ImporterCollection importers, ExporterCollection exporters) {
+            _logger = logger;
             _redirectsImportService = redirectsImportService;
             _importers = importers;
             _exporters = exporters;
@@ -77,23 +80,33 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
         [HttpPost]
         public object Export(JObject body) {
 
-            // Get a reference to the selected exporter
-            string type = body.GetString("type")!;
-            if (string.IsNullOrWhiteSpace(type)) return BadRequest("No type specified for selected exporter.");
-            if (!_exporters.TryGet(type, out IExporter? exporter)) return BadRequest($"Selected exporter {type} not found.");
+            try {
 
-            JObject? config = body.GetObject("config");
-            if (config == null) return BadRequest("Failed parsing JSON data!!!");
+                // Get a reference to the selected exporter
+                string type = body.GetString("type")!;
+                if (string.IsNullOrWhiteSpace(type)) return BadRequest("No type specified for selected exporter.");
+                if (!_exporters.TryGet(type, out IExporter? exporter)) return BadRequest($"Selected exporter {type} not found.");
 
-            IExportOptions options = exporter.ParseOptions(config);
+                JObject? config = body.GetObject("config");
+                if (config == null) return BadRequest("Failed parsing JSON data!!!");
 
-            IExportResult result = exporter.Export(options);
+                IExportOptions options = exporter.ParseOptions(config);
 
-            string tempDir = _redirectsImportService.EnsureTempDirectory();
-            string tempPath = Path.Combine(tempDir, result.Key + Path.GetExtension(result.FileName));
-            System.IO.File.WriteAllBytes(tempPath, result.GetBytes(options));
+                IExportResult result = exporter.Export(options);
 
-            return Ok(result);
+                string tempDir = _redirectsImportService.EnsureTempDirectory();
+                string tempPath = Path.Combine(tempDir, result.Key + Path.GetExtension(result.FileName));
+                System.IO.File.WriteAllBytes(tempPath, result.GetBytes(options));
+
+                return Ok(result);
+
+            } catch (Exception ex) {
+
+                _logger.LogError(ex, "Failed exporting redirects.");
+
+                return InternalServerError(ImportResult.Failed(ex, "Failed exporting redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
+
+            }
 
         }
 
@@ -123,20 +136,30 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers {
 
             if (!TryGetJsonBody(out JObject? body)) return BadRequest("Failed parsing JSON data!!!");
 
-            // Get a reference to the selected importer
-            string type = body.GetString("type")!;
-            if (!_importers.TryGet(type, out IImporter? importer)) return BadRequest($"Importer '{type}' not found.");
+            try {
 
-            JObject? config = body.GetObject("config");
-            if (config == null) return BadRequest("Configuration object not found in JSON data.");
+                // Get a reference to the selected importer
+                string type = body.GetString("type")!;
+                if (!_importers.TryGet(type, out IImporter? importer)) return BadRequest($"Importer '{type}' not found.");
 
-            IImportOptions options = importer.ParseOptions(config);
+                JObject? config = body.GetObject("config");
+                if (config == null) return BadRequest("Configuration object not found in JSON data.");
 
-            options.File = HttpContext.Request.Form.Files.FirstOrDefault();
+                IImportOptions options = importer.ParseOptions(config);
 
-            IImportResult result = importer.Import(options);
+                options.File = HttpContext.Request.Form.Files.FirstOrDefault();
 
-            return result.IsSuccessful ? Ok(result) : InternalServerError(result);
+                IImportResult result = importer.Import(options);
+
+                return result.IsSuccessful ? Ok(result) : InternalServerError(result);
+
+            } catch (Exception ex) {
+
+                _logger.LogError(ex, "Failed importing redirects.");
+
+                return InternalServerError(ImportResult.Failed(ex, "Failed importing redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
+
+            }
 
         }
 

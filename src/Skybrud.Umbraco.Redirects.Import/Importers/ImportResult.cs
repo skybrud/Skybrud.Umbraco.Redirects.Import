@@ -59,6 +59,13 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
             Redirects = Array.Empty<RedirectImportItem>();
         }
 
+        private ImportResult(Exception exception, params string[] errors) {
+            IsSuccessful = false;
+            Exception = exception;
+            Errors = errors;
+            Redirects = Array.Empty<RedirectImportItem>();
+        }
+
         #endregion
 
         #region Static methods
@@ -70,6 +77,16 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers {
         /// <returns>An instance of <see cref="ImportResult"/> representing the import result.</returns>
         public static ImportResult Failed(Exception exception) {
             return new ImportResult(exception);
+        }
+
+        /// <summary>
+        /// Initializes a new, failed import result based on the specified <paramref name="exception"/>.
+        /// </summary>
+        /// <param name="exception">The exception triggered by the import.</param>
+        /// <param name="errors">An array of errors triggered by the import.</param>
+        /// <returns>An instance of <see cref="ImportResult"/> representing the import result.</returns>
+        public static ImportResult Failed(Exception exception, params string[] errors) {
+            return new ImportResult(exception, errors);
         }
 
         /// <summary>
