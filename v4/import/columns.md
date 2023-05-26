@@ -32,7 +32,7 @@ The following names are supported:
 The value may include both a query string and/or a fragment, but the query string may also be specified via the [destination query](#destination-query) column and the fragment via the [destination fragment](#destination-fragment) column.
 
 
-The *destination URL* column itself may also be omitted if the [destionation key][#destination-key] column is specified and the [destination type](#destination-type) column is set to either `Content` or `Media`.
+The *destination URL* column itself may also be omitted if the [destionation key](#destination-key) column is specified and the [destination type](#destination-type) column is set to either `Content` or `Media`.
 
 
 ## Optional
