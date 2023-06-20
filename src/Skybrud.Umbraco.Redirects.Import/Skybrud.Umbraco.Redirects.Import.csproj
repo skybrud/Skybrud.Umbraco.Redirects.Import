@@ -1,50 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net45</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup>
-    <Version>1.0.0-alpha001</Version>
+    <VersionPrefix>1.0.0</VersionPrefix>
+    <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
+    <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
-    <Company>Skybrud.dk</Company>
-    <Description>Import and export addon for Skybrud.Umbraco.Redirects.</Description>
-    <Copyright>Copyright © 2020</Copyright>
+    <Copyright>Copyright © $([System.DateTime]::UtcNow.ToString(`yyyy`))</Copyright>
+    <Title>Skybrud Redirects Import</Title>
+    <Product>Skybrud Redirects</Product>
+    <Description>Import and export addon for Skybrud Redirects.</Description>
   </PropertyGroup>
 
+  <!-- Information for the NuGet package -->
   <PropertyGroup>
     <PackageId>Skybrud.Umbraco.Redirects.Import</PackageId>
-    <PackageTags>Umbraco, Redirects, 301, Content, Url, Import</PackageTags>
+    <PackageTags>Skybrud, Umbraco, Redirects, Import, Export, Limbo, Umbraco-Marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/</PackageProjectUrl>
-    <PackageIconUrl>http://www.skybrud.dk/img/5431sk/icon/favicon.ico</PackageIconUrl>
+    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/v1/</PackageProjectUrl>
+    <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</RepositoryUrl>
   </PropertyGroup>
 
+  <!-- Include dependencies -->
   <ItemGroup>
     <Reference Include="System.Web" />
-    <PackageReference Include="UmbracoCms.Core" Version="8.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="UmbracoCms.Web" Version="8.1.0">
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="2.0.5">
-      <ExcludeAssets>contentFiles</ExcludeAssets>
-    </PackageReference>
+    <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.49" />
+    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="1.0.2" />
+    <PackageReference Include="UmbracoCms.Core" Version="[7.7.0,8.0)" />
   </ItemGroup>
 
+  <!-- Include package icon and README for the NuGet -->
   <ItemGroup>
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.css" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.html" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\**\*.js" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\Lang\*.xml" />
-    <Content Include="App_Plugins\Skybrud.Umbraco.Redirects.Import\package.manifest" />
+    <Content Include="../build/Limbo.png" Pack="true" PackagePath="\" />
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent" Condition="'$(ConfigurationName)'=='Release' AND '$(BuildTools)'=='1'">
-    <Exec Command="&quot;$(ProjectDir)..\build\Skybrud.BuildTools.Tasks.exe&quot; &quot;postBuild&quot; &quot;$(ConfigurationName)&quot; &quot;$(ProjectPath)&quot; &quot;$(TargetPath)&quot;" />
-  </Target>
 
 </Project>

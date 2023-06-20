@@ -1,3 +1,5 @@
 src/.vs/
-src/Skybrud.Umbraco.Redirects.Import/obj/
+src/Limbo.Umbraco.MigrationsApi/bin/
+src/Limbo.Umbraco.MigrationsApi/obj/
 src/Skybrud.Umbraco.Redirects.Import/bin/
+src/Skybrud.Umbraco.Redirects.Import/obj/
