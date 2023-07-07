@@ -18,7 +18,7 @@ dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.0-alpha005
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects -Version 4.0.0-alpha005
+Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.0-alpha005
 ```
 
 
