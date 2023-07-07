@@ -2,6 +2,26 @@
 
 Small package that adds an endpoint for exporting all redirects to either a CSV or a JSON file. Although suggested by the name, the Umbraco 7 does not support importing. The purpose is instead to provide a CSV or JSON file that can be imported by the [Umbraco 10 version](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v4/main) of the package.
 
+<table>
+  <tr>
+    <td><strong>License:</strong></td>
+    <td><a href="./LICENSE.md"><strong>MIT License</strong></a></td>
+  </tr>
+  <tr>
+    <td><strong>Umbraco:</strong></td>
+    <td>
+      Umbraco 7
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Target Framework:</strong></td>
+    <td>
+      .NET Framework 4.5
+    </td>
+  </tr>
+</table>
+
+
 
 <br /><br />
 
