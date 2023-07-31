@@ -7,7 +7,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Csv {
 
         public int Id { get; set; }
 
-        public string Key { get; set; }
+        public Guid Key { get; set; }
 
         public Guid RootNodeKey { get; set; }
 
@@ -15,7 +15,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Csv {
 
         public string QueryString { get; set; }
 
-        public RedirectLinkMode DestinationType { get; set; }
+        public RedirectDestinationType DestinationType { get; set; }
 
         public Guid DestinationKey { get; set; }
 
