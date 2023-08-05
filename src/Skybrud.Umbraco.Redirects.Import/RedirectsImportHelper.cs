@@ -159,6 +159,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
                 switch (column.ColumnName.Replace(" ", "").ToLowerInvariant()) {
 
+                    // Root Node / Domain
                     case "siteid":
                     case "rootid":
                     case "rootnodeid":
@@ -170,11 +171,13 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         columns.RootNode = column;
                         break;
 
+                    // Original URL
                     case "url":
                     case "old":
                     case "from":
                     case "inboundurl":
                     case "originalurl":
+                    case "oldurl":
                         if (columns.InboundUrl != null) break;
                         columns.InboundUrl = column;
                         break;
@@ -183,11 +186,14 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     case "querystring":
                     case "inboundquery":
                     case "inboundquerystring":
+                    case "originalquery":
+                    case "originalquerystring":
                         if (columns.InboundQuery != null) break;
                         columns.InboundQuery = column;
                         break;
 
                     case "destinationid":
+                    case "redirectnodeid":
                         if (columns.DestinationId != null) break;
                         columns.DestinationId = column;
                         break;
@@ -206,6 +212,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     case "new":
                     case "newurl":
                     case "destinationurl":
+                    case "redirecturl":
                         if (columns.DestinationUrl != null) break;
                         columns.DestinationUrl = column;
                         break;
@@ -224,6 +231,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     case "redirecttype":
                     case "permanent":
                     case "ispermanent":
+                    case "redirecthttpcode":
                         if (columns.RedirectType != null) break;
                         columns.RedirectType = column;
                         break;
