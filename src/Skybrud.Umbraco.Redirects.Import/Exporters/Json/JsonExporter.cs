@@ -40,7 +40,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Json {
         public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
             return new List<Option> {
-                new ("formatting", "Encoding", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the formatting of the JSON file.") {
+                new ("formatting", "Formatting", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the formatting of the JSON file.") {
                     Value = "None",
                     Config = new Dictionary<string, object> {
                         {"items", new [] {
