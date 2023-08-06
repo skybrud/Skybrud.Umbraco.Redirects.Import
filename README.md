@@ -2,7 +2,7 @@
 
 [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md) [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.Import.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import) [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.Import.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import) [![Our Umbraco](https://img.shields.io/badge/our-umbraco-%233544B1)](https://our.umbraco.com/packages/website-utilities/skybrud-redirects-import/)
 
-Import and export addon for [Skybrud.Umbraco.Redirects](https://github.com/skybrud/Skybrud.Umbraco.Redirects). The package features an extensible set of importers and exporters, and by default it supports importing from and exporting to CSV, XLSX and JSON files.
+Import and export addon for [**Skybrud.Umbraco.Redirects**](https://github.com/skybrud/Skybrud.Umbraco.Redirects). The package features an extensible set of importers and exporters, and by default it supports importing from and exporting to CSV, XLSX and JSON files.
 
 
 <br /><br />
@@ -12,13 +12,13 @@ Import and export addon for [Skybrud.Umbraco.Redirects](https://github.com/skybr
 The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.0-alpha005
+dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.0
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.0-alpha005
+Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.0
 ```
 
 
