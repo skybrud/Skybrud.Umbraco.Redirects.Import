@@ -9,7 +9,7 @@
         { alias: "Url", selected: true },
         { alias: "QueryString", selected: true },
         { alias: "DestinationType", selected: true },
-        { alias: "DestinationId", selected: true },
+        { alias: "DestinationId", selected: false },
         { alias: "DestinationKey", selected: true },
         { alias: "DestinationUrl", selected: true },
         { alias: "DestinationQuery", selected: true },
