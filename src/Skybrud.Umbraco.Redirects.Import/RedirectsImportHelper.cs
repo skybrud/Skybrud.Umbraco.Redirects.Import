@@ -248,7 +248,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
             }
 
             if (columns.InboundUrl == null) throw new RedirectsImportException("No column found for 'inbound URL'");
-            if (columns.DestinationId == null && columns.DestinationUrl == null) throw new RedirectsImportException("No column found for destination (ID, key or URL");
+            if (columns.DestinationId == null && columns.DestinationUrl == null) throw new RedirectsImportException("No column found for destination (ID, key or URL)");
 
             return columns;
 
