@@ -34,6 +34,11 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     return;
                 }
 
+                if (item.Errors.Count > 0) {
+                    item.Status = RedirectImportStatus.Failed;
+                    return;
+                }
+
                 if (existing == null) {
                     _redirectsService.AddRedirect(item.AddOptions);
                     item.Status = RedirectImportStatus.Added;
