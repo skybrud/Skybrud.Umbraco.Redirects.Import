@@ -13,7 +13,7 @@ Specifies the original (inbound) URL of the redirect. The following alises are s
 
 - URL
 - Old
-- 🟥 Old URL *(not supported, but should be)*
+- Old URL
 - From
 - Inbound URL
 - Original URL
@@ -37,7 +37,7 @@ The *destination URL* column itself may also be omitted if the [destionation key
 
 ## Optional
 
-### Root Node Key
+### Root Node
 
 Specifies the Umbraco ID or GUID key of the root node. Alternatively the value may be a domain, in which case the importer tries to map the domain to an Umbraco root node.
 
@@ -47,6 +47,7 @@ The following names are supported:
 
 - Site ID
 - Site Key
+- Root Node
 - Root Node ID
 - Root Key
 - Root Node Key
@@ -62,19 +63,21 @@ The following names are supported:
 - Query String
 - Inbound Query
 - Inbound Query String
-- 🟥 Original Query *(not supported, but should be)*
-- 🟥 Original Query String *(not supported, but should be)*
+- Original Query
+- Original Query String
 
 ### Destination Key
 
-Specifies the GUID key of a content or media item that represents the destination. Alternatively the value may be the numeric Umbraco ID instead.
+Specifies the GUID key of a content or media item that represents the destination. Alternatively the value may be the numeric Umbraco ID instead, although you should keep in mind that numeric IDs will typically differ across environments and solutions.
 
 If not specified, the import tries to determine the GUID key value of the [destination URL](#destination-url) column instead.
 
 The following names are supported:
 
 - Destination Key
+- Redirect Node Key
 - Destination ID
+- Redirect Node ID
 
 ### Destination Type
 
@@ -100,6 +103,7 @@ The following names are supported:
 - Redirect Type
 - Permanent
 - Is permanent
+- Redirect HTTP code
 
 ### Forward query string
 
@@ -110,3 +114,12 @@ The following names are supported:
 - Forward
 - Forward Query
 - Forward Query String
+
+### Culture
+
+Specifies the ISO code or numeric ID of the Umbraco language.
+
+The following names are supported:
+
+- Culture
+- Destination Culture
