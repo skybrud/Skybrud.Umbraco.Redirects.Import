@@ -538,6 +538,12 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
             if (Columns is null) throw new PropertyNotSetException(nameof(Columns));
 
+            // Use the fallback value if we can't tell from the imported file
+            if (Columns.RedirectType is null) {
+                item.AddOptions.Type = Options.DefaultRedirectType;
+                return;
+            }
+
             // Get the value from the cell (if found)
             string? value = row.GetString(Columns.RedirectType);
 
@@ -551,6 +557,25 @@ namespace Skybrud.Umbraco.Redirects.Import {
             if (StringUtils.TryParseBoolean(value, out bool isPermanent)) {
                 item.AddOptions.Type = isPermanent ? RedirectType.Permanent : RedirectType.Temporary;
                 return;
+            }
+
+            // Or is the value a HTTP status code?
+            if (EnumUtils.TryParseEnum(value, out HttpStatusCode statusCode)) {
+                switch (statusCode) {
+                    case HttpStatusCode.MovedPermanently:
+                        item.AddOptions.Type = RedirectType.Permanent;
+                        return;
+                    case HttpStatusCode.TemporaryRedirect:
+                        item.AddOptions.Type = RedirectType.Temporary;
+                        return;
+                    case HttpStatusCode.Found:
+                        item.AddOptions.Type = RedirectType.Temporary;
+                        item.Warnings.Add($"The '{Columns.RedirectType.ColumnName}' column specifies a '{(int) statusCode}' HTTP status code. Skybrud Redirects doesn't support this, and the redirect will be imported with the '307' status code instead.");
+                        return;
+                    default:
+                        item.Errors.Add($"The '{Columns.RedirectType.ColumnName}' column specifies an supported HTTP status code: {(int) statusCode}");
+                        return;
+                }
             }
 
             // Use the fallback value if we can't tell from the imported file
