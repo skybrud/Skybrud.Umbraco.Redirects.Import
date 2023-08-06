@@ -72,7 +72,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
         public virtual ImportResult Import(IImportOptions options, DataTable dataTable) {
 
             // Initialize a new helper instance
-            RedirectsImportHelper helper = new(_domainService, _mediaService, _umbracoContextAccessor, dataTable, options);
+            RedirectsImportHelper helper = new(_domainService, _localizationService, _mediaService, _umbracoContextAccessor, dataTable, options);
 
             try {
 

@@ -9,8 +9,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Net;
-using System.Text;
-using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Common;
 using Skybrud.Umbraco.Redirects.Import.Importers;
 using Umbraco.Cms.Core.Models;
@@ -26,6 +24,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
     /// </summary>
     public class RedirectsImportHelper {
 
+        private readonly ILocalizationService _localizationService;
         private readonly IMediaService _mediaService;
 
         #region Properties
@@ -62,8 +61,9 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
-        public RedirectsImportHelper(IDomainService domainService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, DataTable table, IImportOptions options) {
+        public RedirectsImportHelper(IDomainService domainService, ILocalizationService localizationService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, DataTable table, IImportOptions options) {
 
+            _localizationService = localizationService;
             _mediaService = mediaService;
 
             DomainService = domainService;
@@ -165,6 +165,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     // Root Node / Domain
                     case "siteid":
                     case "rootid":
+                    case "rootnode":
                     case "rootnodeid":
                     case "sitekey":
                     case "rootkey":
@@ -244,6 +245,11 @@ namespace Skybrud.Umbraco.Redirects.Import {
                     case "forwardquerystring":
                         if (columns.ForwardQueryString != null) break;
                         columns.ForwardQueryString = column;
+                        break;
+
+                    case "culture":
+                        if (columns.DestinationCulture != null) break;
+                        columns.DestinationCulture = column;
                         break;
 
                 }
@@ -492,13 +498,19 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 }
             } else if (destinationUrl.StartsWith("/")) {
                 if (destination == null) {
-                    if (TryGetContent(destinationUrl, out IPublishedContent? content)) {
+
+                    string route = $"{item.AddOptions.RootNodeId}{destinationUrl}";
+
+                    if (item.AddOptions.RootNodeId > 0 && TryGetContent(route, out IPublishedContent? content)) {
+                        destination = content;
+                        destinationUrl = content.Url();
+                        destinationType = RedirectDestinationType.Content;
+                    } else if (TryGetContent(destinationUrl, out content)) {
                         destination = content;
                         destinationUrl = content.Url();
                         destinationType = RedirectDestinationType.Content;
                     } else {
-                        // TODO: Should this trigger an error, or just create an 'URL' redirect?
-                        item.Errors.Add($"No destination found with URL '{destinationUrl}'.");
+                        item.Errors.Add($"No destination found with URL '{destinationUrl}'. ({route}) ({item.AddOptions.RootNodeId})");
                         return;
                     }
                 }
@@ -517,6 +529,18 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 if (!string.IsNullOrWhiteSpace(value)) destinationFragment = value;
             }
 
+            string? culture = null;
+            if (Columns.DestinationCulture is not null) {
+                string? value = row.GetString(Columns.DestinationCulture);
+                if (!string.IsNullOrWhiteSpace(value)) {
+                    if (TryGetLanguage(value, out ILanguage? language)) {
+                        culture = language.IsoCode;
+                    } else {
+                        item.Errors.Add($"The value '{value}' specified for the '{Columns.DestinationCulture.ColumnName}' column does not match a configured language in Umbraco.");
+                    }
+                }
+            }
+
             item.AddOptions.Destination = new RedirectDestination {
                 Id = destination?.Id ?? default,
                 Key = destination?.Key ?? default,
@@ -524,9 +548,15 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 Query = destinationQuery ?? string.Empty,
                 Fragment = destinationFragment ?? string.Empty,
                 Type = destinationType,
-                Name = destination?.Name ?? string.Empty
+                Name = destination?.Name ?? string.Empty,
+                Culture = culture ?? string.Empty
             };
 
+        }
+
+        private bool TryGetLanguage(string input, [NotNullWhen(true)] out ILanguage? result) {
+            result = int.TryParse(input, out int languageId) ? _localizationService.GetLanguageById(languageId) : _localizationService.GetLanguageByIsoCode(input);
+            return result is not null;
         }
 
         /// <summary>

@@ -27,6 +27,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Models.Import {
 
         public DataColumn? DestinationFragment { get; set; }
 
+        public DataColumn? DestinationCulture { get; set; }
+
         public DataColumn? RedirectType { get; set; }
 
         public DataColumn? ForwardQueryString { get; set; }

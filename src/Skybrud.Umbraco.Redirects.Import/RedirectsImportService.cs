@@ -25,6 +25,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
         private readonly ILogger<RedirectsImportService> _logger;
         private readonly IDomainService _domainService;
+        private readonly ILocalizationService _localizationService;
         private readonly IMediaService _mediaService;
         private readonly IUmbracoContextAccessor _umbracoContextAccessor;
         private readonly IWebHostEnvironment _webHostEnvironment;
@@ -37,13 +38,15 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// </summary>
         /// <param name="logger"></param>
         /// <param name="domainService"></param>
+        /// <param name="localizationService"></param>
         /// <param name="mediaService"></param>
         /// <param name="umbracoContextAccessor"></param>
         /// <param name="webHostEnvironment"></param>
         /// <param name="redirectsService"></param>
-        public RedirectsImportService(ILogger<RedirectsImportService> logger, IDomainService domainService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, IWebHostEnvironment webHostEnvironment, IRedirectsService redirectsService) {
+        public RedirectsImportService(ILogger<RedirectsImportService> logger, IDomainService domainService, ILocalizationService localizationService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, IWebHostEnvironment webHostEnvironment, IRedirectsService redirectsService) {
             _logger = logger;
             _domainService = domainService;
+            _localizationService = localizationService;
             _mediaService = mediaService;
             _umbracoContextAccessor = umbracoContextAccessor;
             _webHostEnvironment = webHostEnvironment;
@@ -92,6 +95,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 {"DestinationQuery", x => x.Destination.Query.ToString()},
                 {"DestinationFragment", x => x.Destination.Fragment.ToString()},
                 {"DestinationName", x => x.Destination.Name.ToString()},
+                {"DestinationCulture", x => x.Destination.Culture ?? string.Empty},
                 {"Type", x => x.Type.ToString()},
                 {"IsPermanent", x => x.IsPermanent.ToString()},
                 {"ForwardQueryString", x => x.ForwardQueryString.ToString()},
