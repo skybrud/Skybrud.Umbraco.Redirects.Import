@@ -26,7 +26,7 @@ As mentioned earlier, not all CSV files use a comma as separator. By default, th
 - **File**  
 This is where you pick the CSV file. Only files with the `.csv` extension are allowed, so if your CSV file has another extension (it happens), you'll have to rename it first.
 
-When processing the uploaded CSV file, the package will look for a number of different column names. You can see the [**Columns** page](./Columns.md) for mroe information on this.
+When processing the uploaded CSV file, the package will look for a number of different column names. You can see the [**Columns** page](./Columns.md) for more information on this.
 
 ## XLSX
 
