@@ -8,6 +8,9 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
+using System.Text;
+using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Common;
 using Skybrud.Umbraco.Redirects.Import.Importers;
 using Umbraco.Cms.Core.Models;
@@ -483,7 +486,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         destinationType = RedirectDestinationType.Media;
                     } else {
                         // TODO: Should this trigger an error, or just create an 'URL' redirect?
-                        item.Errors.Add($"No destination found with URL '{destinationUrl}.");
+                        item.Errors.Add($"No destination found with URL '{destinationUrl}'.");
                         return;
                     }
                 }
@@ -495,7 +498,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         destinationType = RedirectDestinationType.Content;
                     } else {
                         // TODO: Should this trigger an error, or just create an 'URL' redirect?
-                        item.Errors.Add($"No destination found with URL '{destinationUrl}.");
+                        item.Errors.Add($"No destination found with URL '{destinationUrl}'.");
                         return;
                     }
                 }
