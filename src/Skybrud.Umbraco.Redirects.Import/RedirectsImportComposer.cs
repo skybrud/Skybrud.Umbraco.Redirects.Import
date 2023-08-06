@@ -12,6 +12,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
         public void Compose(IUmbracoBuilder builder) {
 
+            builder.Services.AddSingleton<RedirectsImportDependencies>();
             builder.Services.AddSingleton<RedirectsImportService>();
 
             // TODO: Should importers/exporters be registered manually as auto discovery may be expensive?

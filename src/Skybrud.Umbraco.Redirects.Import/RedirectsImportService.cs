@@ -24,6 +24,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
     public partial class RedirectsImportService {
 
         private readonly ILogger<RedirectsImportService> _logger;
+        private readonly RedirectsImportDependencies _dependencies;
         private readonly IDomainService _domainService;
         private readonly ILocalizationService _localizationService;
         private readonly IMediaService _mediaService;
@@ -37,20 +38,16 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
         /// <param name="logger"></param>
-        /// <param name="domainService"></param>
-        /// <param name="localizationService"></param>
-        /// <param name="mediaService"></param>
-        /// <param name="umbracoContextAccessor"></param>
-        /// <param name="webHostEnvironment"></param>
-        /// <param name="redirectsService"></param>
-        public RedirectsImportService(ILogger<RedirectsImportService> logger, IDomainService domainService, ILocalizationService localizationService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, IWebHostEnvironment webHostEnvironment, IRedirectsService redirectsService) {
+        /// <param name="dependencies"></param>
+        public RedirectsImportService(ILogger<RedirectsImportService> logger, RedirectsImportDependencies dependencies) {
             _logger = logger;
-            _domainService = domainService;
-            _localizationService = localizationService;
-            _mediaService = mediaService;
-            _umbracoContextAccessor = umbracoContextAccessor;
-            _webHostEnvironment = webHostEnvironment;
-            _redirectsService = redirectsService;
+            _dependencies = dependencies;
+            _domainService = dependencies.DomainService;
+            _localizationService = dependencies.LocalizationService;
+            _mediaService = dependencies.MediaService;
+            _umbracoContextAccessor = dependencies.UmbracoContextAccessor;
+            _webHostEnvironment = dependencies.WebHostEnvironment;
+            _redirectsService = dependencies.RedirectsService;
         }
 
         #endregion

@@ -61,13 +61,13 @@ namespace Skybrud.Umbraco.Redirects.Import {
         /// <summary>
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
-        public RedirectsImportHelper(IDomainService domainService, ILocalizationService localizationService, IMediaService mediaService, IUmbracoContextAccessor umbracoContextAccessor, DataTable table, IImportOptions options) {
+        public RedirectsImportHelper(RedirectsImportDependencies dependencies, DataTable table, IImportOptions options) {
 
-            _localizationService = localizationService;
-            _mediaService = mediaService;
+            _localizationService = dependencies.LocalizationService;
+            _mediaService = dependencies.MediaService;
 
-            DomainService = domainService;
-            Umbraco = umbracoContextAccessor.GetRequiredUmbracoContext();
+            DomainService = dependencies.DomainService;
+            Umbraco = dependencies.UmbracoContextAccessor.GetRequiredUmbracoContext();
             DataTable = table;
             Options = options;
 
@@ -203,6 +203,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         break;
 
                     case "destinationkey":
+                    case "redirectnodekey":
                         if (columns.DestinationKey != null) break;
                         columns.DestinationKey = column;
                         break;
