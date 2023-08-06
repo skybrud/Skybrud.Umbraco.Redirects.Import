@@ -248,6 +248,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                         break;
 
                     case "culture":
+                    case "destinationculture":
                         if (columns.DestinationCulture != null) break;
                         columns.DestinationCulture = column;
                         break;
