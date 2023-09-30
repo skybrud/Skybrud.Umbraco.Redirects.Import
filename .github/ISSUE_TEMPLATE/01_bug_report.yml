@@ -6,13 +6,13 @@ body:
 - type: input
   id: "version"
   attributes:
-    label: "Which version of `Skybrud.Umbraco.Redirects.Import` are you using? (Please write the *exact* version, example: 4.0.1)"
+    label: "Which version of Skybrud.Umbraco.Redirects.Import are you using? (Please write the *exact* version, example: 4.0.1)"
   validations:
     required: true
 - type: input
   id: "redirectsVersion"
   attributes:
-    label: "Which version of `Skybrud.Umbraco.Redirects` are you using? (Please write the *exact* version, example: 4.0.15)"
+    label: "Which version of Skybrud.Umbraco.Redirects are you using? (Please write the *exact* version, example: 4.0.15)"
   validations:
     required: true
 - type: input
