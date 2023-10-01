@@ -20,7 +20,7 @@ Encodings are always a bit tricky. If your redirects may have special characters
 
 ### Separator
 
-CSV stands for comma separator values, meaning a comma (`,`) is used for separating each column. Despite the name, a *semi colons* (`;`) do however seem to be more widely used. The default separator in Excel may depend both on the version, and the culture of the operating system.
+CSV stands for comma separator values, meaning a comma (`,`) is used for separating each column. Despite the name, semi colons (`;`) do however seem to be more widely used. The default separator in Excel may depend both on the version, and the culture of the operating system.
 
 ### Columns
 
