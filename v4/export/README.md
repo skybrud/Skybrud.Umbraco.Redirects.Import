@@ -10,23 +10,19 @@ The package ships with three different exporters, thereby supporting to either a
 
 
 
-### CSV
+## CSV
 
 Since CSV files are text based, there are a few additional options to consider. 
 
-#### Encoding
+### Encoding
 
 Encodings are always a bit tricky. If your redirects may have special characters, you should make sure to select the right encoding that matches the application or system for which the exported file is intended. **UTF-8** supports the widest set of characters, which often makes it a favorable encoding. But Excel will not automatically detect UTF-8 encoding files, so if the exported file is intended to be opened in Excel, you should select the **Windows 1252** encoding.
 
-#### Separator
+### Separator
 
 CSV stands for comma separator values, meaning a comma (`,`) is used for separating each column. Despite the name, a *semi colons* (`;`) do however seem to be more widely used. The default separator in Excel may depend both on the version, and the culture of the operating system.
 
-
-
-
-
-#### Columns
+### Columns
 
 This option let's you specify the columns that should be included in the CSV file. Most columns are selected by default, while these columns are not selected by default:
 
@@ -40,7 +36,7 @@ This column is obsolete as a `Type` column was introduced instead. Currently **S
 
 
 
-#### XLSX
+## XLSX
 
 Available options:
 
@@ -57,6 +53,6 @@ This column is obsolete as a `Type` column was introduced instead. Currently **S
 
 
 
-#### JSON
+## JSON
 
 The JSON exporter uses an internal format, which can be used to re-import in another Umbraco installation that is also using this package.
