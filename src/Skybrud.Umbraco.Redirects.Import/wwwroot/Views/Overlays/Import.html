@@ -11,13 +11,13 @@
                                 <umb-box-content>
                                     <ul class="redirects-importers">
                                         <li ng-repeat="importer in vm.importers">
-                                            <a ng-click="vm.selectImporter(importer)">
+                                            <button type="button" class="btn-reset w-100 text-left" ng-click="vm.selectImporter(importer)">
                                                 <umb-icon icon="{{importer.icon}}"></umb-icon>
                                                 <div>
                                                     <strong ng-bind="importer.name"></strong><br />
                                                     <small ng-bind="importer.description"></small>
                                                 </div>
-                                            </a>
+                                            </button>
                                         </li>
                                     </ul>
                                 </umb-box-content>
@@ -41,7 +41,7 @@
                                         <div class="skybrud-borgerdk-item-content">
                                             <div class="skybrud-borgerdk-item-title">
                                                 <div class="skybrud-borgerdk-item-icon">
-                                                    <i class="icon-delete color-red"></i>
+                                                    <umb-icon icon="'icon-delete'" class="color-red"></umb-icon>
                                                 </div>
                                                 <div class="skybrud-borgerdk-item-name color-red">
                                                     Import failed
@@ -57,7 +57,7 @@
                                         <div class="skybrud-borgerdk-item-content">
                                             <div class="skybrud-borgerdk-item-title">
                                                 <div class="skybrud-borgerdk-item-icon">
-                                                    <i ng-show="item.icon" class="{{item.icon}}"></i>
+                                                    <umb-icon ng-show="item.icon" icon="{{item.icon}}"></umb-icon>
                                                 </div>
                                                 <div class="skybrud-borgerdk-item-name">
                                                     {{item.options.originalUrl}}
