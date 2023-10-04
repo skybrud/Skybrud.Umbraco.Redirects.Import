@@ -13,13 +13,13 @@
                                 <umb-box-content>
                                     <ul class="redirects-importers">
                                         <li ng-repeat="exporter in vm.exporters">
-                                            <a ng-click="vm.selectExporter(exporter)">
+                                            <button type="button" class="btn-reset w-100 text-left" ng-click="vm.selectExporter(exporter)">
                                                 <umb-icon icon="{{exporter.icon}}"></umb-icon>
                                                 <div>
                                                     <strong ng-bind="exporter.name"></strong><br />
                                                     <small ng-bind="exporter.description"></small>
                                                 </div>
-                                            </a>
+                                            </button>
                                         </li>
                                     </ul>
                                 </umb-box-content>
@@ -48,13 +48,13 @@
     <umb-box-content>
         <ul class="redirects-exporters">
             <li ng-repeat="exporter in vm.exporters">
-                <a ng-click="vm.selectExporter(exporter)">
+                <button type="button" class="btn-reset w-100 text-left" ng-click="vm.selectExporter(exporter)">
                     <umb-icon icon="{{exporter.icon}}"></umb-icon>
                     <div>
                         <strong ng-bind="exporter.name"></strong><br />
                         <small ng-bind="exporter.description"></small>
                     </div>
-                </a>
+                </button>
             </li>
         </ul>
     </umb-box-content>
