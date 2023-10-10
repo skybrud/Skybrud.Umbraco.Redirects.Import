@@ -34,8 +34,8 @@
   <ItemGroup>
     <PackageReference Include="ClosedXml" Version="0.101.0" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.50" />
-    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="4.0.13" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.52" />
+    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="4.0.17" />
     <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,12.999)" />
     <PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,12.999)" />
     <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,12.999)" />
