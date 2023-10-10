@@ -31,21 +31,21 @@ ul.redirects-exporters {
   list-style: none;
   margin: 0;
 }
-ul.redirects-providers a,
-ul.redirects-importers a,
-ul.redirects-exporters a {
+ul.redirects-providers button,
+ul.redirects-importers button,
+ul.redirects-exporters button {
   display: flex;
   padding: 10px;
   margin: 0;
 }
-ul.redirects-providers a:hover,
-ul.redirects-importers a:hover,
-ul.redirects-exporters a:hover {
+ul.redirects-providers button:hover,
+ul.redirects-importers button:hover,
+ul.redirects-exporters button:hover {
   background: #efefef;
 }
-ul.redirects-providers a div,
-ul.redirects-importers a div,
-ul.redirects-exporters a div {
+ul.redirects-providers button div,
+ul.redirects-importers button div,
+ul.redirects-exporters button div {
   min-height: 48px;
 }
 ul.redirects-providers li + li,
