@@ -52,8 +52,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv {
                     Value = "semicolon",
                     Config = new Dictionary<string, object> {
                         {"items", new [] {
-                            new Item("default", "Default"),
                             new Item("colon", "Colon"),
+                            new Item("comma", "Comma"),
                             new Item("semicolon", "Semi colon"),
                             new Item("space", "Space"),
                             new Item("Tab", "Tab")
