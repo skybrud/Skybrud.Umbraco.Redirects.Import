@@ -20,7 +20,6 @@ using Umbraco.Web.WebApi;
 namespace Skybrud.Umbraco.Redirects.Import {
 
     [PluginController("Skybrud")]
-    [AngularJsonOnlyConfiguration]
     public class RedirectsExportController : UmbracoAuthorizedApiController {
 
         [HttpGet]
