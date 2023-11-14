@@ -8,7 +8,9 @@ using System.Net.Http;
 using System.Text;
 using System;
 using System.Linq;
+using System.Net;
 using System.Web.Http;
+using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Import.Csv;
 using Umbraco.Core.Models;
 using Umbraco.Web;
@@ -154,7 +156,19 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
             }
 
-            return new { versions, redirects };
+            var body = new { versions, redirects };
+
+            string jsonBody = JsonConvert.SerializeObject(body, Formatting.Indented);
+
+            return new HttpResponseMessage(HttpStatusCode.OK) {
+                Content = new StringContent(jsonBody, Encoding.UTF8, "application/json") {
+                    Headers = {
+                        ContentDisposition = new ContentDispositionHeaderValue("attachment") {
+                            FileName = $"Redirects_{DateTime.UtcNow:yyyyMMddHHmmss}.json"
+                        }
+                    }
+                }
+            };
 
         }
 
