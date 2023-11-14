@@ -101,13 +101,13 @@ namespace Skybrud.Umbraco.Redirects.Import {
 
                     case RedirectLinkMode.Content: {
 
-                            IPublishedContent content = Umbraco.TypedContent(redirect.LinkId);
+                        IPublishedContent content = Umbraco.TypedContent(redirect.LinkId);
 
-                            if (content == null) {
-                                warnings.Add($"Content node with ID '{redirect.LinkId}' not found.'");
-                            }
+                        if (content == null) {
+                            warnings.Add($"Content node with ID '{redirect.LinkId}' not found.'");
+                        }
 
-                            json.Add("destination", new JObject {
+                        json.Add("destination", new JObject {
                             {"id", redirect.LinkId},
                             {"key", content?.GetKey() ?? Guid.Empty},
                             {"name", redirect.LinkName},
@@ -115,18 +115,19 @@ namespace Skybrud.Umbraco.Redirects.Import {
                             {"type", "content"}
                         });
 
-                            break;
+                        break;
 
-                        }
+                    }
+
                     case RedirectLinkMode.Media: {
 
-                            IPublishedContent media = Umbraco.TypedMedia(redirect.LinkId);
+                        IPublishedContent media = Umbraco.TypedMedia(redirect.LinkId);
 
-                            if (media == null) {
-                                warnings.Add($"Media node with ID '{redirect.LinkId}' not found.'");
-                            }
+                        if (media == null) {
+                            warnings.Add($"Media node with ID '{redirect.LinkId}' not found.'");
+                        }
 
-                            json.Add("destination", new JObject {
+                        json.Add("destination", new JObject {
                             {"id", redirect.LinkId},
                             {"key", media?.GetKey() ?? Guid.Empty},
                             {"name", redirect.LinkName},
@@ -134,9 +135,9 @@ namespace Skybrud.Umbraco.Redirects.Import {
                             {"type", "media"}
                         });
 
-                            break;
+                        break;
 
-                        }
+                    }
 
                     default:
 
