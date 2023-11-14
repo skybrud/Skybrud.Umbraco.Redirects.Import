@@ -32,13 +32,13 @@ Small package that adds an endpoint for exporting all redirects to either a CSV 
 The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects.Import --version 1.0.0
+dotnet add package Skybrud.Umbraco.Redirects.Import --version 1.0.1
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects.Import -Version 1.0.0
+Install-Package Skybrud.Umbraco.Redirects.Import -Version 1.0.1
 ```
 
 
