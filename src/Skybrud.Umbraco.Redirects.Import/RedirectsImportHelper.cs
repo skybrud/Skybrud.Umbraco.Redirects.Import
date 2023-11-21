@@ -342,7 +342,7 @@ namespace Skybrud.Umbraco.Redirects.Import {
                 item.Errors.Add($"Domain doesn't have a root node ID: '{valueRootNode}'");
             } else {
                 item.AddOptions.RootNodeId = domain.RootContentId.Value;
-                if (TryGetContent(rootNodeId, out IPublishedContent? content)) {
+                if (TryGetContent(domain.RootContentId.Value, out IPublishedContent? content)) {
                     item.AddOptions.RootNodeKey = content.Key;
                     return;
                 }
