@@ -2,8 +2,11 @@
 
     <div ng-repeat="column in model.value">
         <label>
-            <input type="checkbox" ng-model="column.selected" />
-            {{column.alias}}
+            <umb-checkbox
+                name="exportColumns"
+                model="column.selected"
+                text="{{column.alias}}">
+            </umb-checkbo>
         </label>
     </div>
 
