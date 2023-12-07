@@ -1,4 +1,6 @@
-﻿namespace Skybrud.Umbraco.Redirects.Import {
+﻿using System.Collections.Generic;
+
+namespace Skybrud.Umbraco.Redirects.Import {
 
     /// <summary>
     /// Static class with various constants used throughout this package.
@@ -9,6 +11,11 @@
         /// Static class with constants for various content types.
         /// </summary>
         public static class ContentTypes {
+
+            /// <summary>
+            /// Gets a list of the allowed content types for CSV files
+            /// </summary>
+            public static readonly IList<string> AllowedCsvContentTypes = new[] { "application/vnd.ms-excel", "text/csv" };
 
             /// <summary>
             /// Gets the content type for a <strong>CSV</strong> file.

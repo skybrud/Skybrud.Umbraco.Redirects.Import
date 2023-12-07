@@ -92,7 +92,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
                 return CsvImportResult.Failed(errors);
             }
 
-            if (options.File.ContentType != "text/csv" || Path.GetExtension(options.File.FileName).ToLowerInvariant() != ".csv") {
+            if (!RedirectsImportConstants.ContentTypes.AllowedCsvContentTypes.Contains(options.File.ContentType) ||
+                Path.GetExtension(options.File.FileName).ToLowerInvariant() != ".csv") {
                 errors.Add("Uploaded file doesn't look like a CSV file.");
                 return CsvImportResult.Failed(errors);
             }
