@@ -15,13 +15,13 @@ Import and export addon for [**Skybrud.Umbraco.Redirects**](https://github.com/s
 The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
 
 ```
-dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.2
+dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.3
 ```
 
 or the older NuGet Package Manager:
 
 ```
-Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.2
+Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.3
 ```
 
 
