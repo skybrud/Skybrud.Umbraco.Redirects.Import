@@ -18,185 +18,183 @@ using Umbraco.Cms.Web.Common.Attributes;
 
 #pragma warning disable CS1591
 
-namespace Skybrud.Umbraco.Redirects.Import.Controllers {
+namespace Skybrud.Umbraco.Redirects.Import.Controllers;
 
-    [PluginController("Skybrud")]
-    public class RedirectsImportController : UmbracoAuthorizedApiController {
+[PluginController("Skybrud")]
+public class RedirectsImportController : UmbracoAuthorizedApiController {
 
-        private readonly ILogger<RedirectsImportController> _logger;
-        private readonly RedirectsImportService _redirectsImportService;
-        private readonly ImporterCollection _importers;
-        private readonly ExporterCollection _exporters;
+    private readonly ILogger<RedirectsImportController> _logger;
+    private readonly RedirectsImportService _redirectsImportService;
+    private readonly ImporterCollection _importers;
+    private readonly ExporterCollection _exporters;
 
-        #region Constructors
+    #region Constructors
 
-        public RedirectsImportController(ILogger<RedirectsImportController> logger, RedirectsImportService redirectsImportService, ImporterCollection importers, ExporterCollection exporters) {
-            _logger = logger;
-            _redirectsImportService = redirectsImportService;
-            _importers = importers;
-            _exporters = exporters;
-        }
+    public RedirectsImportController(ILogger<RedirectsImportController> logger, RedirectsImportService redirectsImportService, ImporterCollection importers, ExporterCollection exporters) {
+        _logger = logger;
+        _redirectsImportService = redirectsImportService;
+        _importers = importers;
+        _exporters = exporters;
+    }
 
-        #endregion
+    #endregion
 
-        [HttpGet]
-        public object GetImporters() {
+    [HttpGet]
+    public object GetImporters() {
 
-            List<object> importers = new();
+        List<object> importers = new();
 
-            foreach (IImporter importer in _importers) {
+        foreach (IImporter importer in _importers) {
 
-                JObject json = JObject.FromObject(importer);
+            JObject json = JObject.FromObject(importer);
 
-                json["config"] = JArray.FromObject(importer.GetOptions(HttpContext.Request));
+            json["config"] = JArray.FromObject(importer.GetOptions(HttpContext.Request));
 
-                importers.Add(json);
-
-            }
-
-            return importers;
+            importers.Add(json);
 
         }
 
-        [HttpGet]
-        public object GetExporters() {
+        return importers;
 
-            List<object> exporters = new();
+    }
 
-            foreach (IExporter exporter in _exporters) {
+    [HttpGet]
+    public object GetExporters() {
 
-                JObject json = JObject.FromObject(exporter);
+        List<object> exporters = new();
 
-                json["config"] = JArray.FromObject(exporter.GetOptions(HttpContext.Request));
+        foreach (IExporter exporter in _exporters) {
 
-                exporters.Add(json);
+            JObject json = JObject.FromObject(exporter);
 
-            }
+            json["config"] = JArray.FromObject(exporter.GetOptions(HttpContext.Request));
 
-            return exporters;
-
-        }
-
-        [HttpPost]
-        public object Export(JObject body) {
-
-            try {
-
-                // Get a reference to the selected exporter
-                string type = body.GetString("type")!;
-                if (string.IsNullOrWhiteSpace(type)) return BadRequest("No type specified for selected exporter.");
-                if (!_exporters.TryGet(type, out IExporter? exporter)) return BadRequest($"Selected exporter {type} not found.");
-
-                JObject? config = body.GetObject("config");
-                if (config == null) return BadRequest("Failed parsing JSON data!!!");
-
-                IExportOptions options = exporter.ParseOptions(config);
-
-                IExportResult result = exporter.Export(options);
-
-                string tempDir = _redirectsImportService.EnsureTempDirectory();
-                string tempPath = Path.Combine(tempDir, result.Key + Path.GetExtension(result.FileName));
-                System.IO.File.WriteAllBytes(tempPath, result.GetBytes(options));
-
-                return Ok(result);
-
-            } catch (Exception ex) {
-
-                _logger.LogError(ex, "Failed exporting redirects.");
-
-                return InternalServerError(ImportResult.Failed(ex, "Failed exporting redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
-
-            }
+            exporters.Add(json);
 
         }
 
-        [HttpGet]
-        public object GetExportedFile(Guid key, string filename) {
+        return exporters;
 
-            string dir = _redirectsImportService.GetTempDirectoryPath();
+    }
 
-            string extension = Path.GetExtension(filename).Trim('.');
+    [HttpPost]
+    public object Export(JObject body) {
 
-            string contentType = _redirectsImportService.GetContentType(extension);
+        try {
 
-            string path = Path.Combine(dir, $"{key}.{extension}");
+            // Get a reference to the selected exporter
+            string type = body.GetString("type")!;
+            if (string.IsNullOrWhiteSpace(type)) return BadRequest("No type specified for selected exporter.");
+            if (!_exporters.TryGet(type, out IExporter? exporter)) return BadRequest($"Selected exporter {type} not found.");
 
-            if (!System.IO.File.Exists(path)) return BadRequest("File not found.");
+            JObject? config = body.GetObject("config");
+            if (config == null) return BadRequest("Failed parsing JSON data!!!");
 
-            byte[] bytes = System.IO.File.ReadAllBytes(path);
+            IExportOptions options = exporter.ParseOptions(config);
 
-            System.IO.File.Delete(path);
+            IExportResult result = exporter.Export(options);
 
-            return File(bytes, contentType, filename);
+            string tempDir = _redirectsImportService.EnsureTempDirectory();
+            string tempPath = Path.Combine(tempDir, result.Key + Path.GetExtension(result.FileName));
+            System.IO.File.WriteAllBytes(tempPath, result.GetBytes(options));
 
-        }
+            return Ok(result);
 
-        [HttpPost]
-        public object Import() {
+        } catch (Exception ex) {
 
-            if (!TryGetJsonBody(out JObject? body)) return BadRequest("Failed parsing JSON data!!!");
+            _logger.LogError(ex, "Failed exporting redirects.");
 
-            try {
-
-                // Get a reference to the selected importer
-                string type = body.GetString("type")!;
-                if (!_importers.TryGet(type, out IImporter? importer)) return BadRequest($"Importer '{type}' not found.");
-
-                JObject? config = body.GetObject("config");
-                if (config == null) return BadRequest("Configuration object not found in JSON data.");
-
-                IImportOptions options = importer.ParseOptions(config);
-
-                options.File = HttpContext.Request.Form.Files.FirstOrDefault();
-
-                IImportResult result = importer.Import(options);
-
-                return result.IsSuccessful ? Ok(result) : InternalServerError(result);
-
-            } catch (Exception ex) {
-
-                _logger.LogError(ex, "Failed importing redirects.");
-
-                return InternalServerError(ImportResult.Failed(ex, "Failed importing redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
-
-            }
+            return InternalServerError(ImportResult.Failed(ex, "Failed exporting redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
 
         }
 
-        private static new ActionResult Ok(object data)  {
-            return new ContentResult {
-                StatusCode = (int)HttpStatusCode.OK,
-                ContentType = "application/json",
-                Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                })
-            };
+    }
+
+    [HttpGet]
+    public object GetExportedFile(Guid key, string filename) {
+
+        string dir = _redirectsImportService.GetTempDirectoryPath();
+
+        string extension = Path.GetExtension(filename).Trim('.');
+
+        string contentType = _redirectsImportService.GetContentType(extension);
+
+        string path = Path.Combine(dir, $"{key}.{extension}");
+
+        if (!System.IO.File.Exists(path)) return BadRequest("File not found.");
+
+        byte[] bytes = System.IO.File.ReadAllBytes(path);
+
+        System.IO.File.Delete(path);
+
+        return File(bytes, contentType, filename);
+
+    }
+
+    [HttpPost]
+    public object Import() {
+
+        if (!TryGetJsonBody(out JObject? body)) return BadRequest("Failed parsing JSON data!!!");
+
+        try {
+
+            // Get a reference to the selected importer
+            string type = body.GetString("type")!;
+            if (!_importers.TryGet(type, out IImporter? importer)) return BadRequest($"Importer '{type}' not found.");
+
+            JObject? config = body.GetObject("config");
+            if (config == null) return BadRequest("Configuration object not found in JSON data.");
+
+            IImportOptions options = importer.ParseOptions(config);
+
+            options.File = HttpContext.Request.Form.Files.FirstOrDefault();
+
+            IImportResult result = importer.Import(options);
+
+            return result.IsSuccessful ? Ok(result) : InternalServerError(result);
+
+        } catch (Exception ex) {
+
+            _logger.LogError(ex, "Failed importing redirects.");
+
+            return InternalServerError(ImportResult.Failed(ex, "Failed importing redirects. Check the Umbraco log for further information or contact your administrator if the problem persists."));
+
         }
 
-        private static new ActionResult BadRequest(object data) {
-            return new ContentResult {
-                StatusCode = (int)HttpStatusCode.BadRequest,
-                ContentType = "application/json",
-                Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                })
-            };
-        }
+    }
 
-        private static ActionResult InternalServerError(object data) {
-            return new ContentResult {
-                StatusCode = (int)HttpStatusCode.InternalServerError,
-                ContentType = "application/json",
-                Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
-                    ContractResolver = new CamelCasePropertyNamesContractResolver()
-                })
-            };
-        }
+    private static new ActionResult Ok(object data)  {
+        return new ContentResult {
+            StatusCode = (int)HttpStatusCode.OK,
+            ContentType = "application/json",
+            Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            })
+        };
+    }
 
-        private bool TryGetJsonBody([NotNullWhen(true)] out JObject? result) {
-            return JsonUtils.TryParseJsonObject(Request.Form["body"].FirstOrDefault()!, out result);
-        }
+    private static new ActionResult BadRequest(object data) {
+        return new ContentResult {
+            StatusCode = (int)HttpStatusCode.BadRequest,
+            ContentType = "application/json",
+            Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            })
+        };
+    }
 
+    private static ActionResult InternalServerError(object data) {
+        return new ContentResult {
+            StatusCode = (int)HttpStatusCode.InternalServerError,
+            ContentType = "application/json",
+            Content = JsonConvert.SerializeObject(data, new JsonSerializerSettings {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            })
+        };
+    }
+
+    private bool TryGetJsonBody([NotNullWhen(true)] out JObject? result) {
+        return JsonUtils.TryParseJsonObject(Request.Form["body"].FirstOrDefault()!, out result);
     }
 
 }

@@ -1,8 +1,6 @@
-﻿namespace Skybrud.Umbraco.Redirects.Import.Exporters {
+﻿namespace Skybrud.Umbraco.Redirects.Import.Exporters;
 
-    /// <summary>
-    /// Interface describing common options for exporting redirects.
-    /// </summary>
-    public interface IExportOptions { }
-
-}
+/// <summary>
+/// Interface describing common options for exporting redirects.
+/// </summary>
+public interface IExportOptions { }
