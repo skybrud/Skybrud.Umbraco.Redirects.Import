@@ -6,7 +6,7 @@
         if (!add) return;
 
         add.subButtons.push({
-            label: "Import",
+            //label: "Import",
             labelKey: "redirects_import",
             handler: function () {
 
@@ -26,7 +26,7 @@
         });
 
         add.subButtons.push({
-            label: "Export",
+            //label: "Export",
             labelKey: "redirects_export",
             handler: function () {
 
