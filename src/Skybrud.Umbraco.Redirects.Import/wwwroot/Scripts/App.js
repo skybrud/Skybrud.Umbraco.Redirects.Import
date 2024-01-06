@@ -16,9 +16,11 @@
                     view: "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Overlays/Import.html",
                     submit: function () {
                         editorService.close();
+                        args.dashboard.updateList();
                     },
                     close: function () {
                         editorService.close();
+                        args.dashboard.updateList();
                     }
                 });
 
