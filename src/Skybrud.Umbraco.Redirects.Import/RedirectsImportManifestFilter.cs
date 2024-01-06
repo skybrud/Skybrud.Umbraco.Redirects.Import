@@ -8,10 +8,12 @@ public class RedirectsImportManifestFilter : IManifestFilter {
 
     /// <inheritdoc />
     public void Filter(List<PackageManifest> manifests) {
+
         manifests.Add(new PackageManifest {
             AllowPackageTelemetry = true,
             PackageName = RedirectsImportPackage.Name,
-            Version = RedirectsImportPackage.InformationalVersion,
+            Version = RedirectsImportPackage.InformationalVersion.Split('+')[0],
+            PackageId = RedirectsImportPackage.Alias,
             BundleOptions = BundleOptions.Independent,
             Scripts = new[] {
                 $"/App_Plugins/{RedirectsImportPackage.Alias}/Scripts/App.js",
@@ -25,6 +27,7 @@ public class RedirectsImportManifestFilter : IManifestFilter {
                 $"/App_Plugins/{RedirectsImportPackage.Alias}/Styles/Default.css"
             }
         });
+
     }
 
 }

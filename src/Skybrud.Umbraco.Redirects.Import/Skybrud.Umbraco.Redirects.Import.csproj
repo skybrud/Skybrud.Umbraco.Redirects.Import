@@ -3,14 +3,14 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <LangVersion>10.0</LangVersion>
-    <TargetFramework>net6.0</TargetFramework>
+    <LangVersion>12.0</LangVersion>
+    <TargetFramework>net8.0</TargetFramework>
     <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>4.0.2</VersionPrefix>
+    <VersionPrefix>13.0.0-alpha000</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
@@ -24,7 +24,7 @@
     <PackageId>Skybrud.Umbraco.Redirects.Import</PackageId>
     <PackageTags>Skybrud, Umbraco, Redirects, Import, Export, Limbo, Umbraco-Marketplace</PackageTags>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/v4/</PackageProjectUrl>
+    <PackageProjectUrl>https://packages.skybrud.dk/skybrud.umbraco.redirects.import/v13/</PackageProjectUrl>
     <PackageIcon>Limbo.png</PackageIcon>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import</RepositoryUrl>
@@ -35,10 +35,10 @@
     <PackageReference Include="ClosedXml" Version="0.102.2" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
     <PackageReference Include="Skybrud.Essentials" Version="1.1.54" />
-    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="4.0.20" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[10.0.0,12.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[10.0.0,12.999)" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[10.0.0,12.999)" />
+    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="13.0.2" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" />
   </ItemGroup>
 
   <!-- Include package icon for NuGet -->

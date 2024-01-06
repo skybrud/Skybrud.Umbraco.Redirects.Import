@@ -3,7 +3,7 @@ using System.Data;
 using Skybrud.Umbraco.Redirects.Exceptions;
 using System.Linq;
 
-namespace Skybrud.Umbraco.Redirects.Import; 
+namespace Skybrud.Umbraco.Redirects.Import;
 
 public partial class RedirectsImportService {
 
@@ -42,7 +42,7 @@ public partial class RedirectsImportService {
 
             // Iterate through the columns of the row
             foreach (IXLCell cell in row.Cells(firstCell.Address.ColumnNumber, lastCell.Address.ColumnNumber)) {
-                table.Rows[^1][cell.WorksheetColumn().ColumnNumber() - 1] = cell.Value.GetText();
+                table.Rows[^1][cell.WorksheetColumn().ColumnNumber() - 1] = cell.Value.ToString();
             }
 
         }
