@@ -159,15 +159,15 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
                 new ("Ascii", "Ascii")
             };
 
-            if (TryGetEncoding("utf-8", out Encoding _)) {
+            if (TryGetEncoding("utf-8", out Encoding? _)) {
                 temp.Add(new CsvImportEncodingItem("utf-8", "Unicode (UTF-8)"));
             }
 
-            if (TryGetEncoding("Windows-1252", out Encoding _)) {
+            if (TryGetEncoding("Windows-1252", out Encoding? _)) {
                 temp.Add(new CsvImportEncodingItem("windows1252", "Windows 1252"));
             }
 
-            if (TryGetEncoding("iso-8859-1", out Encoding _)) {
+            if (TryGetEncoding("iso-8859-1", out Encoding? _)) {
                 temp.Add(new CsvImportEncodingItem("iso-8859-1", "Western European (ISO)"));
             }
 
