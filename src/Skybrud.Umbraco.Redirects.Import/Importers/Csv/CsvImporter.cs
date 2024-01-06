@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Skybrud.Umbraco.Redirects.Import.Config;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
 
@@ -17,6 +18,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
     /// </summary>
     public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
 
+        private readonly RedirectsImportSettings _redirectsImportSettings;
         private readonly RedirectsImportService _redirectsImportService;
 
         #region Constructors
@@ -24,8 +26,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// <summary>
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
-        public CsvImporter(RedirectsImportService redirectsImportService) {
-
+        public CsvImporter(RedirectsImportSettings redirectsImportSettings, RedirectsImportService redirectsImportService) {
+            _redirectsImportSettings = redirectsImportSettings;
             _redirectsImportService = redirectsImportService;
 
             Icon = "icon-redirects-csv";
@@ -92,7 +94,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
                 return CsvImportResult.Failed(errors);
             }
 
-            if (options.File.ContentType != "text/csv" || Path.GetExtension(options.File.FileName).ToLowerInvariant() != ".csv") {
+            if (!_redirectsImportSettings.Csv.AllowedContentTypes.Contains(options.File.ContentType) || Path.GetExtension(options.File.FileName).ToLowerInvariant() != ".csv") {
                 errors.Add("Uploaded file doesn't look like a CSV file.");
                 return CsvImportResult.Failed(errors);
             }
@@ -118,7 +120,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
             DataTable dataTable = file.ToDataTable();
 
             // Start a new import based on the data table
-            var result = _redirectsImportService.Import(options, dataTable);
+            ImportResult result = _redirectsImportService.Import(options, dataTable);
 
             // Wrap the result
             return new CsvImportResult(result);
