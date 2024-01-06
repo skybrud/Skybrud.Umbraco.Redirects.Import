@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>13.0.0-alpha000</VersionPrefix>
+    <VersionPrefix>13.0.0</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
