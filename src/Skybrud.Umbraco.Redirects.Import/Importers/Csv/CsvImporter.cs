@@ -9,6 +9,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.Extensions.Options;
 using Skybrud.Umbraco.Redirects.Import.Config;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
@@ -26,14 +27,12 @@ namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv {
         /// <summary>
         /// Initializes a new instance based on the specified dependencies.
         /// </summary>
-        public CsvImporter(RedirectsImportSettings redirectsImportSettings, RedirectsImportService redirectsImportService) {
-            _redirectsImportSettings = redirectsImportSettings;
+        public CsvImporter(IOptions<RedirectsImportSettings> redirectsImportSettings, RedirectsImportService redirectsImportService) {
+            _redirectsImportSettings = redirectsImportSettings.Value;
             _redirectsImportService = redirectsImportService;
-
             Icon = "icon-redirects-csv";
             Name = "CSV";
             Description = "Lets you import redirects from a CSV file.";
-
         }
 
         #endregion
