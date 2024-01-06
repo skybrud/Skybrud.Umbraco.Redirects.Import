@@ -7,10 +7,31 @@
 
 Import and export addon for [**Skybrud.Umbraco.Redirects**](https://github.com/skybrud/Skybrud.Umbraco.Redirects). The package features an extensible set of importers and exporters, and by default it supports importing from and exporting to CSV, XLSX and JSON files.
 
+<table>
+  <tr>
+    <td><strong>License:</strong></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/blob/v13/main/LICENSE.md"><strong>MIT License</strong></a></td>
+  </tr>
+  <tr>
+    <td><strong>Umbraco:</strong></td>
+    <td>
+      Umbraco 13
+    </td>
+  </tr>
+  <tr>
+    <td><strong>Target Framework:</strong></td>
+    <td>
+      .NET 8
+    </td>
+  </tr>
+</table>
+
 
 <br /><br />
 
 ## Installation
+
+### Umbraco 13
 
 The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
 
@@ -18,11 +39,15 @@ The package is only available via [**NuGet**](https://www.nuget.org/packages/Sky
 dotnet add package Skybrud.Umbraco.Redirects.Import --version 4.0.2
 ```
 
-or the older NuGet Package Manager:
+or the NuGet Package Manager:
 
 ```
 Install-Package Skybrud.Umbraco.Redirects.Import -Version 4.0.2
 ```
+
+### Other versions of Umbraco
+
+- For Umbraco 10, 11 and 12 see the [**v4/main** branch](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v4/main)
 
 
 
