@@ -41,7 +41,7 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
 
         return new [] {
             RedirectsImportUtils.GetOverwriteOption(),
-            RedirectsImportUtils.GetFileOption("Select the XSLT file containing the redirects.")
+            RedirectsImportUtils.GetFileOption("Select the XSLS file containing the redirects.")
         };
 
     }
