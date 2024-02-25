@@ -1,6 +1,6 @@
 # Documentation
 
-**Skybrud Redirects Import** is an add-on for [**Skybrud Redirects**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import) that adds support for importing and exporting redirects.
+**Skybrud Redirects Import** is an add-on for [**Skybrud Redirects**](https://packages.limbo.works/skybrud.umbraco.redirects/) that adds support for importing and exporting redirects.
 
 ## Versions
 
