@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Net;
 using Skybrud.Essentials.Common;
 using Skybrud.Umbraco.Redirects.Import.Importers;
@@ -108,6 +109,21 @@ public class RedirectsImportHelper {
     public bool TryGetContent(string route, [NotNullWhen(true)] out IPublishedContent? result) {
         result = Umbraco.Content?.GetByRoute(route);
         return result != null;
+    }
+
+    /// <summary>
+    /// Attempts to get the culture for the specified <paramref name="route"/>
+    /// </summary>
+    /// <param name="route">The route of the content.</param>
+    /// <param name="culture">When this method returns, holds the matching culture.</param>
+    /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
+    public bool TryGetCulture(string route, [NotNullWhen(true)] out string? culture) {
+        culture = DomainService
+            .GetAll(includeWildcards: false)
+            .FirstOrDefault(d => route.InvariantStartsWith($"/{d.LanguageIsoCode}"))?
+            .LanguageIsoCode;
+
+        return culture != null;
     }
 
     /// <summary>
@@ -400,6 +416,7 @@ public class RedirectsImportHelper {
         string? destinationUrl = row.GetString(Columns.DestinationUrl);
         string? destinationQuery = null;
         string? destinationFragment = null;
+        string? culture = null;
 
         IPublishedContent? destination = null;
 
@@ -511,6 +528,11 @@ public class RedirectsImportHelper {
                     destination = content;
                     destinationUrl = content.Url();
                     destinationType = RedirectDestinationType.Content;
+                } else if (TryGetCulture(destinationUrl, out culture) &&
+                           TryGetContent(destinationUrl.Replace($"/{culture}", "", StringComparison.InvariantCultureIgnoreCase), out content)) {
+                    destination = content;
+                    destinationUrl = content.Url(culture);
+                    destinationType = RedirectDestinationType.Content;
                 } else {
                     item.Errors.Add($"No destination found with URL '{destinationUrl}'. ({route}) ({item.AddOptions.RootNodeId})");
                     return;
@@ -531,7 +553,6 @@ public class RedirectsImportHelper {
             if (!string.IsNullOrWhiteSpace(value)) destinationFragment = value;
         }
 
-        string? culture = null;
         if (Columns.DestinationCulture is not null) {
             string? value = row.GetString(Columns.DestinationCulture);
             if (!string.IsNullOrWhiteSpace(value)) {
