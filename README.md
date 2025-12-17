@@ -1,6 +1,6 @@
 # Skybrud Redirects Import
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/blob/v17/main/LICENSE.md)
 [![NuGet](https://img.shields.io/nuget/vpre/Skybrud.Umbraco.Redirects.Import.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import)
 [![NuGet](https://img.shields.io/nuget/dt/Skybrud.Umbraco.Redirects.Import.svg)](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import)
 [![Umbraco Marketplace](https://img.shields.io/badge/umbraco-marketplace-%233544B1)](https://marketplace.umbraco.com/package/skybrud.umbraco.redirects.import)
@@ -10,18 +10,18 @@ Import and export addon for [**Skybrud.Umbraco.Redirects**](https://github.com/s
 <table>
   <tr>
     <td><strong>License:</strong></td>
-    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/blob/v13/main/LICENSE.md"><strong>MIT License</strong></a></td>
+    <td><a href="https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/blob/v17/main/LICENSE.md"><strong>MIT License</strong></a></td>
   </tr>
   <tr>
     <td><strong>Umbraco:</strong></td>
     <td>
-      Umbraco 13
+      Umbraco 17
     </td>
   </tr>
   <tr>
     <td><strong>Target Framework:</strong></td>
     <td>
-      .NET 8
+      .NET 10
     </td>
   </tr>
 </table>
@@ -31,23 +31,14 @@ Import and export addon for [**Skybrud.Umbraco.Redirects**](https://github.com/s
 
 ## Installation
 
-### Umbraco 13
+### Umbraco 17
 
-The package is only available via [**NuGet**](https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import). To install the package, you can use either .NET CLI:
-
-```
-dotnet add package Skybrud.Umbraco.Redirects.Import --version 13.0.1
-```
-
-or the NuGet Package Manager:
-
-```
-Install-Package Skybrud.Umbraco.Redirects.Import -Version 13.0.1
-```
+*Not available on NuGet yet*
 
 ### Other versions of Umbraco
 
-- For Umbraco 10, 11 and 12 see the [**v4/main** branch](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v4/main)
+- [**`v13/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v13/main) Umbraco 13
+- ~~[**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v4/main) Umbraco 10, 11 and 12~~ <sub title="Umbraco 10, 11 and 12 have reached end-of-life"><sup>(EOL)</sup></sub>
 
 
 
