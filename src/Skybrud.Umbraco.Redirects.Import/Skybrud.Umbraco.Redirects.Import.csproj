@@ -1,16 +1,15 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Project Sdk="Microsoft.NET.Sdk.Razor">
 
   <PropertyGroup>
-    <LangVersion>12.0</LangVersion>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <StaticWebAssetBasePath>App_Plugins/$(AssemblyName)</StaticWebAssetBasePath>
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <PropertyGroup>
-    <VersionPrefix>13.0.1</VersionPrefix>
+    <VersionPrefix>17.0.0-alpha000</VersionPrefix>
     <VersionSuffix Condition="'$(Configuration)'=='Debug'">build$([System.DateTime]::UtcNow.ToString(`yyyyMMddHHmm`))</VersionSuffix>
     <Company>Limbo</Company>
     <Authors>Anders Bjerner</Authors>
@@ -33,20 +32,19 @@
   <!-- Include additional metadata in the assembly -->
   <ItemGroup>
     <AssemblyMetadata Include="PackageProjectUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects.import/" />
-    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects.import/docs/v13/" />
+    <AssemblyMetadata Include="DocumentationUrl" Value="https://packages.limbo.works/skybrud.umbraco.redirects.import/docs/v17/" />
     <AssemblyMetadata Include="NuGetUrl" Value="https://www.nuget.org/packages/Skybrud.Umbraco.Redirects.Import" />
     <AssemblyMetadata Include="UmbracoMarketplaceUrl" Value="https://marketplace.umbraco.com/package/skybrud.umbraco.redirects.import" />
   </ItemGroup>
 
   <!-- Include NuGet dependencies -->
   <ItemGroup>
-    <PackageReference Include="ClosedXml" Version="0.102.2" />
+    <PackageReference Include="ClosedXML" Version="0.105.0" />
     <PackageReference Include="Skybrud.Csv" Version="0.0.3" />
-    <PackageReference Include="Skybrud.Essentials" Version="1.1.58" />
-    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="13.0.8" />
-    <PackageReference Include="Umbraco.Cms.Core" Version="[13.0.0,13.999)" NoWarn="NU1902" />
-    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[13.0.0,13.999)" NoWarn="NU1902" />
-    <PackageReference Include="Umbraco.Cms.Web.BackOffice" Version="[13.0.0,13.999)" NoWarn="NU1902" />
+    <PackageReference Include="Skybrud.Essentials" Version="1.1.63" />
+    <PackageReference Include="Skybrud.Umbraco.Redirects" Version="17.0.1" />
+    <PackageReference Include="Umbraco.Cms.Core" Version="[17.0.0,17.999)" />
+    <PackageReference Include="Umbraco.Cms.Web.Website" Version="[17.0.0,17.999)" />
   </ItemGroup>
 
   <!-- Include package icon for NuGet -->
@@ -58,10 +56,5 @@
   <PropertyGroup>
     <DocumentationFile>bin\$(Configuration)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
-
-  <ItemGroup>
-    <Content Remove="compilerconfig.json" />
-    <None Include="compilerconfig.json" />
-  </ItemGroup>
 
 </Project>

@@ -4,6 +4,7 @@ using System.IO;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Xlsx;
 
@@ -21,7 +22,7 @@ public class XlsxExporter : ExporterBase<XlsxExportOptions, XlsxExportResult> {
     /// </summary>
     public XlsxExporter(RedirectsImportService redirectsImportService) {
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-excel";
+        Icon = "redirects-xslt";
         Name = "XLSX";
         Description = "Lets you export redirects to an XLSX file.";
     }
@@ -36,9 +37,14 @@ public class XlsxExporter : ExporterBase<XlsxExportOptions, XlsxExportResult> {
     /// <param name="request">A reference to the current request.</param>
     /// <returns>A collection of <see cref="Option"/></returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
-        return new[] {
-            RedirectsImportUtils.GetColumnsOption()
-        };
+        return [
+            new Option() {
+                Alias = "columns",
+                Label = "Columns",
+                Description = "Select the columns that should be included in the exported file.",
+                Element = "skybrud-redirects-export-columns"
+            }
+        ];
     }
 
     /// <summary>
@@ -47,6 +53,8 @@ public class XlsxExporter : ExporterBase<XlsxExportOptions, XlsxExportResult> {
     /// <param name="options">The options for the export.</param>
     /// <returns>An instance of <see cref="XlsxExportResult"/> representing the result of the export.</returns>
     public override XlsxExportResult Export(XlsxExportOptions options) {
+
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
         byte[] bytes;
 

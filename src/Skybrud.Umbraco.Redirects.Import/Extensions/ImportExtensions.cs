@@ -4,6 +4,8 @@ namespace Skybrud.Umbraco.Redirects.Import.Extensions;
 
 internal static class ImportExtensions {
 
+    // TODO: consider moving this to Skybrud.Essentials?
+
     /// <summary>
     /// Gets the string value of the cell identified by the specified <paramref name="row"/> and <paramref name="column"/>.
     /// </summary>

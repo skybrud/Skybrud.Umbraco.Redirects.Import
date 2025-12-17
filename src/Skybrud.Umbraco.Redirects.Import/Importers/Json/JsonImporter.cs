@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Json.Newtonsoft;
 using Skybrud.Essentials.Json.Newtonsoft.Extensions;
 using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Services;
 
-namespace Skybrud.Umbraco.Redirects.Import.Importers.Json; 
+namespace Skybrud.Umbraco.Redirects.Import.Importers.Json;
 
 /// <summary>
 /// Class representing an importer based on an <strong>JSON</strong> file.
@@ -26,7 +26,7 @@ public class JsonImporter : ImporterBase<JsonImportOptions, JsonImportResult> {
     /// </summary>
     public JsonImporter(RedirectsImportService redirectsImportService) {
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-json";
+        Icon = "redirects-json";
         Name = "JSON";
         Description = "Lets you import redirects from a JSON file.";
     }
@@ -41,17 +41,7 @@ public class JsonImporter : ImporterBase<JsonImportOptions, JsonImportResult> {
     /// <param name="request">A reference to current request.</param>
     /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
-
-        const string fileUrl = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/File.html";
-
-        return new Option[] {
-            new ("file", "File", fileUrl, "Select the JSON file.") {
-                Config = new Dictionary<string, object> {
-                    {"multiple", false}
-                }
-            }
-        };
-
+        return [ Option.File(description: "Select the JSON file.") ];
     }
 
     /// <summary>
@@ -61,9 +51,9 @@ public class JsonImporter : ImporterBase<JsonImportOptions, JsonImportResult> {
     /// <returns>An instance of <see cref="JsonImportResult"/> representing the result of the import.</returns>
     public override JsonImportResult Import(JsonImportOptions options) {
 
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
-        List<string> errors = new();
+        List<string> errors = [];
 
         if (options.File == null) {
             errors.Add("No file was uploaded.");
@@ -76,7 +66,7 @@ public class JsonImporter : ImporterBase<JsonImportOptions, JsonImportResult> {
         }
 
         // Return if we have encountered any errors this far
-        if (errors.Any()) return JsonImportResult.Failed(errors);
+        if (errors.Count > 0) return JsonImportResult.Failed(errors);
 
         // Create a new stream for the uploaded file
         using Stream stream = options.File.OpenReadStream();
@@ -94,7 +84,7 @@ public class JsonImporter : ImporterBase<JsonImportOptions, JsonImportResult> {
         }
 
         // Validate the JSON file. Exported files should contain both the version for both the main redirects package and
-        // the import package. Currently we don't really check the version - just that the value is present
+        // the import package. Currently, we don't really check the version - just that the value is present
         JObject? versions = json.GetObject("versions");
         string? v1 = versions.GetString("Skybrud.Umbraco.Redirects");
         string? v2 = versions.GetString("Skybrud.Umbraco.Redirects.Import");

@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
-using Skybrud.Csv;
-using Skybrud.Umbraco.Redirects.Exceptions;
-using Skybrud.Umbraco.Redirects.Import.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Options;
-using Skybrud.Umbraco.Redirects.Import.Config;
+using Skybrud.Csv;
+using Skybrud.Umbraco.Redirects.Exceptions;
+using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Models.Config;
+using Skybrud.Umbraco.Redirects.Import.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Csv;
 
@@ -30,7 +30,7 @@ public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
     public CsvImporter(IOptions<RedirectsImportSettings> redirectsImportSettings, RedirectsImportService redirectsImportService) {
         _redirectsImportSettings = redirectsImportSettings.Value;
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-csv";
+        Icon = "redirects-csv";
         Name = "CSV";
         Description = "Lets you import redirects from a CSV file.";
     }
@@ -46,34 +46,35 @@ public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
     /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
-        const string itemsUrl = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/Items.html";
-        const string fileUrl = "/App_Plugins/Skybrud.Umbraco.Redirects.Import/Views/Editors/File.html";
+        List<Option> options = [
+            Option.Overwrite(),
+            new() {
+                Alias = "encoding",
+                Label = "Encoding",
+                Element = "skybrud-redirects-import-items",
+                Description = "Select the encoding of the uploaded CSV file.",
+                Config = new ItemList(GetEncodings()),
+                Value = "Auto"
+            },
+            new() {
+                Alias = "separator",
+                Label = "Separator",
+                Element = "skybrud-redirects-import-items",
+                Description = "Select the encoding of the uploaded CSV file.",
+                Config = new ItemList {
+                    new Item("Auto", "Auto"),
+                    new Item("Colon", "Colon"),
+                    new Item("Comma", "Comma"),
+                    new Item("SemiColon", "Semi colon"),
+                    new Item("Space", "Space"),
+                    new Item("Tab", "Tab")
+                },
+                Value = "Auto"
+            },
+            Option.File(description: "Select the CSV file.")
+        ];
 
-        return new Option[] {
-            new ("overwriteExisting", "Overwrite existing", "boolean", "Indicates whether existing redirects should be overwritten for matching inbound URLs."),
-            new ("encoding", "Encoding", itemsUrl, "Select the encoding of the uploaded CSV file.") {
-                Config = new Dictionary<string, object> {
-                    {"items", GetEncodings()}
-                }
-            },
-            new ("separator", "Separator", itemsUrl, "Select the separator used in the uploaded CSV file.") {
-                Config = new Dictionary<string, object> {
-                    {"items", new [] {
-                        new Item("Auto", "Auto"),
-                        new Item("Colon", "Colon"),
-                        new Item("Comma", "Comma"),
-                        new Item("SemiColon", "Semi colon"),
-                        new Item("Space", "Space"),
-                        new Item("Tab", "Tab")
-                    }}
-                }
-            },
-            new ("file", "File", fileUrl, "Select the CSV file.") {
-                Config = new Dictionary<string, object> {
-                    {"multiple", false}
-                }
-            }
-        };
+        return options;
 
     }
 
@@ -84,9 +85,9 @@ public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
     /// <returns>An instance of <see cref="CsvImportResult"/> representing the result of the import.</returns>
     public override CsvImportResult Import(CsvImportOptions options) {
 
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
-        List<string> errors = new();
+        List<string> errors = [];
 
         if (options.File == null) {
             errors.Add("No file was uploaded.");
@@ -99,7 +100,7 @@ public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
         }
 
         // Return if we have encountered any errors this far
-        if (errors.Any()) return CsvImportResult.Failed(errors);
+        if (errors.Count > 0) return CsvImportResult.Failed(errors);
 
         // Create a new stream for the uploaded file
         using Stream stream = options.File.OpenReadStream();
@@ -131,7 +132,7 @@ public class CsvImporter : ImporterBase<CsvImportOptions, CsvImportResult> {
             CsvImportSeparator.Auto => CsvSeparator.Auto,
             CsvImportSeparator.Colon => CsvSeparator.Colon,
             CsvImportSeparator.Comma => CsvSeparator.Comma,
-            CsvImportSeparator.SemiColon => CsvSeparator.SemiColon,
+            CsvImportSeparator.Semicolon => CsvSeparator.SemiColon,
             CsvImportSeparator.Space => CsvSeparator.Space,
             CsvImportSeparator.Tab => CsvSeparator.Tab,
             _ => throw new RedirectsException($"Unsupported separator: {options.Separator}")

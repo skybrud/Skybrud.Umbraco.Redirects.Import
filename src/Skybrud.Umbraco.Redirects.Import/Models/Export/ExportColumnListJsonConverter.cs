@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Skybrud.Essentials.Strings;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,13 @@ internal class ExportColumnListJsonConverter : JsonConverter {
     }
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
+
+        if (reader.TokenType == JsonToken.String) {
+            string? str = reader.Value!.ToString();
+            if (string.IsNullOrWhiteSpace(str)) return null;
+            return new ExportColumnList(StringUtils.ParseStringArray(str).Select(x => new ExportColumnItem(x, true)).ToList());
+        }
+
         if (reader.TokenType != JsonToken.StartArray) return null;
         JArray array = JArray.Load(reader);
         return new ExportColumnList(new List<ExportColumnItem>(array.Select(x => ((JObject) x).ToObject<ExportColumnItem>())!));

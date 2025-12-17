@@ -51,23 +51,23 @@ public class XlsxImportResult : IImportResult {
 
     private XlsxImportResult(IReadOnlyList<RedirectImportItem> redirects) {
         IsSuccessful = true;
-        Errors = Array.Empty<string>();
+        Errors = [];
         Redirects = redirects;
     }
 
     private XlsxImportResult(IReadOnlyList<string> errors) {
         IsSuccessful = false;
         Errors = errors;
-        Redirects = Array.Empty<RedirectImportItem>();
+        Redirects = [];
     }
 
     private XlsxImportResult(Exception exception) {
         IsSuccessful = false;
         Exception = exception;
-        Errors = new[] {
+        Errors = [
             exception is RedirectsException rex ? rex.Message : "Import failed on the server."
-        };
-        Redirects = Array.Empty<RedirectImportItem>();
+        ];
+        Redirects = [];
     }
 
     #endregion

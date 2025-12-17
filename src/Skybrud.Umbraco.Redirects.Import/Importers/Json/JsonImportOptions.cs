@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Models;
 
-namespace Skybrud.Umbraco.Redirects.Import.Importers.Json; 
+namespace Skybrud.Umbraco.Redirects.Import.Importers.Json;
 
 /// <summary>
 /// Class representing the options for importing redirects from a <strong>JSON</strong> file.

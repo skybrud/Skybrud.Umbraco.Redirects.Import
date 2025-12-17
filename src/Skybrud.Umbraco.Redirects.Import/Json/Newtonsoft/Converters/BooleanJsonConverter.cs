@@ -15,23 +15,12 @@ internal class BooleanJsonConverter : JsonConverter {
     }
 
     public override object? ReadJson(JsonReader reader, Type objectType, object? existingValue, JsonSerializer serializer) {
-
-        switch (reader.TokenType) {
-
-            case JsonToken.Boolean:
-                return (bool) reader.Value!;
-
-            case JsonToken.String:
-                return StringUtils.ParseBoolean((string)reader.Value!);
-
-            case JsonToken.Integer:
-                return ((int) reader.Value!) == 1;
-
-            default:
-                throw new Exception($"Unsupported token type: {reader.TokenType}.");
-
-        }
-
+        return reader.TokenType switch {
+            JsonToken.Boolean => (bool) reader.Value!,
+            JsonToken.String => StringUtils.ParseBoolean((string) reader.Value!),
+            JsonToken.Integer => ((int) reader.Value!) == 1,
+            _ => throw new Exception($"Unsupported token type: {reader.TokenType}."),
+        };
     }
 
     public override bool CanConvert(Type objectType) {

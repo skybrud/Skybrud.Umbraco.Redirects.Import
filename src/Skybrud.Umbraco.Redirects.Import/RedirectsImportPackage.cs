@@ -26,7 +26,7 @@ public static class RedirectsImportPackage {
     /// <summary>
     /// Gets the version of the package.
     /// </summary>
-    public static readonly Version Version = typeof(RedirectsPackage).Assembly.GetName().Version!;
+    public static readonly Version Version = typeof(RedirectsImportPackage).Assembly.GetName().Version!;
 
     /// <summary>
     /// Gets the informational version of the package.

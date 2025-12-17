@@ -18,12 +18,8 @@ public class ExporterCollection : BuilderCollectionBase<IExporter> {
         _lookup = new Dictionary<string, IExporter>(StringComparer.OrdinalIgnoreCase);
 
         foreach (IExporter item in this) {
-
             string? typeName = item.GetType().AssemblyQualifiedName;
-            if (typeName != null && _lookup.ContainsKey(typeName) == false) {
-                _lookup.Add(typeName, item);
-            }
-
+            if (typeName != null) _lookup.TryAdd(typeName, item);
         }
 
     }
@@ -36,7 +32,7 @@ public class ExporterCollection : BuilderCollectionBase<IExporter> {
     /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
     public bool TryGet<TExporter>([NotNullWhen(true)] out TExporter? result) where TExporter : IExporter {
         if (_lookup.TryGetValue(typeof(TExporter).AssemblyQualifiedName!, out IExporter? exporter)) {
-            result = (TExporter)exporter;
+            result = (TExporter) exporter;
             return true;
         } else {
             result = default;

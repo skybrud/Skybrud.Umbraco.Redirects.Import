@@ -16,24 +16,25 @@ public class ExportColumnList : IEnumerable<ExportColumnItem> {
     /// Initializes a new instanced with default options.
     /// </summary>
     public ExportColumnList() {
-        _columns = new List<ExportColumnItem> {
-            new("Id", true),
-            new("Key", true),
-            new("RootKey", true),
-            new("Url", true),
-            new("QueryString", true),
-            new("DestinationType", true),
-            new("DestinationId", true),
-            new("DestionationUrl", true),
-            new("DestionationQuery", true),
-            new("DestionationFragment", true),
-            new("DestionationName", true),
-            new("Type", true),
-            new("IsPermanent", false),
-            new("ForwardQueryString", true),
-            new("CreateDate", true),
-            new("UpdateDate", true)
-        };
+        _columns = [
+            new ExportColumnItem("Id", true),
+            new ExportColumnItem("Key", true),
+            new ExportColumnItem("RootKey", true),
+            new ExportColumnItem("Url", true),
+            new ExportColumnItem("QueryString", true),
+            new ExportColumnItem("DestinationType", true),
+            new ExportColumnItem("DestinationId", false),
+            new ExportColumnItem("DestinationKey", true),
+            new ExportColumnItem("DestinationUrl", true),
+            new ExportColumnItem("DestinationQuery", true),
+            new ExportColumnItem("DestinationFragment", true),
+            new ExportColumnItem("DestinationName", true),
+            new ExportColumnItem("Type", true),
+            new ExportColumnItem("IsPermanent", false),
+            new ExportColumnItem("ForwardQueryString", true),
+            new ExportColumnItem("CreateDate", true),
+            new ExportColumnItem("UpdateDate", true)
+        ];
     }
 
     /// <summary>

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
-using Skybrud.Umbraco.Redirects.Models.Options;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models.Import;
 
@@ -13,7 +12,7 @@ public class RedirectImportItem {
     /// The options describing the redirect to be added.
     /// </summary>
     [JsonProperty("options")]
-    public AddRedirectOptions AddOptions { get; set; }
+    public RedirectImportOptions Options { get; set; }
 
     /// <summary>
     /// Gets or sets the import status of the redirect.
@@ -25,19 +24,19 @@ public class RedirectImportItem {
     /// Gets a list of errors triggered by the redirect.
     /// </summary>
     [JsonProperty("errors")]
-    public List<string> Errors = new();
+    public List<string> Errors = [];
 
     /// <summary>
     /// Gets a list of warnings triggered by the redirect.
     /// </summary>
     [JsonProperty("warnings")]
-    public List<string> Warnings = new();
+    public List<string> Warnings = [];
 
     /// <summary>
     /// Initializes a new instance with default options.
     /// </summary>
     public RedirectImportItem() {
-        AddOptions = new AddRedirectOptions();
+        Options = new RedirectImportOptions();
     }
 
 }

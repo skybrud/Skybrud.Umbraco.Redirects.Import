@@ -5,7 +5,7 @@
 namespace Skybrud.Umbraco.Redirects.Import.Models.Import;
 
 /// <summary>
-/// Class representing the column mapping of a redriects import.
+/// Class representing the column mapping of a redirects import.
 /// </summary>
 public class ImportColumnList {
 

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Data;
 using System.IO;
-using System.Linq;
 using ClosedXML.Excel;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Importers.Xlsx;
 
@@ -23,7 +23,7 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
     /// </summary>
     public XlsxImporter(RedirectsImportService redirectsImportService) {
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-excel";
+        Icon = "redirects-xslt";
         Name = "XLSX";
         Description = "Lets you import redirects from an XLSX file.";
     }
@@ -38,12 +38,10 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
     /// <param name="request">A reference to current request.</param>
     /// <returns>A collection of <see cref="Option"/> representing the options.</returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
-
-        return new [] {
-            RedirectsImportUtils.GetOverwriteOption(),
-            RedirectsImportUtils.GetFileOption("Select the XSLT file containing the redirects.")
-        };
-
+        return [
+            Option.Overwrite(),
+            Option.File(description: "Select the XSLT file containing the redirects.")
+        ];
     }
 
     /// <summary>
@@ -53,9 +51,9 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
     /// <returns>An instance of <see cref="XlsxImportResult"/> representing the result of the import.</returns>
     public override XlsxImportResult Import(XlsxImportOptions options) {
 
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
-        List<string> errors = new();
+        List<string> errors = [];
 
         if (options.File == null) {
             errors.Add("No file was uploaded.");
@@ -68,7 +66,7 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
         }
 
         // Return if we have encountered any errors this far
-        if (errors.Any()) return XlsxImportResult.Failed(errors);
+        if (errors.Count > 0) return XlsxImportResult.Failed(errors);
 
         // Create a new stream for the uploaded file
         using Stream stream = options.File.OpenReadStream();
@@ -78,7 +76,6 @@ public class XlsxImporter : ImporterBase<XlsxImportOptions, XlsxImportResult> {
 
         // Start a new import and return the result
         return new XlsxImportResult(_redirectsImportService.Import(options, table));
-
 
     }
 

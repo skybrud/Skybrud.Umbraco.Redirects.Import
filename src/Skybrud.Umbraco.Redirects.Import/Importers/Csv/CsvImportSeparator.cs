@@ -25,9 +25,9 @@ public enum CsvImportSeparator {
     Comma,
 
     /// <summary>
-    /// Indicates that the importer should use a semi colon (<c>;</c>) as separator.
+    /// Indicates that the importer should use a semicolon (<c>;</c>) as separator.
     /// </summary>
-    SemiColon,
+    Semicolon,
 
     /// <summary>
     /// Indicates that the importer should use a space (<c> </c>) as separator.

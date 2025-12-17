@@ -6,7 +6,7 @@ using Skybrud.Umbraco.Redirects.Import.Models.Export;
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv;
 
 /// <summary>
-/// Class reprenting the options for an export to a CSV file.
+/// Class representing the options for an export to a CSV file.
 /// </summary>
 public class CsvExportOptions : IExportColumnOptions {
 

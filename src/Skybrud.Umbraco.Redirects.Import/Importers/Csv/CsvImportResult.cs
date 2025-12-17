@@ -51,23 +51,23 @@ public class CsvImportResult : IImportResult {
 
     private CsvImportResult(IReadOnlyList<RedirectImportItem> redirects) {
         IsSuccessful = true;
-        Errors = Array.Empty<string>();
+        Errors = [];
         Redirects = redirects;
     }
 
     private CsvImportResult(IReadOnlyList<string> errors) {
         IsSuccessful = false;
         Errors = errors;
-        Redirects = Array.Empty<RedirectImportItem>();
+        Redirects = [];
     }
 
     private CsvImportResult(Exception exception) {
         IsSuccessful = false;
         Exception = exception;
-        Errors = new[] {
+        Errors = [
             exception is RedirectsException rex ? rex.Message : "Import failed on the server."
-        };
-        Redirects = Array.Empty<RedirectImportItem>();
+        ];
+        Redirects = [];
     }
 
     #endregion

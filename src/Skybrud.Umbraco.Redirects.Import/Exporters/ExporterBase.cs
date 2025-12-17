@@ -61,7 +61,7 @@ public abstract class ExporterBase<TOptions, TResult> : IExporter<TOptions, TRes
     /// <param name="request">The HTTP request.</param>
     /// <returns>A collection of <see cref="Option"/> representing the parsed options.</returns>
     public virtual IEnumerable<Option> GetOptions(HttpRequest request) {
-        return Array.Empty<Option>();
+        return [];
     }
 
     IExportOptions IExporter.ParseOptions(JObject config) {

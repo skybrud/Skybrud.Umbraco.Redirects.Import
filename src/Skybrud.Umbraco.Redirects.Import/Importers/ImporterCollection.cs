@@ -18,12 +18,8 @@ public class ImporterCollection : BuilderCollectionBase<IImporter> {
         _lookup = new Dictionary<string, IImporter>(StringComparer.OrdinalIgnoreCase);
 
         foreach (IImporter item in this) {
-
             string? typeName = item.GetType().AssemblyQualifiedName;
-            if (typeName != null && _lookup.ContainsKey(typeName) == false) {
-                _lookup.Add(typeName, item);
-            }
-
+            if (typeName != null) _lookup.TryAdd(typeName, item);
         }
 
     }
@@ -36,7 +32,7 @@ public class ImporterCollection : BuilderCollectionBase<IImporter> {
     /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
     public bool TryGet<TImporter>([NotNullWhen(true)] out TImporter? result) where TImporter : IImporter {
         if (_lookup.TryGetValue(typeof(TImporter).AssemblyQualifiedName!, out IImporter? importer)) {
-            result = (TImporter)importer;
+            result = (TImporter) importer;
             return true;
         }
         result = default;

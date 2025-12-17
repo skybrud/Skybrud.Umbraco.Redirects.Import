@@ -41,29 +41,27 @@ public class ImportResult : IImportResult {
     private ImportResult(IReadOnlyList<RedirectImportItem> redirects) {
         IsSuccessful = true;
         Redirects = redirects;
-        Errors = Array.Empty<string>();
+        Errors = [];
     }
 
     private ImportResult(IReadOnlyList<string> errors) {
         IsSuccessful = false;
         Errors = errors;
-        Redirects = Array.Empty<RedirectImportItem>();
+        Redirects = [];
     }
 
     private ImportResult(Exception exception) {
         IsSuccessful = false;
         Exception = exception;
-        Errors = new[] {
-            exception is RedirectsException rex ? rex.Message : "Import failed on the server."
-        };
-        Redirects = Array.Empty<RedirectImportItem>();
+        Errors = [ exception is RedirectsException rex ? rex.Message : "Import failed on the server." ];
+        Redirects = [];
     }
 
     private ImportResult(Exception exception, params string[] errors) {
         IsSuccessful = false;
         Exception = exception;
         Errors = errors;
-        Redirects = Array.Empty<RedirectImportItem>();
+        Redirects = [];
     }
 
     #endregion

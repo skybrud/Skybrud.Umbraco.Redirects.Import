@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json.Linq;
 using Skybrud.Essentials.Reflection;
 using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Services;
 using Skybrud.Umbraco.Redirects.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Json;
@@ -23,7 +24,7 @@ public class JsonExporter : ExporterBase<JsonExportOptions, JsonExportResult> {
     /// </summary>
     public JsonExporter(RedirectsImportService redirectsImportService) {
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-json";
+        Icon = "redirects-json";
         Name = "JSON";
         Description = "Lets you export redirects to a JSON.";
     }
@@ -39,17 +40,21 @@ public class JsonExporter : ExporterBase<JsonExportOptions, JsonExportResult> {
     /// <returns>A collection of <see cref="Option"/></returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
-        return new List<Option> {
-            new ("formatting", "Formatting", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the formatting of the JSON file.") {
-                Value = "None",
-                Config = new Dictionary<string, object> {
-                    {"items", new [] {
-                        new Item("None", "None"),
-                        new Item("Indented", "Indented")
-                    }}
-                }
+        ItemList indentations = [
+            new Item("None", "None"),
+            new Item("Indented", "Indented")
+        ];
+
+        return [
+            new Option() {
+                Alias = "formatting",
+                Label = "Formatting",
+                Description = "Select the formatting of the JSON file.",
+                Element = "skybrud-redirects-import-items",
+                Value = indentations[0].Alias,
+                Config = indentations
             }
-        };
+        ];
 
     }
 
@@ -60,7 +65,7 @@ public class JsonExporter : ExporterBase<JsonExportOptions, JsonExportResult> {
     /// <returns>An instance of <see cref="JsonExportResult"/> representing the result of the export.</returns>
     public override JsonExportResult Export(JsonExportOptions options) {
 
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
         // We include the version numbers for future reference
         JObject versions = new();

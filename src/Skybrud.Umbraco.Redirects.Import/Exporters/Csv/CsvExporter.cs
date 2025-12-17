@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Skybrud.Csv;
 using Skybrud.Umbraco.Redirects.Import.Models;
+using Skybrud.Umbraco.Redirects.Import.Services;
 
 namespace Skybrud.Umbraco.Redirects.Import.Exporters.Csv;
 
@@ -21,7 +22,7 @@ public class CsvExporter : ExporterBase<CsvExportOptions, CsvExportResult> {
     /// <param name="redirectsImportService">The current instance of <see cref="RedirectsImportService"/>.</param>
     public CsvExporter(RedirectsImportService redirectsImportService) {
         _redirectsImportService = redirectsImportService;
-        Icon = "icon-redirects-csv icon-user";
+        Icon = "redirects-csv";
         Name = "CSV";
         Description = "Lets you export redirects to a CSV file.";
     }
@@ -37,44 +38,44 @@ public class CsvExporter : ExporterBase<CsvExportOptions, CsvExportResult> {
     /// <returns>A collection of <see cref="Option"/>.</returns>
     public override IEnumerable<Option> GetOptions(HttpRequest request) {
 
-        return new List<Option> {
-            new("encoding", "Encoding", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the encoding of the CSV file.") {
+        ItemList encodings = [
+            new Item("ascii", "Ascii"),
+            new Item("utf8", "UTF-8"),
+            new Item("windows1252", "Windows 1252")
+        ];
+
+        ItemList separators = [
+            new Item("colon", "Colon"),
+            new Item("comma", "Comma"),
+            new Item("semicolon", "Semi colon"),
+            new Item("space", "Space"),
+            new Item("tab", "Tab")
+        ];
+
+        return [
+            new Option() {
+                Alias = "encoding",
+                Label = "Encoding",
+                Description = "Select the encoding of the CSV file.",
+                Element = "skybrud-redirects-import-items",
                 Value = "utf8",
-                Config = new Dictionary<string, object> {
-                    {"items", new [] {
-                        new Item("ascii", "Ascii"),
-                        new Item("utf8", "UTF-8"),
-                        new Item("windows1252", "Windows 1252")
-                    }}
-                }
+                Config = encodings
             },
-            new("separator", "Separator", $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}", "Select the separator to be used in the exported CSV file.") {
+            new Option() {
+                Alias = "separator",
+                Label = "Separator",
+                Description = "Select the separator to be used in the exported CSV file.",
+                Element = "skybrud-redirects-import-items",
                 Value = "semicolon",
-                Config = new Dictionary<string, object> {
-                    {"items", new [] {
-                        new Item("colon", "Colon"),
-                        new Item("comma", "Comma"),
-                        new Item("semicolon", "Semi colon"),
-                        new Item("space", "Space"),
-                        new Item("Tab", "Tab")
-                    }}
-                }
+                Config = separators
             },
-            //new() {
-            //    Alias = "includeSeparator",
-            //    Label = "Include separator",
-            //    Description = "Include an explicit separator declaration (eg. <code>sep=;</code>) in the beginning of the CSV file.",
-            //    View = $"{RedirectsImportPackage.AppPlugins}Views/Editors/Items.html?v={RedirectsPackage.Version}",
-            //    Value = "true",
-            //    Config = new Dictionary<string, object> {
-            //        {"items", new [] {
-            //            new Item("true", "Yes"),
-            //            new Item("false", "No")
-            //        }}
-            //    }
-            //},
-            RedirectsImportUtils.GetColumnsOption()
-        };
+            new Option() {
+                Alias = "columns",
+                Label = "Columns",
+                Description = "Select the columns that should be included in the exported file.",
+                Element = "skybrud-redirects-export-columns"
+            }
+        ];
 
     }
 
@@ -85,7 +86,7 @@ public class CsvExporter : ExporterBase<CsvExportOptions, CsvExportResult> {
     /// <returns>An instance of <see cref="CsvExportResult"/> representing the result of the export.</returns>
     public override CsvExportResult Export(CsvExportOptions options) {
 
-        if (options == null) throw new ArgumentNullException(nameof(options));
+        ArgumentNullException.ThrowIfNull(options, nameof(options));
 
         CsvFile file = _redirectsImportService.ExportAsCsv(options);
 

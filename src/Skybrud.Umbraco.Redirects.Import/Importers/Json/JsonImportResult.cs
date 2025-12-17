@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Skybrud.Umbraco.Redirects.Exceptions;
 
-namespace Skybrud.Umbraco.Redirects.Import.Importers.Json; 
+namespace Skybrud.Umbraco.Redirects.Import.Importers.Json;
 
 /// <summary>
 /// Class representing the result of an import of redirects from a <strong>JSON</strong> file.
@@ -60,23 +60,23 @@ public class JsonImportResult : IImportResult {
 
     private JsonImportResult(IReadOnlyList<RedirectImportItem> redirects) {
         IsSuccessful = true;
-        Errors = Array.Empty<string>();
+        Errors = [];
         Redirects = redirects;
     }
 
     private JsonImportResult(IReadOnlyList<string> errors) {
         IsSuccessful = false;
         Errors = errors;
-        Redirects = Array.Empty<RedirectImportItem>();
+        Redirects = [];
     }
 
     private JsonImportResult(Exception exception) {
         IsSuccessful = false;
         Exception = exception;
-        Errors = new[] {
+        Errors = [
             exception is RedirectsException rex ? rex.Message : "Import failed on the server."
-        };
-        Redirects = Array.Empty<RedirectImportItem>();
+        ];
+        Redirects = [];
     }
 
     #endregion
