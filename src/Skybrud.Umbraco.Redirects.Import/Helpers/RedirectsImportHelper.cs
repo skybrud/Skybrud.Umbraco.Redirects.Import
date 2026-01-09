@@ -58,6 +58,9 @@ public class RedirectsImportHelper {
     /// </summary>
     public ImportColumnList? Columns { get; set; }
 
+    /// <summary>
+    /// Gets a reference to Umbraco's <see cref="IDocumentUrlService"/>.
+    /// </summary>
     public IDocumentUrlService DocumentUrlService => _dependencies.DocumentUrlService;
 
     #endregion

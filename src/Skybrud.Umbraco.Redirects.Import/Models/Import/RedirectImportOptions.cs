@@ -3,6 +3,9 @@ using Skybrud.Umbraco.Redirects.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Models.Import;
 
+/// <summary>
+/// Class with options for importing a single redirect.
+/// </summary>
 public class RedirectImportOptions {
 
     /// <summary>

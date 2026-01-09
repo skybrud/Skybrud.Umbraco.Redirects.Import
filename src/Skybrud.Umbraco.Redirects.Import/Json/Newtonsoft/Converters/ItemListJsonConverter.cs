@@ -5,7 +5,7 @@ using Skybrud.Umbraco.Redirects.Import.Models;
 
 namespace Skybrud.Umbraco.Redirects.Import.Json.Newtonsoft.Converters;
 
-public class ItemListJsonConverter : JsonConverter {
+internal class ItemListJsonConverter : JsonConverter {
 
     public override bool CanConvert(Type objectType) {
         return false;

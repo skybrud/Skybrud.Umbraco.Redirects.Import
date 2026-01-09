@@ -53,6 +53,9 @@ public class Option {
 
     #region Constructors
 
+    /// <summary>
+    /// Initializes a new instance. Notice that the required members must be set manually after using this constructor.
+    /// </summary>
     public Option() { }
 
     /// <summary>

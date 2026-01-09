@@ -19,6 +19,8 @@ using Skybrud.Umbraco.Redirects.Import.Importers;
 using Skybrud.Umbraco.Redirects.Import.Services;
 using Umbraco.Cms.Web.Common.Routing;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace Skybrud.Umbraco.Redirects.Import.Controllers;
 
 [ApiController]

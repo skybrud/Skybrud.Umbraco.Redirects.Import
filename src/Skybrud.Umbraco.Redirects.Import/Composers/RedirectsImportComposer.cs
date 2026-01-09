@@ -8,6 +8,8 @@ using Umbraco.Cms.Core.Composing;
 using Umbraco.Cms.Core.DependencyInjection;
 using Umbraco.Cms.Infrastructure.Manifest;
 
+#pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
+
 namespace Skybrud.Umbraco.Redirects.Import.Composers;
 
 public class RedirectsImportComposer : IComposer {

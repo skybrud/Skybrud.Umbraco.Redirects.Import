@@ -20,6 +20,9 @@ using Umbraco.Cms.Core.Extensions;
 
 namespace Skybrud.Umbraco.Redirects.Import.Services;
 
+/// <summary>
+/// Service class for handling redirects import and export functionality.
+/// </summary>
 public partial class RedirectsImportService {
 
     private readonly ILogger<RedirectsImportService> _logger;
@@ -29,6 +32,11 @@ public partial class RedirectsImportService {
 
     #region Constructors
 
+    /// <summary>
+    /// Initializes a new instance based on the specified <paramref name="logger"/> and <paramref name="dependencies"/>.
+    /// </summary>
+    /// <param name="logger">The logger to be used for the instance.</param>
+    /// <param name="dependencies">The dependencies for the service.</param>
     public RedirectsImportService(ILogger<RedirectsImportService> logger, RedirectsImportServiceDependencies dependencies) {
         _logger = logger;
         _dependencies = dependencies;
