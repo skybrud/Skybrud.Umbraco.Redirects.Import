@@ -1,5 +1,35 @@
 ﻿import { RedirectsImportAuth } from "@skybrud-redirects/import/auth";
 
+function _fetch(url, config) {
+
+    if (!config) config = {};
+    if (!config.method) config.method = "GET";
+    if (!config.headers) config.headers = {};
+
+    return new Promise((resolve, reject) => {
+
+        RedirectsImportAuth.TOKEN().then(function (token) {
+
+            config.headers.Authorization = "Bearer " + token;
+
+            const response = fetch(url, config);
+
+            response.then(function (res) {
+                if (res.status < 400) {
+                    resolve(res);
+                } else {
+                    reject(res);
+                }
+            }, function (res) {
+                console.log("failed", arguments);
+            });
+
+        });
+
+    });
+
+}
+
 function hi(url, config) {
 
     if (!config) config = {};
@@ -12,24 +42,30 @@ function hi(url, config) {
 
             config.headers.Authorization = "Bearer " + token;
 
-            //console.log(config.method + " " + url);
-
             const response = fetch(url, config);
 
             response.then(function (res) {
 
-                res.json().then(function (json) {
-                    res.data = json;
+                const contentType = res.headers.get("content-type") || "";
+
+                if (contentType.includes("application/json")) {
+                    res.json().then(function (json) {
+                        res.data = json;
+                        if (res.status < 400) {
+                            resolve(res);
+                        } else {
+                            reject(res);
+                        }
+                    });
+                } else {
                     if (res.status < 400) {
                         resolve(res);
                     } else {
                         reject(res);
                     }
-                });
+                }
 
             }, function (res) {
-
-                // sending the request failed (before actually calling the URL)
 
                 console.log("failed", arguments);
 
@@ -81,6 +117,16 @@ export class RedirectsImportService {
     static import(config) {
         config.method = "POST";
         return hi("/umbraco/skybrud/redirects/import/import", config);
+    }
+
+    static async downloadFile(key, filename) {
+
+        // Generate the download URL from the 'key' and 'filename'
+        const url = `/umbraco/skybrud/redirects/import/export/${key}/${filename}`;
+
+        // Perform the GET request to download the file
+        return await _fetch(url);
+
     }
 
 };

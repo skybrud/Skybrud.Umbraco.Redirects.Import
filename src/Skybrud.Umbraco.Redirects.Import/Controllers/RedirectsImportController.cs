@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Asp.Versioning;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
@@ -17,6 +18,7 @@ using Skybrud.Essentials.Security.Extensions;
 using Skybrud.Umbraco.Redirects.Import.Exporters;
 using Skybrud.Umbraco.Redirects.Import.Importers;
 using Skybrud.Umbraco.Redirects.Import.Services;
+using Umbraco.Cms.Web.Common.Authorization;
 using Umbraco.Cms.Web.Common.Routing;
 
 #pragma warning disable CS1591 // Missing XML comment for publicly visible type or member
@@ -25,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Controllers;
 
 [ApiController]
 [BackOfficeRoute("skybrud/redirects/import")]
-//[Authorize(Policy = AuthorizationPolicies.SectionAccessContent)]
+[Authorize(Policy = AuthorizationPolicies.SectionAccessContent)]
 [ApiVersion("1.0")]
 [ApiExplorerSettings(GroupName = "Skybrud Redirects Import")]
 public class RedirectsImportController : Controller {

@@ -94,20 +94,33 @@ export class ExportRedirectsModalElement extends UmbModalBaseElement {
             const key = response.data.key;
             const filename = response.data.fileName;
 
-            // Generate the download URL from the 'key' and 'filename'
-            const downloadUrl = `/umbraco/skybrud/redirects/import/export/${key}/${filename}`;
+            // Download the file (aka the export result)
+            RedirectsImportService.downloadFile(key, filename).then(function (fileResponse) {
 
-            // Create a fake <a> element
-            const link = document.createElement("a");
-            link.setAttribute("href", downloadUrl);
-            link.setAttribute("download", filename);
-            link.setAttribute("target", "_blank");
+                // Get the blob from the response
+                fileResponse.blob().then(function (blob) {
 
-            // Click the link
-            link.click();
+                    // Create a new blob URL
+                    const url = window.URL.createObjectURL(blob);
 
-            // Submit the modal (so it closes)
-            self.modalContext?.submit();
+                    // Create a fake <a> element
+                    const link = document.createElement("a");
+                    link.setAttribute("href", url);
+                    link.setAttribute("download", filename);
+                    link.setAttribute("target", "_blank");
+
+                    // Click the link
+                    link.click();
+
+                    // Cleanup
+                    window.URL.revokeObjectURL(url);
+
+                    // Submit the modal (so it closes)
+                    self.modalContext?.submit();
+
+                });
+
+            });
 
         });
 
