@@ -110,15 +110,39 @@ public class RedirectsImportHelper {
     }
 
     /// <summary>
-    /// Attempts to get a <see cref="IPublishedContent"/> instance representing the content at the specified <paramref name="route"/>.
+    /// Attempts to resolve published content by its route, relative to a specified start node.
     /// </summary>
-    /// <param name="startNodeId">The ID of the start node.</param>
-    /// <param name="route">The route of the content.</param>
-    /// <param name="result">When this method returns, holds the matching <see cref="IPublishedContent"/> if successful; otherwise, <see langword="null"/>.</param>
-    /// <returns><see langword="true"/> if successful; otherwise, <see langword="false"/>.</returns>
+    /// <param name="startNodeId">The ID of the node from which to resolve the route.</param>
+    /// <param name="route">The route of the content to resolve.</param>
+    /// <param name="result">
+    /// When this method returns <see langword="true"/>, contains the resolved <see cref="IPublishedContent"/>;
+    /// otherwise, <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if matching published content was found; otherwise, <see langword="false"/>.
+    /// </returns>
     public bool TryGetContent(int startNodeId, string route, [NotNullWhen(true)] out IPublishedContent? result) {
+        return TryGetContent(startNodeId, null, route, out result);
+    }
 
-        if (DocumentUrlService.GetDocumentKeyByRoute(route, null, startNodeId, false) is not {} key) {
+    /// <summary>
+    /// Attempts to resolve published content by its route and culture, relative to a specified start node.
+    /// </summary>
+    /// <param name="startNodeId">The ID of the node from which to resolve the route.</param>
+    /// <param name="culture">
+    /// The culture to use when resolving the route, or <see langword="null"/> to resolve without specifying a culture.
+    /// </param>
+    /// <param name="route">The route of the content to resolve.</param>
+    /// <param name="result">
+    /// When this method returns <see langword="true"/>, contains the resolved <see cref="IPublishedContent"/>;
+    /// otherwise, <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if matching published content was found; otherwise, <see langword="false"/>.
+    /// </returns>
+    public bool TryGetContent(int startNodeId, string? culture, string route, [NotNullWhen(true)] out IPublishedContent? result) {
+
+        if (DocumentUrlService.GetDocumentKeyByRoute(route, culture, startNodeId, false) is not { } key) {
             result = null;
             return false;
         }
@@ -181,6 +205,7 @@ public class RedirectsImportHelper {
             switch (column.ColumnName.Replace(" ", "").ToLowerInvariant()) {
 
                 // Root Node / Domain
+                case "site":
                 case "siteid":
                 case "rootid":
                 case "rootnode":
@@ -411,8 +436,22 @@ public class RedirectsImportHelper {
         string? destinationUrl = row.GetString(Columns.DestinationUrl);
         string? destinationQuery = null;
         string? destinationFragment = null;
+        string? destinationCulture = null;
 
         IPublishedContent? destination = null;
+
+        // If a destination culture is specified, we validate that culture. If
+        // the culture doesn't match a language in Umbraco, we trigger an error
+        if (Columns.DestinationCulture is not null) {
+            string? value = row.GetString(Columns.DestinationCulture);
+            if (!string.IsNullOrWhiteSpace(value)) {
+                if (TryGetLanguage(value, out ILanguage? language)) {
+                    destinationCulture = language.IsoCode;
+                } else {
+                    item.Errors.Add($"The value '{value}' specified for the '{Columns.DestinationCulture.ColumnName}' column does not match a configured language in Umbraco.");
+                }
+            }
+        }
 
         if (Columns.DestinationKey is not null) {
             string? value = row.GetString(Columns.DestinationKey);
@@ -510,26 +549,11 @@ public class RedirectsImportHelper {
                 }
             }
         } else if (destinationUrl.StartsWith('/')) {
-            if (destination == null) {
-
-                if (item.Options.RootNodeKey == null || item.Options.RootNodeKey == Guid.Empty) {
-                    item.Errors.Add("Cannot resolve relative destination URL without a root node being specified.");
-                    return;
-                }
-
-                if (!TryGetContent(item.Options.RootNodeKey.Value, out IPublishedContent? rootNode)) {
-                    item.Errors.Add($"Cannot resolve relative destination URL. Root node with key '{item.Options.RootNodeKey.Value}' not found.");
-                    return;
-                }
-
-                if (!TryGetContent(rootNode.Id, destinationUrl, out IPublishedContent? content)) {
-                    item.Errors.Add($"No destination found with URL '{destinationUrl}' starting from root node '{rootNode.Name}' ({rootNode.Id}).");
-                    return;
-                }
-
-                destination = content;
-                destinationUrl = content.Url();
+            if (destination == null && TryGetDestinationContent(item, destinationUrl, out DestinationContentResult? result)) {
+                destination = result.Content;
+                destinationUrl = destination.Url(result.Culture);
                 destinationType = RedirectDestinationType.Content;
+                destinationCulture = result.Culture;
             }
         } else if (!destinationUrl.StartsWith("http://") && !destinationUrl.StartsWith("https://")) {
             item.Errors.Add($"Destination URL is not a valid URL: {destinationUrl}");
@@ -546,18 +570,6 @@ public class RedirectsImportHelper {
             if (!string.IsNullOrWhiteSpace(value)) destinationFragment = value;
         }
 
-        string? culture = null;
-        if (Columns.DestinationCulture is not null) {
-            string? value = row.GetString(Columns.DestinationCulture);
-            if (!string.IsNullOrWhiteSpace(value)) {
-                if (TryGetLanguage(value, out ILanguage? language)) {
-                    culture = language.IsoCode;
-                } else {
-                    item.Errors.Add($"The value '{value}' specified for the '{Columns.DestinationCulture.ColumnName}' column does not match a configured language in Umbraco.");
-                }
-            }
-        }
-
         item.Options.Destination = new RedirectDestination {
             Id = destination?.Id ?? 0,
             Key = destination?.Key ?? Guid.Empty,
@@ -566,12 +578,114 @@ public class RedirectsImportHelper {
             Fragment = destinationFragment ?? string.Empty,
             Type = destinationType,
             Name = destination?.Name ?? string.Empty,
-            Culture = culture ?? string.Empty
+            Culture = destinationCulture ?? string.Empty
         };
 
     }
 
-    private bool TryGetLanguage(string input, [NotNullWhen(true)] out ILanguage? result) {
+    /// <summary>
+    /// Attempts to resolve a destination URL to published content using the root node
+    /// and assigned domains configured for the specified import item.
+    /// </summary>
+    /// <param name="item">The redirect import item containing the resolution options and error collection.</param>
+    /// <param name="destinationUrl">The destination URL to resolve.</param>
+    /// <param name="result">
+    /// When this method returns <see langword="true"/>, contains the resolved destination content
+    /// and its optional culture; otherwise, <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if the destination content was resolved successfully;
+    /// otherwise, <see langword="false"/>.
+    /// </returns>
+    /// <remarks>
+    /// Any resolution errors are added to the error collection of <paramref name="item"/>.
+    /// </remarks>
+    protected bool TryGetDestinationContent(RedirectImportItem item, string destinationUrl, [NotNullWhen(true)] out DestinationContentResult? result) {
+        result = GetDestinationContent(item, destinationUrl);
+        return result is not null;
+    }
+
+    /// <summary>
+    /// Resolves a destination URL to published content, optionally using the domains
+    /// assigned to the configured root node to determine the route and culture.
+    /// </summary>
+    /// <param name="item">The redirect import item containing the root node configuration and error collection.</param>
+    /// <param name="destinationUrl">The destination URL to resolve relative to the configured root node.</param>
+    /// <returns>
+    /// A <see cref="DestinationContentResult"/> containing the resolved published content
+    /// and its optional culture, or <see langword="null"/> if the destination could not be resolved.
+    /// </returns>
+    /// <remarks>
+    /// Resolution first attempts to locate the content directly beneath the configured root node.
+    /// If unsuccessful, the method examines the assigned domains and attempts to resolve the
+    /// destination URL after removing any matching domain path prefix.
+    /// When a domain-based match is found, its language ISO code is included in the result.
+    /// Resolution failures are recorded in the error collection of <paramref name="item"/>.
+    /// </remarks>
+    protected virtual DestinationContentResult? GetDestinationContent(RedirectImportItem item, string destinationUrl) {
+
+        if (item.Options.RootNodeKey == null || item.Options.RootNodeKey == Guid.Empty) {
+            item.Errors.Add("Cannot resolve relative destination URL without a root node being specified.");
+            return null;
+        }
+
+        if (!TryGetContent(item.Options.RootNodeKey.Value, out IPublishedContent? rootNode)) {
+            item.Errors.Add($"Cannot resolve relative destination URL. Root node with key '{item.Options.RootNodeKey.Value}' not found.");
+            return null;
+        }
+
+        if (TryGetContent(rootNode.Id, destinationUrl, out IPublishedContent? content)) {
+            return new DestinationContentResult(content, null);
+        }
+
+        // If we haven't found a content node as this point, we get the domains
+        // assigned to the specified root node, and try to match the destination
+        // URL against each domain and culture
+        foreach (IDomain domain in _dependencies.DomainService.GetAssignedDomains(rootNode.Id, false)) {
+            if (!domain.DomainName.Contains('/')) continue;
+            string route = GetRoute(domain, destinationUrl);
+            if (TryGetContent(rootNode.Id, domain.LanguageIsoCode, route, out IPublishedContent? result)) {
+                return new DestinationContentResult(result, domain.LanguageIsoCode);
+            }
+        }
+
+        item.Errors.Add($"No destination found with URL '{destinationUrl}' starting from root node '{rootNode.Name}' ({rootNode.Id}).");
+
+        return null;
+
+        static string GetRoute(IDomain domain, string destinationUrl) {
+
+            string domainName = domain.DomainName;
+            bool hasScheme = domainName.Contains("://", StringComparison.Ordinal);
+
+            Uri uri = new(hasScheme ? domainName : $"https://{domainName}");
+
+            string domainPath = uri.AbsolutePath.TrimEnd('/');
+            string destinationPath = "/" + destinationUrl.TrimStart('/');
+
+            if (string.IsNullOrEmpty(domainPath)) return destinationPath;
+
+            if (destinationPath.Equals(domainPath, StringComparison.OrdinalIgnoreCase)) return "/";
+
+            if (destinationPath.StartsWith(domainPath + "/", StringComparison.OrdinalIgnoreCase)) return destinationPath[domainPath.Length..];
+
+            return destinationPath;
+
+        }
+
+    }
+    /// <summary>
+    /// Attempts to resolve a language by its numeric ID or ISO code.
+    /// </summary>
+    /// <param name="input">The language ID or ISO code to resolve.</param>
+    /// <param name="result">
+    /// When this method returns <see langword="true"/>, contains the resolved <see cref="ILanguage"/>;
+    /// otherwise, <see langword="null"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if a matching language was found; otherwise, <see langword="false"/>.
+    /// </returns>
+    public virtual bool TryGetLanguage(string input, [NotNullWhen(true)] out ILanguage? result) {
         result = int.TryParse(input, out int languageId) ? _localizationService.GetLanguageById(languageId) : _localizationService.GetLanguageByIsoCode(input);
         return result is not null;
     }

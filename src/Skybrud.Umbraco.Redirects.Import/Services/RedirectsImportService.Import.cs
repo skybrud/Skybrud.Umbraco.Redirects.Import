@@ -14,6 +14,15 @@ namespace Skybrud.Umbraco.Redirects.Import.Services;
 
 public partial class RedirectsImportService {
 
+    /// <summary>
+    /// Creates a new instance of <see cref="RedirectsImportHelper"/> using the specified import options and data table.
+    /// </summary>
+    /// <param name="options">The options to use for the import.</param>
+    /// <param name="dataTable">The data table containing the redirects to import.</param>
+    /// <returns>A new instance of <see cref="RedirectsImportHelper"/>.</returns>
+    public virtual RedirectsImportHelper CreateImportHelper(IImportOptions options, DataTable dataTable) {
+        return new RedirectsImportHelper(_dependencies, dataTable, options);
+    }
 
     /// <summary>
     /// Triggers a new import of the redirects identified by the specified <paramref name="dataTable"/>.
@@ -24,7 +33,7 @@ public partial class RedirectsImportService {
     public virtual ImportResult Import(IImportOptions options, DataTable dataTable) {
 
         // Initialize a new helper instance
-        RedirectsImportHelper helper = new(_dependencies, dataTable, options);
+        RedirectsImportHelper helper = CreateImportHelper(options, dataTable);
 
         try {
 
