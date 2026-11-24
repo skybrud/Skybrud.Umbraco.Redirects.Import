@@ -47,6 +47,7 @@ Install-Package Skybrud.Umbraco.Redirects.Import -Version 17.0.0
 
 ### Other versions of Umbraco
 
+- [**`v18/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v18/main) Umbraco 18
 - [**`v13/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v13/main) Umbraco 13
 - ~~[**`v4/main`**](https://github.com/skybrud/Skybrud.Umbraco.Redirects.Import/tree/v4/main) Umbraco 10, 11 and 12~~ <sub title="Umbraco 10, 11 and 12 have reached end-of-life"><sup>(EOL)</sup></sub>
 
