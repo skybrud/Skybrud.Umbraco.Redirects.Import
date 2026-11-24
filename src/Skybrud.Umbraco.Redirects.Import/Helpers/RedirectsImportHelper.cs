@@ -27,7 +27,7 @@ namespace Skybrud.Umbraco.Redirects.Import.Helpers;
 /// </summary>
 public class RedirectsImportHelper {
 
-    private readonly ILocalizationService _localizationService;
+    private readonly ILanguageService _languageService;
     private readonly IMediaService _mediaService;
     private readonly RedirectsImportServiceDependencies _dependencies;
 
@@ -73,7 +73,7 @@ public class RedirectsImportHelper {
     public RedirectsImportHelper(RedirectsImportServiceDependencies dependencies, DataTable table, IImportOptions options) {
 
         _dependencies = dependencies;
-        _localizationService = dependencies.LocalizationService;
+        _languageService = dependencies.LanguageService;
         _mediaService = dependencies.MediaService;
 
         DomainService = dependencies.DomainService;
@@ -641,7 +641,7 @@ public class RedirectsImportHelper {
         // If we haven't found a content node as this point, we get the domains
         // assigned to the specified root node, and try to match the destination
         // URL against each domain and culture
-        foreach (IDomain domain in _dependencies.DomainService.GetAssignedDomains(rootNode.Id, false)) {
+        foreach (IDomain domain in _dependencies.DomainService.GetAssignedDomainsAsync(rootNode.Key, false).Result) {
             if (!domain.DomainName.Contains('/')) continue;
             string route = GetRoute(domain, destinationUrl);
             if (TryGetContent(rootNode.Id, domain.LanguageIsoCode, route, out IPublishedContent? result)) {
@@ -675,9 +675,9 @@ public class RedirectsImportHelper {
 
     }
     /// <summary>
-    /// Attempts to resolve a language by its numeric ID or ISO code.
+    /// Attempts to resolve a language by ISO code.
     /// </summary>
-    /// <param name="input">The language ID or ISO code to resolve.</param>
+    /// <param name="input">The ISO code to resolve.</param>
     /// <param name="result">
     /// When this method returns <see langword="true"/>, contains the resolved <see cref="ILanguage"/>;
     /// otherwise, <see langword="null"/>.
@@ -686,7 +686,7 @@ public class RedirectsImportHelper {
     /// <see langword="true"/> if a matching language was found; otherwise, <see langword="false"/>.
     /// </returns>
     public virtual bool TryGetLanguage(string input, [NotNullWhen(true)] out ILanguage? result) {
-        result = int.TryParse(input, out int languageId) ? _localizationService.GetLanguageById(languageId) : _localizationService.GetLanguageByIsoCode(input);
+        result = _languageService.GetAsync(input).Result;
         return result is not null;
     }
 

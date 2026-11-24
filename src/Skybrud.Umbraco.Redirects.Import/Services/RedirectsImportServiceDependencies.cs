@@ -13,7 +13,7 @@ public class RedirectsImportServiceDependencies {
 
     public IDomainService DomainService { get; }
 
-    public ILocalizationService LocalizationService { get; }
+    public ILanguageService LanguageService { get; }
 
     public IMediaService MediaService { get; }
 
@@ -23,10 +23,10 @@ public class RedirectsImportServiceDependencies {
 
     public IDocumentUrlService DocumentUrlService { get; }
 
-    public RedirectsImportServiceDependencies(IWebHostEnvironment webHostEnvironment, IDomainService domainService, ILocalizationService localizationService, IMediaService mediaService, IRedirectsService redirectsService, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
+    public RedirectsImportServiceDependencies(IWebHostEnvironment webHostEnvironment, IDomainService domainService, ILanguageService languageService, IMediaService mediaService, IRedirectsService redirectsService, IUmbracoContextAccessor umbracoContextAccessor, IDocumentUrlService documentUrlService) {
         WebHostEnvironment = webHostEnvironment;
         DomainService = domainService;
-        LocalizationService = localizationService;
+        LanguageService = languageService;
         MediaService = mediaService;
         RedirectsService = redirectsService;
         UmbracoContextAccessor = umbracoContextAccessor;
